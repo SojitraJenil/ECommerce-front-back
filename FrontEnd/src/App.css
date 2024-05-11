@@ -1,0 +1,9 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans&family=Jost&family=Playfair+Display&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+
+:root {
+  --Font_bebas: "Bebas Neue", sans-serif;
+}
+* {
+  scroll-behavior: smooth;
+}

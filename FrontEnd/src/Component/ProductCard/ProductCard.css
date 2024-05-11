@@ -1,0 +1,20 @@
+.Btn > input{
+    background-color: transparent;
+    color: #000;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    padding: 8px 25px !important;
+    margin: 0px 15px;
+    font-weight: 500;
+    transition: .3s;
+}
+.Btn > input:hover{
+    background-color: #60BABE !important;
+    color: white;
+}
+.Btn > input:active{
+    background-color: #60BABE !important;
+    color: white !important;
+}
+.Btn{
+    text-align: center;    
+}

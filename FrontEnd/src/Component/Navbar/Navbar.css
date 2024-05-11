@@ -1,0 +1,13 @@
+.option:hover{
+    color: rgb(219, 187, 5) !important;
+}
+.option{
+    transition: .3s;
+
+}  
+.sticky-top{
+        top: -2px !important;
+        transition: .5s !important;
+}
+      
+      

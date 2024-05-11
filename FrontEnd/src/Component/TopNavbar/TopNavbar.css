@@ -1,0 +1,7 @@
+.btn:hover{
+    color: black !important;
+}
+.btn{
+    transition: .3s;
+    font-size: medium;
+}

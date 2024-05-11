@@ -1,0 +1,35 @@
+.owl-nav{
+    margin: 0 !important;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+}
+.owl-nav .owl-prev,
+.owl-nav .owl-next{
+    position: absolute;
+    left: 50px;
+    height: 50px;
+    width: 50px;
+    background: #000 !important;
+    color: white !important;
+    border-radius: 50% !important;
+    transform: translateY(-50%);
+} 
+.owl-nav .owl-next{
+    left: auto;
+    right: 50px;
+}
+.owl-dots{
+    position: absolute;
+    width: 100%;
+    bottom: 10px;
+}
+.owl-dots .owl-dot span{
+    background: black !important;
+    border-radius: 0 !important;
+    width: 45px !important;
+    height: 3px !important;
+}
+.owl-dots .owl-dot.active span{
+    background: white !important;
+}
