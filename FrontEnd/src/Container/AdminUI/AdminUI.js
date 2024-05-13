@@ -4,8 +4,11 @@ import {
   FaBars,
   FaUserAlt,
   FaRegChartBar,
+  FaCartArrowDown,
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
+import { TbCategoryFilled } from "react-icons/tb";
+import { RiProductHuntFill } from "react-icons/ri";
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -24,7 +27,7 @@ const Sidebar = ({ children }) => {
     {
       path: "/Admin/Product_Detail",
       name: "Product_Detail",
-      icon: <FaRegChartBar />,
+      icon: <RiProductHuntFill />,
     },
     {
       path: "/Admin/Order_Manage",
@@ -34,8 +37,13 @@ const Sidebar = ({ children }) => {
     {
       path: "/Admin/Categories_Detail  ",
       name: "Categories_Detail",
-      icon: <FaUserAlt />,
-    }
+      icon: <TbCategoryFilled />,
+    },
+    {
+      path: "/Admin/Cart_Details  ",
+      name: "Cart_Details",
+      icon: <FaCartArrowDown />,
+    },
   ];
   return (
     <div className="">

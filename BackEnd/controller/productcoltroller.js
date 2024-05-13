@@ -65,12 +65,10 @@ exports.productFindByCat = async (req, res) => {
 
 exports.one_Product_show = async (req, res) => {
   try {
-    const productName = req.params.product_name;
-    console.log(productName);
-    // Find product by name and populate the associated category
-    const product = await Product.findOne({
-      product_name: productName,
-    }).populate("category");
+    const productId = req.params.id; // Assuming the parameter is named product_id
+    console.log(productId);
+    // Find product by ID and populate the associated category
+    const product = await Product.findById(productId).populate("category");
 
     if (product) {
       res.status(200).json({
@@ -85,6 +83,7 @@ exports.one_Product_show = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 exports.oneProductByName = async (req, res) => {
   try {

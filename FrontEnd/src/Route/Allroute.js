@@ -24,9 +24,10 @@ import Error from "../Container/Error/Error";
 import KidsSection from "../Component/Kidssection/Kidssection";
 import Kidssection from "../Component/Kidssection/Kidssection";
 import Blog from "../Component/Blog";
+import Contact from "../Component/Contact/Contact";
+import Cart_Details from "../Container/AdminUI/Cart_Details";
 
 const Allroute = () => {
-
   return (
     <div>
       <Routes>
@@ -38,16 +39,16 @@ const Allroute = () => {
         {/* <Route path="/admin/Product_manage" element={<Product_manage />} /> */}
         {/* <Route path="/admin/InquiryManage" element={<InquiryManage />} /> */}
 
-        <Route path="/Payment" element={<Payment/>} />
-        
-        <Route path="/EmailUpdate" element={<EmailUpdate/>} />
+        <Route path="/Payment" element={<Payment />} />
+
+        <Route path="/EmailUpdate" element={<EmailUpdate />} />
 
         <Route path="/account" element={<Account />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/Product/:id" element={<Product />} />
         <Route path="/About" element={<Home />} />
-        <Route path="/Contact" element={<Home />} />
+        <Route path="/Contact" element={<Contact />} />
         <Route path="/menSection" element={<Mensection />} />
         <Route path="/womenSection" element={<Womensection />} />
         <Route path="/KidsSection" element={<Kidssection />} />
@@ -59,12 +60,13 @@ const Allroute = () => {
         <Route path="/Admin/Product_Detail" element={<Product_Detail />} />
         <Route path="/Admin/Inquiry_Detail" element={<Inquiry_Detail />} />
         <Route path="/Admin/Order_Manage" element={<Order_Manage />} />
-        <Route path="/Admin/Categories_Detail" element={<Categories_Detail />} />
+        <Route
+          path="/Admin/Categories_Detail"
+          element={<Categories_Detail />}
+        />
+        <Route path="/Admin/Cart_Details" element={<Cart_Details />} />
 
         <Route path="*" element={<Error />} />
-
-
-
       </Routes>
     </div>
   );

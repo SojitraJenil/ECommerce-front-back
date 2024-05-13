@@ -6,16 +6,16 @@ import Header from "../../Component/Navbar/Header";
 
 const Product = () => {
   const { id } = useParams();
-  
-  const [data, setData] = useState({ product_img: "" });
 
-  const getdata = async (id) => {
+  const [data, setData] = useState([]);
+
+  const getdata = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/Product_Show/${id}`
+        `http://localhost:8000/Product_Show/ProductId/${id}`
       );
-      setData(response.data.One_product_show);
-      console.log("ok" + response.data);
+      setData(response.data.product);
+      console.log(response.data.product);
     } catch (error) {
       console.error("An error occurred:", error);
     }
@@ -41,14 +41,10 @@ const Product = () => {
             </div>
           </Col>
           <Col xl={7}>
-            <h5>
-              <span>product_category -:</span>
-              {data.product_category}
-            </h5>
-            <h6>
-              <span>product_name -:</span>
+            <p className="fs-5 fw-b">
               {data.product_name}
-            </h6>
+              <span>({data.category ? data.category.name : ""})</span>
+            </p>
             <h6>{data.description}</h6>
             <h3>${data.product_price}</h3>
             <p>
@@ -73,7 +69,7 @@ const Product = () => {
           </Col>
         </Row>
       </Container>
-    </> 
+    </>
   );
 };
 

@@ -3,11 +3,13 @@ import axios from "axios";
 import { Col, Container, Row, Card, Button } from "react-bootstrap";
 import { ImBin2 } from "react-icons/im";
 import { Link } from "react-router-dom";
+import { atom, useAtom } from "jotai";
+import { abcd, totalProduct } from "../../Atom/Atom";
 
 export default function AddToCart() {
   const [cartItems, setCartItems] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
-  const [totalCartedProduct, setTotalCartedProduct] = useState(0);
+  const [totalCartedProduct, setTotalCartedProduct] = useAtom(totalProduct);
   const [CGST, setCGST] = useState(0);
   const [SGST, setSGST] = useState(0);
   const [payable, setpayable] = useState(0);
@@ -15,6 +17,34 @@ export default function AddToCart() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const AddItemToCart = (productId) => {
+    axios
+      .post("http://localhost:8000/addItemToCart", {
+        productId: productId,
+        quantity: 1,
+      })
+      .then((res) => {
+        fetchData();
+      })
+      .catch((error) => {
+        console.error("Error adding item to cart:", error);
+      });
+  };
+  const removeOneItemToCart = (productId) => {
+    axios
+      .post("http://localhost:8000/addItemToCart", {
+        productId: productId,
+        quantity: -1,
+      })
+      .then((res) => {
+        console.log(res);
+        fetchData();
+      })
+      .catch((error) => {
+        console.error("Error adding item to cart:", error);
+      });
+  };
 
   const fetchData = () => {
     axios
@@ -39,9 +69,12 @@ export default function AddToCart() {
         console.log(err);
       });
   };
-  const DeleteCartItem = (Id) => {
+  const DeleteCartItem = (ProductId) => {
+    alert(ProductId);
     axios
-      .delete(`http://localhost:8000/deleteCartProduct/cart/${Id}`)
+      .post(
+        `http://localhost:8000/removeCartProduct/663f151bdde3f55dae966d3b/${ProductId}`
+      )
       .then(function (res) {
         console.log(res);
         alert("Product deleted successfully");
@@ -105,17 +138,25 @@ export default function AddToCart() {
 
                           <div className="d-flex align-items-center py-2">
                             <p className="fw-bold mb-0 me-5 pe-3">
-                              <button className="btn btn-outline-danger">
+                              <button
+                                onClick={() =>
+                                  removeOneItemToCart(product.productId)
+                                }
+                              >
                                 -
                               </button>
+
                               <input
                                 type="number"
                                 step="1"
                                 max="10"
                                 defaultValue="1"
+                                value={product.quantity}
                                 className="quantity-field border-0 text-center w-25"
                               />
-                              <button className="btn btn-outline-success">
+                              <button
+                                onClick={() => AddItemToCart(product.productId)}
+                              >
                                 +
                               </button>
                             </p>
@@ -129,6 +170,7 @@ export default function AddToCart() {
                               <ImBin2 className="ms-5 fs-5" />
                             </div>
                           </div>
+
                           <hr />
                         </div>
                       </div>
@@ -160,7 +202,7 @@ export default function AddToCart() {
                       <h5 className="fw-bold mb-0">={payable}</h5>
                     </div>
                     <hr />
-                    
+
                     <h5 className="mb-5 pt-2 text-center fw-bold text-uppercase">
                       <Link to="/">
                         <button className="btn border border-black px-5 mx-2">

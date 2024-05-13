@@ -1,34 +1,36 @@
-const Products = require("../Model/productmodel");
 const Cart = require("../Model/cartmodel");
 
 exports.addItemToCart = async (req, res) => {
-  const { productId, quantity, product_name, product_price,product_img } =req.body;
-  const userId = "65f5509b7b2fe4ab8d24d60f"; //TODO: the logged in user id
+  const { productId, quantity, product_name, product_price, product_img } =
+    req.body;
+  const userId = "65f5509b7b2fe4ab8d24d60f"; // Assuming you have middleware to authenticate and attach user object to request
+
   try {
     let cart = await Cart.findOne({ userId });
+
     if (cart) {
-      //cart exists for user
+      // Cart exists for user
       let itemIndex = cart.products.findIndex((p) => p.productId == productId);
 
       if (itemIndex > -1) {
-        //product exists in the cart, update the quantity
+        // Product exists in the cart, update the quantity
         let productItem = cart.products[itemIndex];
-        productItem.quantity = quantity;
+        productItem.quantity += quantity; // Increment quantity
         cart.products[itemIndex] = productItem;
       } else {
-        //product does not exists in cart, add new item
+        // Product does not exist in cart, add new item
         cart.products.push({
-          productId,  
+          productId,
           quantity,
           product_name,
           product_price,
-          product_img
+          product_img,
         });
       }
       cart = await cart.save();
       return res.status(201).send(cart);
     } else {
-      //no cart for user, create new cart
+      // No cart for user, create new cart
       const newCart = await Cart.create({
         userId,
         products: [
@@ -55,28 +57,50 @@ exports.getAllCart = async (req, res) => {
   }
 };
 
-
 exports.removeItemFromCart = async (req, res) => {
-  const { productId } = req.params;
-  const userId = "65f5509b7b2fe4ab8d24d60f"; // TODO: Get user ID from authenticated user
-
   try {
-    let cart = await Cart.findOne({ userId });
+    const { cartId, productId } = req.params;
 
+    // Find the cart document by its ID
+    const cart = await Cart.findById(cartId);
+
+    // Check if the cart exists
     if (!cart) {
-      return res.status(404).json({ message: "Cart not found" });
+      return res.status(404).json({
+        status: "Error",
+        message: "Cart not found",
+      });
     }
 
-    const updatedProducts = cart.products.filter(
-      (product) => product.productId !== productId
+    // Find the index of the product in the products array
+    const productIndex = cart.products.findIndex(
+      (product) => product.productId.toString() === productId
     );
+    console.log(productIndex);
 
-    cart.products = updatedProducts;
-    cart = await cart.save();
+    // Check if the product exists in the cart
+    if (productIndex === -1) {
+      return res.status(404).json({
+        status: "Error",
+        message: "Product not found in the cart",
+      });
+    }
 
-    return res.status(200).json({ message: "Item removed from cart", cart });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Internal server error" });
+    // Remove the product from the products array
+    cart.products.splice(productIndex, 1);
+
+    // Save the updated cart
+    await cart.save();
+
+    res.status(200).json({
+      status: "Carted product deleted successfully!",
+      deleted_product: productId,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      status: "Error",
+      message: "Internal server error",
+    });
   }
 };

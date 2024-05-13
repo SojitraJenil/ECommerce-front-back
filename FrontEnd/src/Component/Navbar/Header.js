@@ -7,39 +7,26 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
-import axios from "axios";
+import { useAtom } from "jotai";
+import { totalProduct } from "../../Atom/Atom";
 
 var LogoImage =
   "https://kamleshyadav.com/wp/shopmartio-wp/wp-content/uploads/2021/04/shopmartiologo-1.svg";
 
-function Header({ dataof, onInputChange }) {
+function Header({ onInputChange }) {
   const [inputValue, setInputValue] = useState(null);
+  const [totalCartedProduct] = useAtom(totalProduct);
+  // const [Totalcart, setTotalcart] = useState(totalCartedProduct);
 
-  // setname(JSON.parse(localStorage.getItem("jwt")));
+  // useEffect(() => {
+  //   setTotalcart(Totalcart);
+  // }, [Totalcart]);
+
   const handleInputChange = (event) => {
     event.preventDefault();
     const value = event.target.value;
     setInputValue(value);
-    // Pass the input value to the parent component
     onInputChange(value);
-  };
-
-  const [TotalCartedProduct, setTotalCartedProduct] = useState("");
-
-  useEffect(() => {
-    fetchCartItem();
-  }, []);
-
-  const fetchCartItem = () => {
-    axios
-      .get("http://localhost:8000/getAllCart")
-      .then((res) => {
-        var data = res.data.show_cart[0].products;
-        setTotalCartedProduct(data.length);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   return (
@@ -127,8 +114,8 @@ function Header({ dataof, onInputChange }) {
             <Link to="/AddToCart">
               <span class=" border-none position-relative mx-2">
                 <ShoppingBasketIcon className="option ms-3 fs-2 " />
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  {TotalCartedProduct || dataof}
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {totalCartedProduct}
                 </span>
               </span>
             </Link>

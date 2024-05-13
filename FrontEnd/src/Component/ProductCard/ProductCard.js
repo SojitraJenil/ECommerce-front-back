@@ -3,9 +3,12 @@ import { Col, Container, Row } from "react-bootstrap";
 import "./ProductCard.css";
 import Card from "react-bootstrap/Card";
 import axios from "axios";
+import { MdCurrencyRupee } from "react-icons/md";
 import toast, { Toaster } from "react-hot-toast";
+import { IoStar } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Loader from "../../Container/Loading/Loader";
+import { CardImg, CardBody } from "react-bootstrap";
 
 function Product_card({ SetMainCart, inputValue }) {
   const [data, setdata] = useState(null);
@@ -13,11 +16,12 @@ function Product_card({ SetMainCart, inputValue }) {
   const [cate, setcate] = useState(null);
   const [loading, setLoading] = useState(false);
   const [sortingOption, setSortingOption] = useState(null);
-
-  const notify = () => {
+  
+  const notify = (val) => {
     toast("Product Added Successfully...!", { icon: "👏" });
     setCart(Cart + 1);
     SetMainCart(Cart);
+    AddItemToCart(val);
   };
 
   useEffect(() => {
@@ -27,46 +31,59 @@ function Product_card({ SetMainCart, inputValue }) {
     Product1();
   }, [inputValue]);
 
-
-  const FindProductByProductName = (inputValue) => {
-    console.log(inputValue);
+  const AddItemToCart = (val) => {
     axios
-      .get(`http://localhost:8000/Product_show/ProductName/${inputValue}`)
-      .then(function (response) {
-        setdata(response.data.products);
+      .post("http://localhost:8000/addItemToCart", {
+        productId: val._id,
+        quantity: 1,
+        product_name: val.product_name,
+        product_price: val.product_price,
+        product_img: val.product_img,
       })
-      .catch(function (error) {
-        console.log("error", error);
+      .then((res) => {
+        console.log(res);
       });
   };
 
+  const FindProductByProductName = (inputValue) => {
+    console.log(inputValue);
+    if (inputValue) {
+      axios
+        .get(`http://localhost:8000/Product_show/ProductName/${inputValue}`)
+        .then(function (response) {
+          setdata(response.data.products);
+        })
+        .catch(function (error) {
+          console.log("error", error);
+        });
+    }
+  };
 
-  
-   const handleHighToLow = () => {
-     axios
-       .get(`http://localhost:8000/Product_show/Product_Price/high_to_low`)
-       .then(function (response) {
-         console.log(response.data.products);
-         setdata(response.data.products);
-         setSortingOption("high_to_low");
-       })
-       .catch(function (error) {
-         console.error(error);
-       });
-   };
+  const handleHighToLow = () => {
+    axios
+      .get(`http://localhost:8000/Product_show/Product_Price/high_to_low`)
+      .then(function (response) {
+        console.log(response.data.products);
+        setdata(response.data.products);
+        setSortingOption("high_to_low");
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
 
-   const handleLowToHigh = () => {
-     axios
-       .get(`http://localhost:8000/Product_show/Product_Price/low_to_high`)
-       .then(function (response) {
-         console.log(response.data.products);
-         setdata(response.data.products);
-         setSortingOption("low_to_high");
-       })
-       .catch(function (error) {
-         console.error(error);
-       });
-   };
+  const handleLowToHigh = () => {
+    axios
+      .get(`http://localhost:8000/Product_show/Product_Price/low_to_high`)
+      .then(function (response) {
+        console.log(response.data.products);
+        setdata(response.data.products);
+        setSortingOption("low_to_high");
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
 
   const Category = () => {
     axios
@@ -84,6 +101,7 @@ function Product_card({ SetMainCart, inputValue }) {
       .get(`http://localhost:8000/Product_Show`)
       .then(function (response) {
         setdata(response.data.product_show);
+        // setdata(product_price_filter);
         // console.log(response.data.product_show);
       })
       .catch(function (error) {
@@ -91,29 +109,28 @@ function Product_card({ SetMainCart, inputValue }) {
       });
   };
   const Product1 = (item) => {
-    axios
-      .get(`http://localhost:8000/Product_show/category/${item}`)
-      .then(function (response) {
+    if (item) {
+      axios
+        .get(`http://localhost:8000/Product_show/category/${item}`)
+        .then(function (response) {
           setdata(response.data.One_product_show);
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    }
   };
 
-  if(loading === true){
-    return(
-      <Loader/>
-      )
+  if (loading === true) {
+    return <Loader />;
   }
 
   return (
     <>
-    
       <div className="py-5">
-        <Container>   
+        <Container>
           <div>
-            <div className="Title">
+            <div className="Title py-4">
               <h4>
                 <center className="fw-bold pt-4">New Arrivals</center>{" "}
               </h4>
@@ -128,7 +145,7 @@ function Product_card({ SetMainCart, inputValue }) {
                 className="my-md-2 my-sm-2 my-2"
                 onClick={() => Product()} // Pass item name to Product1 function
               />
-              { cate != null &&
+              {cate != null &&
                 cate.map((item) => {
                   return (
                     <input
@@ -141,77 +158,106 @@ function Product_card({ SetMainCart, inputValue }) {
                 })}
             </div>
             <div>
-             {/* Sorting radio buttons */}
-             <input
-               type="radio"
-               name="sortingOption"
-               onChange={handleHighToLow}
-               checked={sortingOption === "high_to_low"} // Check if High to Low is selected
-             />
-             <span className="ps-2">High to Low</span>
-             <br />
+              {/* Sorting radio buttons */}
+              <input
+                type="radio"
+                name="sortingOption"
+                onChange={handleHighToLow}
+                checked={sortingOption === "high_to_low"} // Check if High to Low is selected
+              />
+              <span className="ps-2">High to Low</span>
+              <br />
 
-             <input
-               type="radio"
-               name="sortingOption"
-               onChange={handleLowToHigh}
-               checked={sortingOption === "low_to_high"} // Check if Low to High is selected
-             />
-             <span className="ps-2">Low to High</span>
-             <br />
-           </div>
-
+              <input
+                type="radio"
+                name="sortingOption"
+                onChange={handleLowToHigh}
+                checked={sortingOption === "low_to_high"} // Check if Low to High is selected
+              />
+              <span className="ps-2">Low to High</span>
+              <br />
+            </div>
           </div>
           <div className="">
             <Row style={{ width: "100%" }}>
               {data != null &&
                 data.map((val) => {
                   return (
-                    <Col xxl={3} xl={4} lg={4} md={6} sm={12}>
-                      <Card
-                        style={{ width: "18rem" }}
-                        className="my-xl-2 mx-auto"
-                      >
+                    <Col
+                      xxl={4}
+                      xl={4}
+                      lg={4}
+                      md={6}
+                      sm={12}
+                      className="mb-4 mb-lg-0"
+                    >
+                      <Card className="my-2">
+                        <div className="d-flex justify-content-between p-3">
+                          <p className="lead mb-0">Today's Combo Offer</p>
+                          <div
+                            className="bg-info rounded-circle d-flex align-items-center justify-content-center shadow-1-strong"
+                            style={{ width: "35px", height: "35px" }}
+                          >
+                            <p className="text-white mb-0 small">x4</p>
+                          </div>
+                        </div>
                         <Link
                           to={`/product/${val._id}`}
                           className="text-decoration-none"
                         >
-                          <Card.Img
-                            variant="top"
+                          <CardImg
+                            src={`http://localhost:8000/images/${val.product_img}`}
+                            alt="Laptop"
                             height={"300px"}
                             className="object-fit-cover"
-                            src={`http://localhost:8000/images/${val.product_img}`}
                           />
                         </Link>
-                        <Card.Body className="text-center">
-                          <h5>{val.product_name}</h5>
-                          <h6
-                            className="fs-5"
-                            style={{
-                              color: "#60BABE",
-                              fontFamily: "Bebas Neue, cursive",
-                            }}
-                          >
-                            Product Price -:&nbsp;{val.product_price}$
-                          </h6>
+                        <CardBody>
+                          <div className="d-flex justify-content-between">
+                            <p className="small">
+                              <a href="#!" className="text-muted">
+                                {val.category ? val.category.name : ""}
+                              </a>
+                            </p>
+                            <p className="small text-danger">
+                              <s>
+                                {"999"} <MdCurrencyRupee className="m-0 p-0" />
+                              </s>
+                            </p>
+                          </div>
+
+                          <div className="d-flex justify-content-between mb-3">
+                            <h5 className="mb-0">{val.product_name}</h5>
+                            <h5 className="text-dark mb-0">
+                              {val.product_price}
+                              <MdCurrencyRupee className="m-0 p-0" />
+                            </h5>
+                          </div>
+
+                          <div className="d-flex justify-content-between mb-2">
+                            <p className="text-muted mb-0">
+                              Available: <span className="fw-bold">6</span>
+                            </p>
+                            <div className="ms-auto text-warning">
+                              <IoStar className="text-warning fs-5" />
+                              <IoStar className="text-warning fs-5" />
+                              <IoStar className="text-warning fs-5" />
+                              <IoStar className="text-warning fs-5" />
+                              <IoStar className="text-warning fs-5" />
+                            </div>
+                          </div>
                           <div className="">
-                            <Link
-                              to={`/Payment/${val._id}`}
-                              className="text-decoration-none"
-                            >
-                              <button className="btn btn-outline-success">
-                                Buy Now
-                              </button>
-                            </Link>
                             <Toaster position="top-left" reverseOrder={false} />
                             <button
-                              className="btn btn-outline-danger ms-2"
-                              onClick={notify}
+                              className="btn btn-outline-danger  col-12  "
+                              onClick={() => {
+                                notify(val);
+                              }}
                             >
                               Add To Cart
                             </button>
                           </div>
-                        </Card.Body>
+                        </CardBody>
                       </Card>
                     </Col>
                   );

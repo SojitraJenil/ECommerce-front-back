@@ -83,8 +83,13 @@ function Slider() {
         {data.map((img) => {
           return (
             <>
-              <div className="item" style={{ objectFit: "cover" ,height:"700px"}} >
-                <img src={img.Path} className="" alt="" />
+              <div className="item" style={{ objectFit: "cover" }}>
+                <img
+                  src={img.Path}
+                  className=""
+                  style={{ height: "700px" }}
+                  alt=""
+                />
               </div>
             </>
           );

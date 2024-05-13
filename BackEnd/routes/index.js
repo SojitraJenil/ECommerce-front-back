@@ -42,7 +42,7 @@ router.get("/Order_Search/:key", Order_Search);
 router.post("/Product_add", upload.single("image"), Product_add);
 router.get("/Product_Show", Product_Show);
 router.delete("/product_delete/:id", product_delete);
-router.get("/Product_show/:id", one_Product_show);
+router.get("/Product_show/ProductId/:id", one_Product_show);
 router.get("/product_Search/:key", product_Search);
 router.get("/Product_show/ProductName/:product_name", oneProductByName);
 router.post("/Product_Update/:id", Product_Update);
@@ -53,7 +53,7 @@ router.get("/Product_show/Product_Price/high_to_low", High_to_Low);
 // router.post("/cart/add/productId", addToCart);
 router.post("/addItemToCart", addItemToCart);
 router.get("/getAllCart", getAllCart);
-router.delete("/deleteCartProduct/cart/:productId", removeItemFromCart);
+router.post("/removeCartProduct/:cartId/:productId", removeItemFromCart);
 
 // router.get('/Product_show/:product_name',oneProductByName);
 
