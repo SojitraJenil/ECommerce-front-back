@@ -55,8 +55,8 @@ function Cart_Details() {
                   cartItem.products.map((product, productIndex) => (
                     <tr key={productIndex}>
                       <td>{productIndex + 1}</td>
-                      <td>{cartItem.userId}</td>
                       <td>{cartItem._id}</td>
+                      <td>{cartItem.userId}</td>
                       <td>{product.product_name}</td>
                       <td>
                         <img

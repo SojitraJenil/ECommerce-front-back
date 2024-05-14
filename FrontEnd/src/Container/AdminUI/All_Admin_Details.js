@@ -1,30 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+
 
 function All_Admin_Details() {
   const [Total_User, setTotal_User] = useState("");
   const [Total_Inquiry, setTotal_Inquiry] = useState("");
   const [Total_Product, setTotal_Product] = useState("");
   const [Total_Order, setTotal_Order] = useState("");
+  const [Cart, setCart] = useState([]);
+  const [Cate, setCate] = useState("");
 
-  axios.get(`http://localhost:8000/Inquiry_show`).then(function (response) {
-    setTotal_Inquiry(response.data.inquiry_show.length);
-  });
 
-  axios.get(`http://localhost:8000/Product_Show`).then(function (response) {
-    setTotal_Product(response.data.product_show.length);
-  });
 
-  axios.get(`http://localhost:8000/show_all_user`).then(function (response) {
-    setTotal_User(response.data.data1.length);
-  });
-  axios.get(`http://localhost:8000/Order_details`).then(function (response) {
-    setTotal_Order(response.data.show_details.length);
-  });
+  useEffect(() => {
+    axios.get(`http://localhost:8000/Inquiry_show`).then(function (response) {
+      setTotal_Inquiry(response.data.inquiry_show.length);
+    });
 
+    axios.get(`http://localhost:8000/Product_Show`).then(function (response) {
+      setTotal_Product(response.data.product_show.length);
+    });
+
+    axios.get(`http://localhost:8000/show_all_user`).then(function (response) {
+      setTotal_User(response.data.data1.length);
+    });
+    axios.get(`http://localhost:8000/Order_details`).then(function (response) {
+      setTotal_Order(response.data.show_details.length);
+    });
+    axios.get(`http://localhost:8000/categories`).then(function (response) {
+      setCate(response.data.categories.length);
+    });
+    axios.get(`http://localhost:8000/getAllCart`).then(function (response) {
+      if (response.data.show_cart && response.data.show_cart.length > 0) {
+        // Assuming each item in the cart has a 'products' array
+        let totalProducts = response.data.show_cart.reduce(
+          (acc, cartItem) => acc + cartItem.products.length,
+          0
+        );
+        setCart(totalProducts);
+      } else {
+        setCart(0); // Set to 0 if there are no cart items
+      }
+    });
+  }, []);
   return (
     <div>
-    {/* <Navbar expand="lg" className="bg-body-tertiary">
+      {/* <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
         <Navbar.Brand href="#home">Admin Dashboard</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -37,7 +58,7 @@ function All_Admin_Details() {
     </Navbar> */}
       <div className="my-3">
         <div className="row w-100">
-          <div className="col-12 col-md-3 shadow-3">
+          <div className="col-12 col-md-4 shadow-3">
             <div className="card border-2">
               <div className="card-body py-4 ">
                 <h5 className="mb-2 fw-bold text-center">Total User</h5>
@@ -49,7 +70,7 @@ function All_Admin_Details() {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-3 shadow-3">
+          <div className="col-12 col-md-4 shadow-3">
             <div className="card border-3 text-center">
               <div className="card-body py-4">
                 <h5 className="mb-2 fw-bold">Total Inquiry</h5>
@@ -61,7 +82,7 @@ function All_Admin_Details() {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-3 shadow-3">
+          <div className="col-12 col-md-4 shadow-3">
             <div className="card border-2 text-center">
               <div className="card-body py-4">
                 <h5 className="mb-2 fw-bold">Total Product</h5>
@@ -73,11 +94,35 @@ function All_Admin_Details() {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-3 shadow-3">
+          <div className="col-12 col-md-4 shadow-3">
             <div className="card border-2 text-center">
               <div className="card-body py-4">
                 <h5 className="mb-2 fw-bold">Total Order</h5>
                 <h4 className="mb-2 fw-bold">{Total_Order}</h4>
+                <div className="mb-0">
+                  <span className="badge bg-success me-2">+9.0%</span>
+                  <span className="fw-bold">Since Last Month</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-12 col-md-4 shadow-3">
+            <div className="card border-2 text-center">
+              <div className="card-body py-4">
+                <h5 className="mb-2 fw-bold">Total Category</h5>
+                <h4 className="mb-2 fw-bold">{Cate}</h4>
+                <div className="mb-0">
+                  <span className="badge bg-success me-2">+9.0%</span>
+                  <span className="fw-bold">Since Last Month</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-12 col-md-4 shadow-3">
+            <div className="card border-2 text-center">
+              <div className="card-body py-4">
+                <h5 className="mb-2 fw-bold">Total Cart</h5>
+                <h4 className="mb-2 fw-bold">{Cart}</h4>
                 <div className="mb-0">
                   <span className="badge bg-success me-2">+9.0%</span>
                   <span className="fw-bold">Since Last Month</span>

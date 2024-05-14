@@ -1,46 +1,96 @@
 var Product = require("../Model/productmodel");
 const Category = require("../Model/categorymodel"); // Import the Category model
-
 exports.Product_add = async (req, res) => {
   try {
-    // Check if an image is uploaded
-    if (!req.file) {
-      return res.status(400).json({ error: "No image uploaded" });
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ error: "No images uploaded" });
     }
-    const { product_name, product_price, category } = req.body;
 
-    // Create product object with image filename
+    const {
+      product_name,
+      product_price,
+      product_description,
+      category,
+      Product_stock,
+      Product_dis_rate,
+      Product_rating,
+    } = req.body;
+
+    // Extract image filenames from the uploaded files
+    const images = req.files.map((file) => file.originalname);
+    console.log(images);
+    // Create product object with image filenames array
     const productData = {
       product_name,
       product_price,
+      product_description,
       category,
-      product_img: req.file.originalname, // Assuming the image filename is stored in req.file.originalname
+      product_img: images, // Array of image filenames
+      Product_stock,
+      Product_dis_rate,
+      Product_rating,
     };
 
-    // Create product with image
+    // Create product with images
     const product = await Product.create(productData);
     res.status(200).json({
-      status: "Product added successfully with image",
+      status: "Product added successfully with images",
       product,
     });
   } catch (error) {
-    console.error("Error adding product with image:", error);
+    console.error("Error adding product with images:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+// var limit=5;
+// var total_record= await user.find().count();
 
+// var page_no= req.query.page_no;
+
+// if(page_no==undefined)
+// {
+//     page_no=1;
+// }
+
+// var skip = (page_no-1)*limit;
+
+// var data = await user.find().limit(limit).skip(skip);
+
+// var page = Math.ceil(total_record/limit);
+
+// res.status(200).json({
+//     status:"successfull",
+//     data,
+//
+// })
+// }
+//localhost:8000/Product_Show?page_no=1
 exports.Product_Show = async (req, res) => {
-  var product_show = await Product.find(req.body).populate("category");
+  var limit = 4;
+  var total_record = await Product.find().count();
+  var page_no = req.query.page_no;
+
+  if (page_no == undefined) {
+    page_no = 1;
+  }
+  var skip = (page_no - 1) * limit;
+  var page = Math.ceil(total_record / limit);
+  var product_show = await Product.find(req.body)
+    .populate("category")
+    .limit(limit)
+    .skip(skip);
   res.status(200).json({
     status: "product show Successfully",
     product_show,
+    total_record,
+    page,
+    page_no,
   });
 };
 
 exports.productFindByCat = async (req, res) => {
   try {
     const categoryName = req.params.category;
-    // Find the category by name in your database
     const category = await Category.findOne({ name: categoryName });
     if (!category) {
       return res.status(404).json({ message: "Category not found" });
@@ -83,7 +133,6 @@ exports.one_Product_show = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
-
 
 exports.oneProductByName = async (req, res) => {
   try {
@@ -128,12 +177,12 @@ exports.High_to_Low = async (req, res) => {
   try {
     const products = await Product.find(req.body).sort({ product_price: -1 });
     res.status(200).json({
-      status: 'Success',
-      products
+      status: "Success",
+      products,
     });
   } catch (error) {
-    console.error('Error fetching products:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching products:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -141,30 +190,41 @@ exports.Low_to_High = async (req, res) => {
   try {
     const products = await Product.find(req.body).sort({ product_price: 1 });
     res.status(200).json({
-      status: 'Success',
-      products
+      status: "Success",
+      products,
     });
   } catch (error) {
-    console.error('Error fetching products:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error fetching products:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 exports.product_Search = async (req, res) => {
-  let Result = await Product.find({
-    $or: [
-      { category: { $regex: req.params.key } },
-      { product_name: { $regex: req.params.key } },
-      { product_price: { $regex: req.params.key } },
-    ],
-  });
-  res.status(200).json({
-    status: "data filtered",
-    Result,
-  });
+  try {
+    const key = req.params.key; // Extract the search key from request parameters
+    console.log("Search Key:", key); // Add logging for debugging
+
+    // Construct a regular expression to match partially provided search key
+    const regex = new RegExp(key, "i"); // "i" flag for case-insensitive search
+
+    // Find products that match partially provided search key in category, product_name, or product_price
+    const result = await Product.find({
+      $or: [
+        { category: regex },
+        { product_name: regex },
+        { product_price: regex },
+      ],
+    });
+
+    res.status(200).json({
+      status: "Data filtered successfully",
+      result,
+    });
+  } catch (error) {
+    console.error("Error searching for products:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
-
-
 
 // exports.Product_Update = async (req, res) => {
 //     var id = req.params.id;

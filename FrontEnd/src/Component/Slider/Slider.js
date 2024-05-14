@@ -85,10 +85,8 @@ function Slider() {
             <>
               <div className="item" style={{ objectFit: "cover" }}>
                 <img
-                  src={img.Path}
-                  className=""
-                  style={{ height: "700px" }}
-                  alt=""
+                  src={img.Path}                  
+                  alt="Carousel"
                 />
               </div>
             </>

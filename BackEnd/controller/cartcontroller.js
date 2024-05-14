@@ -2,7 +2,7 @@ const Cart = require("../Model/cartmodel");
 
 exports.addItemToCart = async (req, res) => {
   const { productId, quantity, product_name, product_price, product_img } =
-    req.body;
+    req.body; 
   const userId = "65f5509b7b2fe4ab8d24d60f"; // Assuming you have middleware to authenticate and attach user object to request
 
   try {

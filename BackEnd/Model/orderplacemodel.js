@@ -1,6 +1,7 @@
 var mongoose = require("mongoose");
 
 var userSchema = mongoose.Schema({
+  userId: { type: String },
   country: { type: String },
   voucher: { type: String },
   fname: { type: String },

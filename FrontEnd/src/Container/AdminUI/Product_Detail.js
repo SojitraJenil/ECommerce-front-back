@@ -13,6 +13,10 @@ function Product_Detail() {
   const [categorys, setcategorys] = useState("");
   const [product_name, Setproduct_name] = useState("");
   const [product_price, Setproduct_price] = useState("");
+  const [Product_stock, SetProduct_stock] = useState("");
+  const [Product_dis_rate, SetProduct_dis_rate] = useState("");
+  const [Product_rating, SetProduct_rating] = useState("");
+  const [product_description, Setproduct_description] = useState("");
 
   // const [Category, setCategory] = useState("");
 
@@ -31,7 +35,7 @@ function Product_Detail() {
   // const handleCategory = () => setCategoryShow(true);
   // const handleShowCategory = () => setCategoryShow(true);
 
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -40,8 +44,10 @@ function Product_Detail() {
   }, []);
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selectedFiles = e.target.files; // Get the array of selected files
+    setFiles(selectedFiles); // Store the array of selected files in state
   };
+    
 
   // setInterval(() => {
   //   loading(true)
@@ -49,17 +55,26 @@ function Product_Detail() {
   // }, 25000);
 
   // const myTimeout = setTimeout(handleSubmit,2000);
-
   const handleSubmit = async () => {
     setLoading(true); // Set loading to true before making the request
     try {
       const formData = new FormData();
-      formData.append("image", file);
+  
+      // Append each file in the array of files
+      for (let i = 0; i < files.length; i++) {
+        formData.append("images", files[i]);
+      }
+  
       formData.append("category", categorys);
       formData.append("product_name", product_name);
       formData.append("product_price", product_price);
+      formData.append("product_description", product_description);
+      formData.append("Product_stock", Product_stock);
+      formData.append("Product_dis_rate", Product_dis_rate);
+      formData.append("Product_rating", Product_rating);
+  
       const uploadResponse = await axios.post(
-        `${process.env.REACT_APP_API_URL}/Product_add`,
+        `http://localhost:8000/Product_add`,
         formData,
         {
           headers: {
@@ -67,17 +82,18 @@ function Product_Detail() {
           },
         }
       );
+  
       setLoading(false); // Set loading to false after the request is complete
       // alert("Product added successfully.");
       setShow(false);
       Getdata();
       console.log(uploadResponse.data);
     } catch (error) {
-      console.error("Error adding product with image:", error);
+      console.error("Error adding product with images:", error);
       setLoading(false); // Set loading to false in case of error
     }
   };
-
+  
   const category = () => {
     axios.get(`http://localhost:8000/categories`).then(function (response) {
       setCategory(response.data.categories);
@@ -101,10 +117,13 @@ function Product_Detail() {
         // navigation("/");
       });
   };
-  const Product_Search = async (key) => { // change val to key for consistency
+  const Product_Search = async (key) => {
+    // change val to key for consistency
     console.log(key);
     try {
-      const result = await axios.get(`http://localhost:8000/product_Search/${key}`);
+      const result = await axios.get(
+        `http://localhost:8000/product_Search/${key}`
+      );
       if (result.data.Result && result.data.Result.length > 0) {
         setData(result.data.Result);
       } else {
@@ -114,8 +133,7 @@ function Product_Detail() {
       console.error("Error searching for products:", error);
     }
   };
-  
-  
+
   const Update_product = async (ID) => {
     alert(ID);
   };
@@ -163,6 +181,9 @@ function Product_Detail() {
                     <th>category</th>
                     <th>Product Name</th>
                     <th>Price</th>
+                    <th>stock</th>
+                    <th>dis_rate</th>
+                    <th>rating</th>
                     <th>Product Image path</th>
                     <th>Delete</th>
                     <th>Update</th>
@@ -189,10 +210,13 @@ function Product_Detail() {
                           </td>
                           <td>{item.product_name}</td>
                           <td>{item.product_price}</td>
+                          <td>{item.Product_stock}</td>
+                          <td>{item.Product_dis_rate}</td>
+                          <td>{item.Product_rating}</td>
                           <td>
-                            {item.product_img &&(
+                            {item.product_img && (
                               <img
-                                src={`http://localhost:8000/images/${item.product_img}`}
+                                src={`http://localhost:8000/images/${item.product_img[0]}`}
                                 style={{ objectFit: "cover" }}
                                 width="100"
                                 height="100"
@@ -230,7 +254,7 @@ function Product_Detail() {
 
           <Modal show={show} onHide={handleClose} onShow={handleUpdate}>
             <Modal.Header closeButton>
-              <Modal.Title> Form</Modal.Title>
+              <Modal.Title> Add Product Form</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Form>
@@ -290,10 +314,84 @@ function Product_Detail() {
                 </Form.Group>
                 <Form.Group
                   className="mb-3"
+                  controlId="exampleForm.ControlInput2"
+                >
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    onChange={(e) => {
+                      Setproduct_description(e.target.value);
+                    }}
+                    placeholder="enter Description"
+                    autoFocus
+                  />
+                </Form.Group>
+
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlInput2"
+                >
+                  <Form.Label>stock</Form.Label>
+                  <Form.Control
+                    type="number"
+                    onChange={(e) => {
+                      SetProduct_stock(e.target.value);
+                    }}
+                    placeholder="enter price"
+                    autoFocus
+                  />
+                </Form.Group>
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlInput2"
+                >
+                  <Form.Label>Discount</Form.Label>
+                  <Form.Control
+                    type="number"
+                    min="1" // Set minimum value
+                    max="25" // Set maximum value
+                    onChange={(e) => {
+                      const discount = parseFloat(e.target.value); // Parse the input value to a float
+                      if (!isNaN(discount) && discount >= 1 && discount <= 25) {
+                        SetProduct_dis_rate(discount); // Update state only if the value is valid
+                      }
+                    }}
+                    placeholder="Enter discount (1-25)"
+                    autoFocus
+                  />
+                </Form.Group>
+
+                <Form.Group
+                  className="mb-3"
+                  controlId="exampleForm.ControlInput2"
+                >
+                  <Form.Label>Rating</Form.Label>
+                  <Form.Control
+                    type="number"
+                    min="1" // Set minimum value
+                    max="5" // Set maximum value
+                    onChange={(e) => {
+                      const rating = parseInt(e.target.value);
+                      if (!isNaN(rating) && rating >= 0 && rating <= 5) {
+                        SetProduct_rating(rating);
+                      }
+                    }}
+                    placeholder="Enter rating (1-5)"
+                    autoFocus
+                  />
+                </Form.Group>
+
+                <Form.Group
+                  className="mb-3"
                   controlId="exampleForm.ControlInput3"
                 >
-                  <Form.Label>Product Image </Form.Label>
-                  <input type="file" onChange={handleFileChange} />
+                  <Form.Label>Product Images</Form.Label>
+                  <input
+                    type="file"
+                    name="images"
+                    multiple
+                    onChange={handleFileChange}
+                  />
                   {/* <button onClick={handleUpload}>Upload</button>*/}
                 </Form.Group>
               </Form>

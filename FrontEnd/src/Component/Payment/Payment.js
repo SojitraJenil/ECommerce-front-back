@@ -18,7 +18,10 @@ import {
   MDBTypography,
 } from "mdb-react-ui-kit";
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import Alert from "react-bootstrap/Alert";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useAtom } from "jotai";
+import { AllCartData } from "../../Atom/Atom";
 
 export default function Payment() {
   const { id } = useParams();
@@ -31,7 +34,10 @@ export default function Payment() {
   const [payable, setpayable] = useState(0);
   const [getEmail, setEmail] = useState("");
   const [cartItems, setCartItems] = useState([]);
-
+  const [error, Seterror] = useState(false);
+  const [IsPayNow, SetIsPayNow] = useState(false);
+  const [CartData, SetAllCartData] = useAtom(AllCartData);
+  const nav = useNavigate()
   useEffect(() => {
     fetchData();
   }, []);
@@ -40,13 +46,14 @@ export default function Payment() {
     axios
       .get("http://localhost:8000/getAllCart")
       .then((res) => {
+        SetAllCartData(res.data.show_cart);
         const cartData = res.data.show_cart[0];
         const products = cartData.products;
         const totalProducts = products.length;
         const total = products.reduce((acc, product) => {
           return acc + parseInt(product.product_price) * product.quantity;
         }, 0);
-
+        console.log("res.data.show_cart.products", res.data.show_cart);
         setCartItems(products);
         setTotalPrice(total);
         setCGST(Math.abs((total * 4.5) / 100));
@@ -59,17 +66,6 @@ export default function Payment() {
         console.log(err);
       });
   };
-
-  // const getData = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:8000/Product_Show`
-  //     );
-  //     setData(response.data.One_product_show);
-  //   } catch (error) {
-  //     console.error("An error occurred:", error);
-  //   }
-  // };
 
   const [formData, setFormData] = useState({
     country: "",
@@ -86,15 +82,46 @@ export default function Payment() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (
+      !formData.country ||
+      !formData.fname ||
+      !formData.lname ||
+      !formData.address ||
+      !formData.pinCode ||
+      !formData.phone
+    ) {
+      Seterror(true);
+      return;
+    }
     try {
       const response = await axios.post(
         "http://localhost:8000/Order_Register",
         formData
       );
-      console.log("Product_add successful:", response.data);
+      console.log("Product Order successful:", response.data);
+
+      // Log the formData state after setting it to null
+      console.log("FormData after reset:", formData);
+      SetIsPayNow(true);
+      setFormData({
+        country: "",
+        voucher: "",
+        fname: "",
+        lname: "",
+        company: "",
+        address: "",
+        // email: "", // Add this line to clear the email field
+        pinCode: "",
+        phone: "",
+      });
+
+      // Log a message to verify that the form data is reset
+      console.log("Form data reset successfully");
+
+      alert("Product Order successful");
+      Seterror(false);
     } catch (error) {
       console.error("Registration failed:", error);
     }
@@ -130,19 +157,24 @@ export default function Payment() {
               </MDBCardBody>
             </MDBCard>
 
-            <MDBAccordion className="card mb-4 my-5">
+            <MDBAccordion className="card mb-4 my-5" initialActive={1}>
               <MDBAccordionItem
                 collapseId={1}
                 className="border-0"
                 headerTitle="Promo/Student Code or Vouchers"
               >
-                <span>Enter Code</span>
-                <MDBInput
-                  label=""
-                  type="text"
-                  name="voucher"
-                  onChange={handleChange}
-                />
+                <div className="accordion-collapse collapse show">
+                  {" "}
+                  {/* Add 'show' class here */}
+                  <span>Enter Code</span>
+                  <MDBInput
+                    label=""
+                    type="number"
+                    min={10}
+                    name="voucher"
+                    onChange={handleChange}
+                  />
+                </div>
               </MDBAccordionItem>
             </MDBAccordion>
 
@@ -241,8 +273,18 @@ export default function Payment() {
                       defaultChecked
                     />
                   </div>
+                  <div className="d-flex mt-2 justify-content-center">
+                    {error && (
+                      <p className="text-danger">
+                        Please fill in all required fields...
+                      </p>
+                    )}
+                  </div>
                   <div className="text-center py-3">
-                    <button className="btn btn-primary button-order col-md-10">
+                    <button
+                      disabled={IsPayNow == true}
+                      className="btn btn-primary button-order col-md-10"
+                    >
                       Place Order
                     </button>
                   </div>
@@ -274,13 +316,17 @@ export default function Payment() {
 
                           <MDBCol>
                             <span className="mb-0 text-price">
-                              <b>Name -: {data.product_name} </b>
+                              <b>
+                                <h5>{data.product_name}</h5>{" "}
+                              </b>
                             </span>
                             <p className="mb-0 text-descriptions">
-                              <b>Price -:{data.product_price}$</b>
+                              <b>
+                                {data.product_price} * {data.quantity}
+                              </b>
                             </p>
                             <span className="text-descriptions fw-bold">
-                              Quantity -{data.quantity}
+                              ={data.product_price * data.quantity}
                             </span>
                           </MDBCol>
                           <hr />
@@ -308,11 +354,19 @@ export default function Payment() {
                       Total payable amount
                       <span>{payable}.00</span>
                     </MDBListGroupItem>
-                    <MDBListGroupItem className="d-flex justify-content-between align-items-center px-0 fw-bold text-uppercase">
-                      <button className="btn btn-primary button-order mx-auto px-5">
-                        Pay Now
-                      </button>
-                    </MDBListGroupItem>
+                    {/* <Link to={"/Payment/Bill"}> */}
+                      <MDBListGroupItem className="d-flex justify-content-between align-items-center px-0 fw-bold text-uppercase">
+                        <button
+                          disabled={IsPayNow === false}
+                          onClick={()=>{
+                            nav("/Payment/Bill")
+                          }}
+                          className="btn btn-primary button-order mx-auto px-5"
+                        >
+                          Pay Now
+                        </button>
+                      </MDBListGroupItem>
+                    {/* </Link> */}
                   </MDBListGroup>
                 </MDBCardFooter>
               </MDBCard>

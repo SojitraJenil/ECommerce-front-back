@@ -23,8 +23,8 @@ function App() {
   return (
     <>
     {/* maintance */}
-      <Maintenance />
-      {/* <Allroute /> */}
+      {/* <Maintenance /> */}
+      <Allroute />
     </>
   );
 }

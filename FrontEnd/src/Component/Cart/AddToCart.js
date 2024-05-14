@@ -5,6 +5,8 @@ import { ImBin2 } from "react-icons/im";
 import { Link } from "react-router-dom";
 import { atom, useAtom } from "jotai";
 import { abcd, totalProduct } from "../../Atom/Atom";
+import { HiMinusSm, HiPlusSm } from "react-icons/hi";
+import { FiPlus } from "react-icons/fi";
 
 export default function AddToCart() {
   const [cartItems, setCartItems] = useState([]);
@@ -91,6 +93,9 @@ export default function AddToCart() {
       <Container className="my-4">
         <Row className="justify-content-center align-items-center ">
           <Col>
+            <h3 className="text-center letter text-uppercase ">
+              Add To cart Page
+            </h3>
             <Card className="shopping-cart">
               <Card.Body className="text-black">
                 <Row>
@@ -129,48 +134,41 @@ export default function AddToCart() {
                               Price -:{product.product_price}
                             </p>
                           </div>
-
-                          <div className="d-flex align-items-center py-2">
-                            <p className="fw-bold mb-0 me-5 pe-3">
-                              Quantity -:{product.quantity}
-                            </p>
-                          </div>
-
-                          <div className="d-flex align-items-center py-2">
-                            <p className="fw-bold mb-0 me-5 pe-3">
-                              <button
-                                onClick={() =>
-                                  removeOneItemToCart(product.productId)
-                                }
-                              >
-                                -
-                              </button>
-
-                              <input
-                                type="number"
-                                step="1"
-                                max="10"
-                                defaultValue="1"
-                                value={product.quantity}
-                                className="quantity-field border-0 text-center w-25"
-                              />
-                              <button
-                                onClick={() => AddItemToCart(product.productId)}
-                              >
-                                +
-                              </button>
-                            </p>
-
-                            <div
-                              className="btn  "
-                              onClick={() => {
-                                DeleteCartItem(product.productId);
-                              }}
-                            >
-                              <ImBin2 className="ms-5 fs-5" />
+                          <div class="col-md-4 mb-3 border">
+                            <div class="input-group">
+                              <div class="input-group-prepend">
+                                <div className="input-group">
+                                  <button
+                                    className="btn btn-light rounded-0"
+                                    type="button"
+                                    onClick={() =>
+                                      removeOneItemToCart(product.productId)
+                                    }
+                                    disabled={product.quantity <= 1} // Disable the button if quantity is already at minimum
+                                  >
+                                    <HiMinusSm />
+                                  </button>
+                                  <input
+                                    type="text"
+                                    name="qty"
+                                    className="form-control text-center"
+                                    value={product.quantity}
+                                    readOnly // Making the input field read-only to prevent direct editing
+                                  />
+                                  <button
+                                    className="btn btn-light rounded-0"
+                                    type="button"
+                                    onClick={() =>
+                                      AddItemToCart(product.productId)
+                                    }
+                                    disabled={product.quantity >= 10} // Disable the button if quantity is already at maximum
+                                  >
+                                    <HiPlusSm />
+                                  </button>
+                                </div>
+                              </div>
                             </div>
                           </div>
-
                           <hr />
                         </div>
                       </div>

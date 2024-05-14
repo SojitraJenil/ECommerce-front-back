@@ -39,7 +39,8 @@ router.get("/Order_details", Show_all_Order_details);
 router.delete("/Order_delete/:id", Order_Delete);
 router.get("/Order_Search/:key", Order_Search);
 
-router.post("/Product_add", upload.single("image"), Product_add);
+router.post("/Product_add", upload.array("images", 5), Product_add);
+// router.post("/Product_add", upload.single("image"), Product_add); 
 router.get("/Product_Show", Product_Show);
 router.delete("/product_delete/:id", product_delete);
 router.get("/Product_show/ProductId/:id", one_Product_show);

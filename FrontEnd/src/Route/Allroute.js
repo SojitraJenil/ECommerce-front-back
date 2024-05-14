@@ -26,6 +26,8 @@ import Kidssection from "../Component/Kidssection/Kidssection";
 import Blog from "../Component/Blog";
 import Contact from "../Component/Contact/Contact";
 import Cart_Details from "../Container/AdminUI/Cart_Details";
+import Statistic from "../Container/AdminUI/Statistic";
+import Bill from "../Component/Payment/Bill";
 
 const Allroute = () => {
   return (
@@ -40,6 +42,7 @@ const Allroute = () => {
         {/* <Route path="/admin/InquiryManage" element={<InquiryManage />} /> */}
 
         <Route path="/Payment" element={<Payment />} />
+        <Route path="/Payment/Bill" element={<Bill />} />
 
         <Route path="/EmailUpdate" element={<EmailUpdate />} />
 
@@ -60,6 +63,7 @@ const Allroute = () => {
         <Route path="/Admin/Product_Detail" element={<Product_Detail />} />
         <Route path="/Admin/Inquiry_Detail" element={<Inquiry_Detail />} />
         <Route path="/Admin/Order_Manage" element={<Order_Manage />} />
+        <Route path="/Admin/Statistics" element={<Statistic  />} />
         <Route
           path="/Admin/Categories_Detail"
           element={<Categories_Detail />}

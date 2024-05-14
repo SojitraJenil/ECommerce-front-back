@@ -9,11 +9,16 @@ import {
 import { NavLink } from "react-router-dom";
 import { TbCategoryFilled } from "react-icons/tb";
 import { RiProductHuntFill } from "react-icons/ri";
-
+import { IoStatsChartSharp } from "react-icons/io5";
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
   const toggle = () => setIsOpen(!isOpen);
   const menuItem = [
+    {
+      path: "/Admin/Statistics   ",
+      name: "statistics ",
+      icon: <IoStatsChartSharp />,
+    },
     {
       path: "/Admin/User_Detail",
       name: "User_Detail",
@@ -73,7 +78,7 @@ const Sidebar = ({ children }) => {
           <NavLink
             to={item.path}
             key={index}
-            className="d-flex text-dark text-decoration-none border border-bottom border-black border-0 "
+            className="d-flex text-dark text-decoration-none border-bottom  border-black border-0 "
             style={{ padding: "10px 15px", gap: "15px" }}
             activeClassName="active"
           >

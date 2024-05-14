@@ -20,7 +20,7 @@ function Order_Manage() {
 
   function delete_order(id) {
     axios
-      .delete(`http://localhost:8000}/Order_delete/${id}`)
+      .delete(`http://localhost:8000/Order_delete/${id}`)
       .then(function (response) {
         console.log(response);
         ShowAllOrder();
@@ -103,7 +103,7 @@ function Order_Manage() {
                           <td>{items.phone}</td>
                           <td>
                             <button
-                              className="btn btn-outline-danger"
+                              className="btn text-dark btn-outline-danger"
                               onClick={() => {
                                 delete_order(items._id);
                               }}

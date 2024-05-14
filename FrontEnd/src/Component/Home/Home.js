@@ -15,9 +15,6 @@ const Home = () => {
   const handleInputChange = (value) => {
     setInputValue(value);
   };
-  useEffect(() => {
-    console.log("Good Morning");
-  }, []);
   return (
     <div>
       <TopNavbar />
