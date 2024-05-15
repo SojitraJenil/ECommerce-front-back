@@ -3,6 +3,7 @@ import AdminUI from "./AdminUI";
 import axios from "axios";
 import Table from "react-bootstrap/Table";
 import All_Admin_Details from "./All_Admin_Details";
+import Swal from "sweetalert2";
 
 function User_Detail() {
   const [data, setData] = useState(null);
@@ -28,15 +29,32 @@ function User_Detail() {
   };
 
   const DeleteHandler = async (id) => {
-    axios
-      .delete(`http://localhost:8000/delete_user/${id}`)
-      .then((response) => {
-        console.log("Resource deleted successfully:", response.data);
-        Getdata();
-      })
-      .catch((error) => {
-        console.error("Error deleting resource:", error);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`http://localhost:8000/delete_user/${id}`)
+          .then((response) => {
+            console.log("Resource deleted successfully:", response.data);
+            Getdata();
+          })
+          .catch((error) => {
+            console.error("Error deleting resource:", error);
+          });
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
   };
 
   const HandlerSearch = async (id) => {

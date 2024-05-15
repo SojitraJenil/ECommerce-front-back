@@ -19,6 +19,7 @@ function Product_card({ SetMainCart, inputValue }) {
   const [sortingOption, setSortingOption] = useState(null);
   const [currentPage, setCurrentPage] = useState(1); // Fix the useState call
   const [totalPages, setTotalPages] = useState(1);
+
   console.log("totalPages", totalPages);
   console.log("currentPage", currentPage);
   const notify = (val) => {
@@ -42,7 +43,7 @@ function Product_card({ SetMainCart, inputValue }) {
         quantity: 1,
         product_name: val.product_name,
         product_price: val.product_price,
-        product_img: val.product_img,
+        product_img: val.product_img[0],
       })
       .then((res) => {
         console.log(res);
@@ -122,14 +123,14 @@ function Product_card({ SetMainCart, inputValue }) {
         })
         .catch(function (error) {
           console.error(error);
-        }); 
+        });
     }
   };
 
   useEffect(() => {
     handlePageChange(currentPage);
   }, [currentPage]);
-  
+
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     axios
@@ -273,7 +274,7 @@ function Product_card({ SetMainCart, inputValue }) {
                               <s>
                                 {val.Product_dis_rate == null
                                   ? "999"
-                                  : val.Product_dis_rate}{" "}
+                                  : val.product_price *val.Product_dis_rate / 100}
                                 <MdCurrencyRupee className="m-0 p-0" />
                               </s>
                             </p>

@@ -54,7 +54,7 @@ router.get("/Product_show/Product_Price/high_to_low", High_to_Low);
 // router.post("/cart/add/productId", addToCart);
 router.post("/addItemToCart", addItemToCart);
 router.get("/getAllCart", getAllCart);
-router.post("/removeCartProduct/:cartId/:productId", removeItemFromCart);
+router.delete("/removeCartProduct/:cartId/:productId", removeItemFromCart);
 
 // router.get('/Product_show/:product_name',oneProductByName);
 

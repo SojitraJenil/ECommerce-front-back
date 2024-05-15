@@ -1,12 +1,14 @@
 import AdminUI from "./AdminUI";
 import React, { useEffect, useState } from "react";
-import { Container, Table } from "react-bootstrap";
+import { Container, Pagination, Table } from "react-bootstrap";
 import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Loader from "../../Container/Loading/Loader";
 import All_Admin_Details from "./All_Admin_Details";
+import Swal from "sweetalert2";
+
 // import { useNavigate } from "react-router-dom";
 
 function Product_Detail() {
@@ -17,14 +19,13 @@ function Product_Detail() {
   const [Product_dis_rate, SetProduct_dis_rate] = useState("");
   const [Product_rating, SetProduct_rating] = useState("");
   const [product_description, Setproduct_description] = useState("");
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   // const [Category, setCategory] = useState("");
-
   const [data, setData] = useState(null);
   const [show, setShow] = useState(false);
   const [Category, setCategory] = useState(null);
   // const [categoryShow, setCategoryShow] = useState(false);
-
   // const navigation = useNavigate();
 
   const handleClose = () => setShow(false);
@@ -47,7 +48,6 @@ function Product_Detail() {
     const selectedFiles = e.target.files; // Get the array of selected files
     setFiles(selectedFiles); // Store the array of selected files in state
   };
-    
 
   // setInterval(() => {
   //   loading(true)
@@ -59,12 +59,12 @@ function Product_Detail() {
     setLoading(true); // Set loading to true before making the request
     try {
       const formData = new FormData();
-  
+
       // Append each file in the array of files
       for (let i = 0; i < files.length; i++) {
         formData.append("images", files[i]);
       }
-  
+
       formData.append("category", categorys);
       formData.append("product_name", product_name);
       formData.append("product_price", product_price);
@@ -72,7 +72,7 @@ function Product_Detail() {
       formData.append("Product_stock", Product_stock);
       formData.append("Product_dis_rate", Product_dis_rate);
       formData.append("Product_rating", Product_rating);
-  
+
       const uploadResponse = await axios.post(
         `http://localhost:8000/Product_add`,
         formData,
@@ -82,7 +82,7 @@ function Product_Detail() {
           },
         }
       );
-  
+
       setLoading(false); // Set loading to false after the request is complete
       // alert("Product added successfully.");
       setShow(false);
@@ -93,7 +93,24 @@ function Product_Detail() {
       setLoading(false); // Set loading to false in case of error
     }
   };
-  
+
+  useEffect(() => {
+    handlePageChange(currentPage);
+  }, [currentPage]);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    axios
+      .get(`http://localhost:8000/Product_show?page_no=${pageNumber}`)
+      .then(function (response) {
+        setData(response.data.product_show);
+        console.log(response.data.product_show);
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
   const category = () => {
     axios.get(`http://localhost:8000/categories`).then(function (response) {
       setCategory(response.data.categories);
@@ -102,20 +119,47 @@ function Product_Detail() {
   };
 
   const Getdata = () => {
-    axios.get(`http://localhost:8000/Product_Show`).then(function (response) {
-      console.log("data", response.data.product_show);
-      setData(response.data.product_show);
-    });
+    // Assuming skip and limit are defined elsewhere in your code
+    const skip = 0; // adjust according to your pagination requirements
+    const limit = 25; // adjust according to your pagination requirements
+
+    axios
+      .get(`http://localhost:8000/Product_Show`)
+      .then(function (response) {
+        console.log("data", response.data.product_show);
+        setData(response.data.product_show);
+      })
+      .catch(function (error) {
+        console.error("Error fetching data:", error);
+      });
   };
 
   const delete_product = (id) => {
-    axios
-      .delete(`http://localhost:8000/product_delete/${id}`)
-      .then(function (response) {
-        console.log(response);
-        Getdata();
-        // navigation("/");
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+        .delete(`http://localhost:8000/product_delete/${id}`)
+        .then(function (response) {
+          console.log(response);
+          Getdata();
+          // navigation("/");
+        });
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
+      }
+    });
+
   };
   const Product_Search = async (key) => {
     // change val to key for consistency
@@ -165,6 +209,28 @@ function Product_Detail() {
                 Add Product
               </button>
             </div>
+            <div className="ms-4">
+              <Pagination>
+                <Pagination.Prev
+                  onClick={() => handlePageChange(currentPage - 1)}
+                  disabled={currentPage === 1}
+                />
+                {[...Array(totalPages)].map((_, index) => (
+                  <Pagination.Item
+                    key={index + 1}
+                    active={index + 1 === currentPage}
+                    onClick={() => handlePageChange(index + 1)}
+                  >
+                    {index + 1}
+                  </Pagination.Item>
+                ))}
+                <Pagination.Next
+                  onClick={() => handlePageChange(currentPage + 1)}
+                  disabled={currentPage === totalPages}
+                />
+              </Pagination>{" "}
+            </div>
+            <hr />
             {/* <div className="ms-2">
               <button className="btn btn-outline-primary" onClick={handleCategory}>
                 Add Category

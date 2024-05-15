@@ -7,6 +7,8 @@ import { atom, useAtom } from "jotai";
 import { abcd, totalProduct } from "../../Atom/Atom";
 import { HiMinusSm, HiPlusSm } from "react-icons/hi";
 import { FiPlus } from "react-icons/fi";
+import { MdDelete } from "react-icons/md";
+import Swal from "sweetalert2";
 
 export default function AddToCart() {
   const [cartItems, setCartItems] = useState([]);
@@ -71,21 +73,37 @@ export default function AddToCart() {
         console.log(err);
       });
   };
-  const DeleteCartItem = (ProductId) => {
-    alert(ProductId);
-    axios
-      .post(
-        `http://localhost:8000/removeCartProduct/663f151bdde3f55dae966d3b/${ProductId}`
-      )
-      .then(function (res) {
-        console.log(res);
-        alert("Product deleted successfully");
-        fetchData();
-      })
-      .catch(function (error) {
-        console.log(error);
-        alert("Error deleting product");
-      });
+
+  const DeleteCartItem = (productId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(
+            `http://localhost:8000/removeCartProduct/66444b466f3d22168fc6238a/${productId}`
+          )
+          .then(function (res) {
+            console.log(res);
+            fetchData();
+          })
+          .catch(function (error) {
+            console.log(error);
+            alert("Error deleting product");
+          });
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+        });
+      }
+    });
   };
 
   return (
@@ -115,14 +133,23 @@ export default function AddToCart() {
                         className="d-flex align-items-center mb-5"
                       >
                         <div className="flex-shrink-0">
-                          <Card.Img
-                            src={`http://localhost:8000/images/${product.product_img}`}
-                            style={{ width: "150px" }}
-                            alt="Product"
-                          />
+                          <Link
+                            to={`/product/${product.productId}`}
+                            className="text-decoration-none"
+                          >
+                            <Card.Img
+                              src={`http://localhost:8000/images/${product.product_img}`}
+                              style={{ width: "150px" }}
+                              alt="Product"
+                            />
+                          </Link>
                         </div>
-
                         <div className="flex-grow-1 ms-3">
+                          <div className="d-flex align-items-center py-2">
+                            <p className="fw-bold mb-0 me-5 pe-3">
+                              id -:{product._id}
+                            </p>
+                          </div>
                           <div className="d-flex align-items-center py-2">
                             <p className="fw-bold mb-0 me-5 pe-3">
                               Name -:{product.product_name}
@@ -134,7 +161,7 @@ export default function AddToCart() {
                               Price -:{product.product_price}
                             </p>
                           </div>
-                          <div class="col-md-4 mb-3 border">
+                          <div class="col-md-6 mb-3 border">
                             <div class="input-group">
                               <div class="input-group-prepend">
                                 <div className="input-group">
@@ -151,7 +178,7 @@ export default function AddToCart() {
                                   <input
                                     type="text"
                                     name="qty"
-                                    className="form-control text-center"
+                                    className="form-control text-center "
                                     value={product.quantity}
                                     readOnly // Making the input field read-only to prevent direct editing
                                   />
@@ -171,6 +198,13 @@ export default function AddToCart() {
                           </div>
                           <hr />
                         </div>
+                        <button
+                          onClick={() => {
+                            DeleteCartItem(product.productId);
+                          }}
+                        >
+                          <MdDelete />
+                        </button>
                       </div>
                     ))}
                   </Col>

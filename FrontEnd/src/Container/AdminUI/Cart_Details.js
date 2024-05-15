@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import All_Admin_Details from "./All_Admin_Details";
+import Swal from "sweetalert2";
 
 function Cart_Details() {
   const [cart, setCart] = useState([]);
@@ -17,6 +18,39 @@ function Cart_Details() {
       setCart(response.data.show_cart);
     });
   };
+  const DeleteCartItem = (productId) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+        .delete(
+          `http://localhost:8000/removeCartProduct/66444b466f3d22168fc6238a/${productId}`
+        )
+        .then(function (res) {
+          console.log(res);
+          ShowAllCartProduct();
+        })
+        .catch(function (error) {
+          console.log(error);
+          alert("Error deleting product");
+        });
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
+      }
+    });
+  };
+
+
 
   return (
     <div className="d-flex">
@@ -47,6 +81,7 @@ function Cart_Details() {
                   <th>Quantity</th>
                   <th>Price</th>
                   <th>Total Price</th>
+                  <th>Deelte</th>
                 </tr>
               </thead>
 
@@ -59,15 +94,29 @@ function Cart_Details() {
                       <td>{cartItem.userId}</td>
                       <td>{product.product_name}</td>
                       <td>
-                        <img
-                          src={`http://localhost:8000/images/${product.product_img}`}
-                          alt="Product"
-                          style={{ width: "50px", height: "50px" }}
-                        />
+                        {product.product_img && (
+                          <img
+                            src={`http://localhost:8000/images/${product.product_img}`}
+                            style={{ objectFit: "cover" }}
+                            width="100"
+                            height="100"
+                            alt="Product"
+                          />
+                        )}
                       </td>
                       <td>{product.quantity}</td>
                       <td>{product.product_price}</td>
                       <td>{product.quantity * product.product_price}</td>
+                      <td>
+                        <button
+                          className="btn btn-outline-danger"
+                          onClick={() => {
+                            DeleteCartItem(product.productId);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   ))
                 )}

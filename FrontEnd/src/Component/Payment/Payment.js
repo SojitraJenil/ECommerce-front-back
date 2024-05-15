@@ -22,6 +22,7 @@ import Alert from "react-bootstrap/Alert";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAtom } from "jotai";
 import { AllCartData } from "../../Atom/Atom";
+import Swal from "sweetalert2";
 
 export default function Payment() {
   const { id } = useParams();
@@ -37,7 +38,7 @@ export default function Payment() {
   const [error, Seterror] = useState(false);
   const [IsPayNow, SetIsPayNow] = useState(false);
   const [CartData, SetAllCartData] = useAtom(AllCartData);
-  const nav = useNavigate()
+  const nav = useNavigate();
   useEffect(() => {
     fetchData();
   }, []);
@@ -101,7 +102,11 @@ export default function Payment() {
         formData
       );
       console.log("Product Order successful:", response.data);
-
+      Swal.fire({
+        title: "Order Address Added..!",
+        text: "You clicked the button!",
+        icon: "success",
+      });
       // Log the formData state after setting it to null
       console.log("FormData after reset:", formData);
       SetIsPayNow(true);
@@ -119,8 +124,6 @@ export default function Payment() {
 
       // Log a message to verify that the form data is reset
       console.log("Form data reset successfully");
-
-      alert("Product Order successful");
       Seterror(false);
     } catch (error) {
       console.error("Registration failed:", error);
@@ -355,17 +358,22 @@ export default function Payment() {
                       <span>{payable}.00</span>
                     </MDBListGroupItem>
                     {/* <Link to={"/Payment/Bill"}> */}
-                      <MDBListGroupItem className="d-flex justify-content-between align-items-center px-0 fw-bold text-uppercase">
-                        <button
-                          disabled={IsPayNow === false}
-                          onClick={()=>{
-                            nav("/Payment/Bill")
-                          }}
-                          className="btn btn-primary button-order mx-auto px-5"
-                        >
-                          Pay Now
-                        </button>
-                      </MDBListGroupItem>
+                    <MDBListGroupItem className="d-flex justify-content-between align-items-center px-0 fw-bold text-uppercase">
+                      <button
+                        disabled={IsPayNow === false}
+                        onClick={() => {
+                          Swal.fire({
+                            title: "payment is received..!",
+                            text: "Now Your Bill is,Here!",
+                            icon: "success",
+                          });
+                          nav("/Payment/Bill");
+                        }}
+                        className="btn btn-primary button-order mx-auto px-5"
+                      >
+                        Pay Now
+                      </button>
+                    </MDBListGroupItem>
                     {/* </Link> */}
                   </MDBListGroup>
                 </MDBCardFooter>

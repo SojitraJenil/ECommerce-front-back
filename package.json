@@ -5,7 +5,7 @@
     "start": "concurrently \"cd frontend && npm start\" \"cd backend && npm start\""
   },
   "dependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "sweetalert2": "^11.11.0"
   }
 }
-

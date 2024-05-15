@@ -72,11 +72,18 @@ exports.removeItemFromCart = async (req, res) => {
       });
     }
 
+    // Check if cart.products exists
+    if (!cart.products || !Array.isArray(cart.products)) {
+      return res.status(404).json({
+        status: "Error",
+        message: "Products not found in the cart",
+      });
+    }
+
     // Find the index of the product in the products array
     const productIndex = cart.products.findIndex(
       (product) => product.productId.toString() === productId
     );
-    console.log(productIndex);
 
     // Check if the product exists in the cart
     if (productIndex === -1) {
@@ -93,7 +100,8 @@ exports.removeItemFromCart = async (req, res) => {
     await cart.save();
 
     res.status(200).json({
-      status: "Carted product deleted successfully!",
+      status: "Success",
+      message: "Carted product deleted successfully!",
       deleted_product: productId,
     });
   } catch (error) {

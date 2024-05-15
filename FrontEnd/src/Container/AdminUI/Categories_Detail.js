@@ -4,6 +4,7 @@ import axios from "axios";
 import Loader from "../../Container/Loading/Loader";
 import AdminUI from "./AdminUI";
 import All_Admin_Details from "./All_Admin_Details";
+import Swal from "sweetalert2";
 
 function Product_Detail() {
   const [name, setName] = useState("");
@@ -40,13 +41,31 @@ function Product_Detail() {
   };
 
   const deleteCategory = (id) => {
-    axios.delete(`http://localhost:8000/CateDelete/${id}`)
-      .then(() => {
-        fetchData();
-      })
-      .catch(error => {
-        console.error("Error deleting category:", error);
-      });
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.delete(`http://localhost:8000/CateDelete/${id}`)
+        .then(() => {
+          fetchData();
+        })
+        .catch(error => {
+          console.error("Error deleting category:", error);
+        });
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
+      }
+    });
+
   };
 
   const updateCategory = () => {
