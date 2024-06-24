@@ -2,17 +2,45 @@ var express = require("express");
 var router = express.Router();
 const multer = require("multer");
 
-var { User_Register, show_All_User, Delete_User, User_Login, Update_user, Search_user,
+var {
+  User_Register,
+  show_All_User,
+  Delete_User,
+  User_Login,
+  Update_user,
+  Search_user,
 } = require("../controller/usercontroller");
 // var {Admin_Register,show_admin,Admin_Login} = require('../controller/admincontroller');
-var {Product_add,Product_Show,product_delete,product_Search,one_Product_show,productFindByCat,oneProductByName,Product_Update,Low_to_High,High_to_Low,
+var {
+  Product_add,
+  Product_Show,
+  product_delete,
+  product_Search,
+  one_Product_show,
+  productFindByCat,
+  oneProductByName,
+  Product_Update,
+  Low_to_High,
+  High_to_Low,
 } = require("../controller/productcoltroller");
-var {Inquiry_add,Inquiry_show,Inquiry_delete,Inquiry_Search,
+var {
+  Inquiry_add,
+  Inquiry_show,
+  Inquiry_delete,
+  Inquiry_Search,
 } = require("../controller/inquirycontroller");
-const {Register_Order_Details,Show_all_Order_details,Order_Delete,Order_Search,
+const {
+  Register_Order_Details,
+  Show_all_Order_details,
+  Order_Delete,
+  Order_Search,
 } = require("../controller/orderplacecontroller");
 const categoryController = require("../controller/categorycontroller");
-const {addItemToCart, getAllCart, removeItemFromCart} = require("../controller/cartcontroller");
+const {
+  addItemToCart,
+  getAllCart,
+  removeItemFromCart,
+} = require("../controller/cartcontroller");
 // const  authenticateUser  = require('../middleware/authenticate');
 // const { Email_Add } = require('../controller/maincontroller');
 
@@ -40,7 +68,7 @@ router.delete("/Order_delete/:id", Order_Delete);
 router.get("/Order_Search/:key", Order_Search);
 
 router.post("/Product_add", upload.array("images", 5), Product_add);
-// router.post("/Product_add", upload.single("image"), Product_add); 
+// router.post("/Product_add", upload.single("image"), Product_add);
 router.get("/Product_Show", Product_Show);
 router.delete("/product_delete/:id", product_delete);
 router.get("/Product_show/ProductId/:id", one_Product_show);

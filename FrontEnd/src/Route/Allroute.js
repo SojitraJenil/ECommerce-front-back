@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "../Component/Home/Home";
@@ -21,7 +22,6 @@ import AddToCart from "../Component/Cart/AddToCart";
 import Payment from "../Component/Payment/Payment";
 import EmailUpdate from "../Component/EmailUpdate/EmailUpdate";
 import Error from "../Container/Error/Error";
-import KidsSection from "../Component/Kidssection/Kidssection";
 import Kidssection from "../Component/Kidssection/Kidssection";
 import Blog from "../Component/Blog";
 import Contact from "../Component/Contact/Contact";
@@ -63,7 +63,7 @@ const Allroute = () => {
         <Route path="/Admin/Product_Detail" element={<Product_Detail />} />
         <Route path="/Admin/Inquiry_Detail" element={<Inquiry_Detail />} />
         <Route path="/Admin/Order_Manage" element={<Order_Manage />} />
-        <Route path="/Admin/Statistics" element={<Statistic  />} />
+        <Route path="/Admin/Statistics" element={<Statistic />} />
         <Route
           path="/Admin/Categories_Detail"
           element={<Categories_Detail />}
