@@ -59,6 +59,7 @@ var upload = multer({ storage: storage });
 router.post("/register", User_Register);
 router.post("/login", User_Login);
 router.get("/show_all_user", show_All_User);
+router.get("/", show_All_User);
 // router.get('/Logout',Logout);
 router.post("/delete_user", Delete_User);
 
