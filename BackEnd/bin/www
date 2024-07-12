@@ -12,7 +12,7 @@ const mongoose = require("mongoose");
 
 // mongoose.connect("mongodb://127.0.0.1:27017/E_Commerce");
 mongoose
-  .connect("mongodb+srv://jenil:jenil@cluster0.itjhhqs.mongodb.net/Ecom")
+  .connect(process.env.DB_HOST)
   .then(() => console.log("Online Connected!"));
 
 // mongoose
