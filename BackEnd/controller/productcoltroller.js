@@ -64,7 +64,7 @@ exports.Product_add = async (req, res) => {
 //
 // })
 // }
-//localhost:8000/Product_Show?page_no=1
+//`${RenderHost}/Product_Show?page_no=1
 exports.Product_Show = async (req, res) => {
   var limit = 80;
   var total_record = await Product.find().count();
