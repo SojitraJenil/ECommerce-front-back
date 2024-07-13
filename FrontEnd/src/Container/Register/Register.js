@@ -5,6 +5,7 @@ import { Container } from "react-bootstrap";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { Link, useNavigate } from "react-router-dom";
+import { RenderHost } from "../../API/Api";
 
 const Register = () => {
   const [fname, setFname] = useState("");
@@ -24,7 +25,7 @@ const Register = () => {
     }
     try {
       console.log({ fname, lname, email, password });
-      const data = await axios.post("http://localhost:8000/register", {
+      const data = await axios.post(`${RenderHost}/register`, {
         fname: fname,
         lname: lname,
         email: email,
@@ -45,7 +46,8 @@ const Register = () => {
       <form
         style={{ maxWidth: "400px" }}
         className="w-auto mx-auto border p-3 mt-5 rounded-2"
-        onSubmit={getData}  >
+        onSubmit={getData}
+      >
         <h3>Sign Up</h3>
         <div className="mb-3">
           <label className="mb-1">First Name:</label>

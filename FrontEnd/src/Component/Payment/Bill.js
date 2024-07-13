@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { LiaRupeeSignSolid } from "react-icons/lia";
 import Table from "react-bootstrap/Table";
+import { RenderHost } from "../../API/Api";
 
 export default function Bill() {
   const [PrintBill, setPrintBill] = useState(null);
@@ -19,7 +20,7 @@ export default function Bill() {
   }, []);
 
   const fetch = () => {
-    axios.get("http://localhost:8000/getAllCart").then((res) => {
+    axios.get(`${RenderHost}/getAllCart`).then((res) => {
       const cartData = res.data.show_cart[0];
       const products = cartData.products;
       setPrintBill(products);
@@ -36,7 +37,7 @@ export default function Bill() {
   };
 
   const ShowAllOrderDetails = () => {
-    axios.get(`http://localhost:8000/Order_details`).then(function (response) {
+    axios.get(`${RenderHost}/Order_details`).then(function (response) {
       console.log(response.data.show_details);
       SetOrderDetails(response.data.show_details);
     });
@@ -154,7 +155,7 @@ export default function Bill() {
                     <tr key={index} className="text-center">
                       <th>
                         <img
-                          src={`http://localhost:8000/images/${item.product_img}`}
+                          src={`${RenderHost}/images/${item.product_img}`}
                           alt="Img"
                           className="object-fit-cover border"
                           style={{ width: "50px", height: "50px" }}

@@ -5,6 +5,7 @@ import { Container } from "react-bootstrap";
 import { FaEyeSlash } from "react-icons/fa";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
+import { RenderHost } from "../../API/Api";
 
 const Login = () => {
   const [email, setEmail] = useState("tejasdhandhukiya@gmail.com");
@@ -21,7 +22,7 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8000/login", {
+      const response = await axios.post(`${RenderHost}/login`, {
         email,
         password,
       });
@@ -56,7 +57,7 @@ const Login = () => {
   const token = localStorage.getItem("token");
 
   axios
-    .get("http://localhost:8000/login", {
+    .get(`${RenderHost}/login`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

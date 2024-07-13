@@ -1,230 +1,225 @@
-import React, { useEffect, useState } from 'react'
-import TopNavbar from '../TopNavbar/TopNavbar'
-import Header from '../Navbar/Header'
-import  axios  from 'axios'
+import React, { useEffect, useState } from "react";
+import TopNavbar from "../TopNavbar/TopNavbar";
+import Header from "../Navbar/Header";
+import axios from "axios";
 import Card from "react-bootstrap/Card";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
+import { RenderHost } from "../../API/Api";
 
 const Mensection = () => {
+  useEffect(() => {
+    Product1();
+    Product2();
+    Product3();
+  }, []);
 
-  useEffect(()=>{
-    Product1()
-    Product2()
-    Product3()
-  },[])
+  const [data1, setdata1] = useState(null);
+  const [data2, setdata2] = useState(null);
+  const [data3, setdata3] = useState(null);
 
-  const [data1 , setdata1] = useState(null)
-  const [data2 , setdata2] = useState(null)
-  const [data3 , setdata3] = useState(null)
-
-  const notify =()=>{
-
-  }
+  const notify = () => {};
 
   const Product1 = (item) => {
-    axios.get("http://localhost:8000/Product_show/category/mens-shirts")
+    axios
+      .get(`${RenderHost}/Product_show/category/mens-shirts`)
       .then(function (response) {
-          setdata1(response.data.One_product_show);
+        setdata1(response.data.One_product_show);
       })
       .catch(function (error) {
-        if(item != null){
-          console.error("error========?>",error);
+        if (item != null) {
+          console.error("error========?>", error);
         }
       });
   };
   const Product2 = (item) => {
-    axios.get("http://localhost:8000/Product_show/category/mens-shoes")
+    axios
+      .get(`${RenderHost}/Product_show/category/mens-shoes`)
       .then(function (response) {
-          setdata2(response.data.One_product_show);
+        setdata2(response.data.One_product_show);
       })
       .catch(function (error) {
-        if(item != null){
-          console.error("error========?>",error);
+        if (item != null) {
+          console.error("error========?>", error);
         }
       });
   };
   const Product3 = (item) => {
-    axios.get("http://localhost:8000/Product_show/category/mens-watches")
+    axios
+      .get(`${RenderHost}/Product_show/category/mens-watches`)
       .then(function (response) {
-          setdata3(response.data.One_product_show);
+        setdata3(response.data.One_product_show);
       })
       .catch(function (error) {
-        if(item != null){
-          console.error("error========?>",error);
+        if (item != null) {
+          console.error("error========?>", error);
         }
       });
   };
-  
+
   return (
     <>
-      <TopNavbar/>
-      <Header/>
+      <TopNavbar />
+      <Header />
 
       <Container>
-      <Row style={{ width: "100%" }}>
-              {data1 != null &&
-                data1.map((val,ind) => {
-                  return (
-                    <Col xxl={3} xl={4} lg={4} md={6} sm={12}>
-                      <Card
-                        style={{ width: "18rem" }}
-                        className="my-xl-2 mx-auto"
+        <Row style={{ width: "100%" }}>
+          {data1 != null &&
+            data1.map((val, ind) => {
+              return (
+                <Col xxl={3} xl={4} lg={4} md={6} sm={12}>
+                  <Card style={{ width: "18rem" }} className="my-xl-2 mx-auto">
+                    <Link
+                      to={`/product/${val._id}`}
+                      className="text-decoration-none"
+                    >
+                      <Card.Img
+                        variant="top"
+                        height={"300px"}
+                        className="object-fit-cover"
+                        src={`${RenderHost}/images/${val.product_img}`}
+                      />
+                    </Link>
+                    <Card.Body className="text-center">
+                      <h5>Name -: {val.product_name}</h5>
+                      <h6
+                        className="fs-5"
+                        style={{
+                          color: "#60BABE",
+                          fontFamily: "Bebas Neue, cursive",
+                        }}
                       >
+                        Product Price -:&nbsp;{val.product_price}$
+                      </h6>
+                      <div className="">
                         <Link
-                          to={`/product/${val._id}`}
+                          to={`/Payment/${val._id}`}
                           className="text-decoration-none"
                         >
-                          <Card.Img
-                            variant="top"
-                            height={"300px"}
-                            className="object-fit-cover"
-                            src={`http://localhost:8000/images/${val.product_img}`}
-                          />
+                          <button className="btn btn-outline-success">
+                            Buy Now
+                          </button>
                         </Link>
-                        <Card.Body className="text-center">
-                          <h5>Name -: {val.product_name}</h5>
-                          <h6
-                            className="fs-5"
-                            style={{
-                              color: "#60BABE",
-                              fontFamily: "Bebas Neue, cursive",
-                            }}
-                          >
-                            Product Price -:&nbsp;{val.product_price}$
-                          </h6>
-                          <div className="">
-                            <Link
-                              to={`/Payment/${val._id}`}
-                              className="text-decoration-none"
-                            >
-                              <button className="btn btn-outline-success">
-                                Buy Now 
-                              </button>
-                            </Link>
-                            <button
-                              className="btn btn-outline-danger ms-2"
-                              onClick={() => notify(val._id , val.product_name , val.product_price )}
-                            >
-                              Add To Cart
-                            </button>
-                          </div>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  );
-                }) 
-                }
-              {data2 != null &&
-                data2.map((val,ind) => {
-                  return (
-                    <Col xxl={3} xl={4} lg={4} md={6} sm={12}>
-                      <Card
-                        style={{ width: "18rem" }}
-                        className="my-xl-2 mx-auto"
+                        <button
+                          className="btn btn-outline-danger ms-2"
+                          onClick={() =>
+                            notify(val._id, val.product_name, val.product_price)
+                          }
+                        >
+                          Add To Cart
+                        </button>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              );
+            })}
+          {data2 != null &&
+            data2.map((val, ind) => {
+              return (
+                <Col xxl={3} xl={4} lg={4} md={6} sm={12}>
+                  <Card style={{ width: "18rem" }} className="my-xl-2 mx-auto">
+                    <Link
+                      to={`/product/${val._id}`}
+                      className="text-decoration-none"
+                    >
+                      <Card.Img
+                        variant="top"
+                        height={"300px"}
+                        className="object-fit-cover"
+                        src={`${RenderHost}/images/${val.product_img}`}
+                      />
+                    </Link>
+                    <Card.Body className="text-center">
+                      <h5>Name -: {val.product_name}</h5>
+                      <h6
+                        className="fs-5"
+                        style={{
+                          color: "#60BABE",
+                          fontFamily: "Bebas Neue, cursive",
+                        }}
                       >
+                        Product Price -:&nbsp;{val.product_price}$
+                      </h6>
+                      <div className="">
                         <Link
-                          to={`/product/${val._id}`}
+                          to={`/Payment/${val._id}`}
                           className="text-decoration-none"
                         >
-                          <Card.Img
-                            variant="top"
-                            height={"300px"}
-                            className="object-fit-cover"
-                            src={`http://localhost:8000/images/${val.product_img}`}
-                          />
+                          <button className="btn btn-outline-success">
+                            Buy Now
+                          </button>
                         </Link>
-                        <Card.Body className="text-center">
-                          <h5>Name -: {val.product_name}</h5>
-                          <h6
-                            className="fs-5"
-                            style={{
-                              color: "#60BABE",
-                              fontFamily: "Bebas Neue, cursive",
-                            }}
-                          >
-                            Product Price -:&nbsp;{val.product_price}$
-                          </h6>
-                          <div className="">
-                            <Link
-                              to={`/Payment/${val._id}`}
-                              className="text-decoration-none"
-                            >
-                              <button className="btn btn-outline-success">
-                                Buy Now 
-                              </button>
-                            </Link>
-                            <button
-                              className="btn btn-outline-danger ms-2"
-                              onClick={() => notify(val._id , val.product_name , val.product_price )}
-                            >
-                              Add To Cart
-                            </button>
-                          </div>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  );
-                }) 
-                }
-              {data3 != null &&
-                data3.map((val,ind) => {
-                  return (
-                    <Col xxl={3} xl={4} lg={4} md={6} sm={12}>
-                      <Card
-                        style={{ width: "18rem" }}
-                        className="my-xl-2 mx-auto"
+                        <button
+                          className="btn btn-outline-danger ms-2"
+                          onClick={() =>
+                            notify(val._id, val.product_name, val.product_price)
+                          }
+                        >
+                          Add To Cart
+                        </button>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              );
+            })}
+          {data3 != null &&
+            data3.map((val, ind) => {
+              return (
+                <Col xxl={3} xl={4} lg={4} md={6} sm={12}>
+                  <Card style={{ width: "18rem" }} className="my-xl-2 mx-auto">
+                    <Link
+                      to={`/product/${val._id}`}
+                      className="text-decoration-none"
+                    >
+                      <Card.Img
+                        variant="top"
+                        height={"300px"}
+                        className="object-fit-cover"
+                        src={`${RenderHost}/images/${val.product_img}`}
+                      />
+                    </Link>
+                    <Card.Body className="text-center">
+                      <h5>Name -: {val.product_name}</h5>
+                      <h6
+                        className="fs-5"
+                        style={{
+                          color: "#60BABE",
+                          fontFamily: "Bebas Neue, cursive",
+                        }}
                       >
+                        Product Price -:&nbsp;{val.product_price}$
+                      </h6>
+                      <div className="">
                         <Link
-                          to={`/product/${val._id}`}
+                          to={`/Payment/${val._id}`}
                           className="text-decoration-none"
                         >
-                          <Card.Img
-                            variant="top"
-                            height={"300px"}
-                            className="object-fit-cover"
-                            src={`http://localhost:8000/images/${val.product_img}`}
-                          />
+                          <button className="btn btn-outline-success">
+                            Buy Now
+                          </button>
                         </Link>
-                        <Card.Body className="text-center">
-                          <h5>Name -: {val.product_name}</h5>
-                          <h6
-                            className="fs-5"
-                            style={{
-                              color: "#60BABE",
-                              fontFamily: "Bebas Neue, cursive",
-                            }}
-                          >
-                            Product Price -:&nbsp;{val.product_price}$
-                          </h6>
-                          <div className="">
-                            <Link
-                              to={`/Payment/${val._id}`}
-                              className="text-decoration-none"
-                            >
-                              <button className="btn btn-outline-success">
-                                Buy Now 
-                              </button>
-                            </Link>
-                            <button
-                              className="btn btn-outline-danger ms-2"
-                              onClick={() => notify(val._id , val.product_name , val.product_price )}
-                            >
-                              Add To Cart
-                            </button>
-                          </div>
-                        </Card.Body>
-                      </Card>
-                    </Col>
-                  );
-                }) 
-                }
-            </Row>
+                        <button
+                          className="btn btn-outline-danger ms-2"
+                          onClick={() =>
+                            notify(val._id, val.product_name, val.product_price)
+                          }
+                        >
+                          Add To Cart
+                        </button>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                </Col>
+              );
+            })}
+        </Row>
       </Container>
     </>
-  )
-}
+  );
+};
 
-export default Mensection
+export default Mensection;

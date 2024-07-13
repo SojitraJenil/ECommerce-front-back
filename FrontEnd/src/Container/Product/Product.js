@@ -3,6 +3,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Header from "../../Component/Navbar/Header";
+import { RenderHost } from "../../API/Api";
 
 const Product = () => {
   const { id } = useParams();
@@ -12,7 +13,7 @@ const Product = () => {
   const getdata = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/Product_Show/ProductId/${id}`
+        `${RenderHost}/Product_Show/ProductId/${id}`
       );
       setData(response.data.product);
     } catch (error) {
@@ -34,7 +35,7 @@ const Product = () => {
               data.product_img.map((imageUrl, index) => (
                 <Col key={index} className="mb-3">
                   <img
-                    src={`http://localhost:8000/images/${imageUrl}`}
+                    src={`${RenderHost}/images/${imageUrl}`}
                     style={{ height: "80px", width: "80px" }}
                     className="border border-black my-2"
                     alt={`Product Image ${index + 1}`}
@@ -44,10 +45,9 @@ const Product = () => {
               ))}
           </div>
           <div className="d-flex">
-
             <div className="">
               <img
-                src={`http://localhost:8000/images/${
+                src={`${RenderHost}/images/${
                   data.product_img && data.product_img.length > 0
                     ? image || data.product_img[0] // Check if image state is defined, if not, use the first image
                     : ""
@@ -86,7 +86,6 @@ const Product = () => {
                 </button>
               </div>
             </div>
-
           </div>
         </div>
       </Container>

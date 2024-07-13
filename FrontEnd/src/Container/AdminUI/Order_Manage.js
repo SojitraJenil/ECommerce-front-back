@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Container, Table } from "react-bootstrap";
 import All_Admin_Details from "./All_Admin_Details";
+import { RenderHost } from "../../API/Api";
 
 function Order_Manage() {
   const [Order, SetOrder] = useState();
@@ -12,19 +13,17 @@ function Order_Manage() {
   }, []);
 
   const ShowAllOrder = () => {
-    axios.get(`http://localhost:8000/Order_details`).then(function (response) {
+    axios.get(`${RenderHost}/Order_details`).then(function (response) {
       console.log(response.data.show_details);
       SetOrder(response.data.show_details);
     });
   };
 
   function delete_order(id) {
-    axios
-      .delete(`http://localhost:8000/Order_delete/${id}`)
-      .then(function (response) {
-        console.log(response);
-        ShowAllOrder();
-      });
+    axios.delete(`${RenderHost}/Order_delete/${id}`).then(function (response) {
+      console.log(response);
+      ShowAllOrder();
+    });
   }
 
   const Order_search = async (key) => {
@@ -48,23 +47,25 @@ function Order_Manage() {
       <div className="">
         <AdminUI />
       </div>
-      <div className="container-fluid" >
+      <div className="container-fluid">
         <All_Admin_Details />
         <div className="d-flex w-50 py-2">
-            <div className="">
-              <span>Search Product -: </span>
-              <span>
-                <input
-                  type="text"
-                  onChange={(e) => {
-                    Order_search(e.target.value);
-                  }}
-                />
-              </span>
-            </div>
+          <div className="">
+            <span>Search Product -: </span>
+            <span>
+              <input
+                type="text"
+                onChange={(e) => {
+                  Order_search(e.target.value);
+                }}
+              />
+            </span>
           </div>
-        <Container >
-          <div style={{ maxHeight: "500px", overflowY: "auto" , fontSize:"13px"}}>
+        </div>
+        <Container>
+          <div
+            style={{ maxHeight: "500px", overflowY: "auto", fontSize: "13px" }}
+          >
             <Table striped bordered hover>
               <thead style={{ position: "sticky", top: "0" }}>
                 <tr>

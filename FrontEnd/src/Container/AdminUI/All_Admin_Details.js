@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import { RenderHost } from "../../API/Api";
 
 function All_Admin_Details() {
   const [Total_User, setTotal_User] = useState("");
@@ -10,27 +10,25 @@ function All_Admin_Details() {
   const [Cart, setCart] = useState([]);
   const [Cate, setCate] = useState("");
 
-
-
   useEffect(() => {
-    axios.get(`http://localhost:8000/Inquiry_show`).then(function (response) {
+    axios.get(`${RenderHost}/Inquiry_show`).then(function (response) {
       setTotal_Inquiry(response.data.inquiry_show.length);
     });
 
-    axios.get(`http://localhost:8000/Product_Show`).then(function (response) {
+    axios.get(`${RenderHost}/Product_Show`).then(function (response) {
       setTotal_Product(response.data.product_show.length);
     });
 
-    axios.get(`http://localhost:8000/show_all_user`).then(function (response) {
+    axios.get(`${RenderHost}/show_all_user`).then(function (response) {
       setTotal_User(response.data.data1.length);
     });
-    axios.get(`http://localhost:8000/Order_details`).then(function (response) {
+    axios.get(`${RenderHost}/Order_details`).then(function (response) {
       setTotal_Order(response.data.show_details.length);
     });
-    axios.get(`http://localhost:8000/categories`).then(function (response) {
+    axios.get(`${RenderHost}/categories`).then(function (response) {
       setCate(response.data.categories.length);
     });
-    axios.get(`http://localhost:8000/getAllCart`).then(function (response) {
+    axios.get(`${RenderHost}/getAllCart`).then(function (response) {
       if (response.data.show_cart && response.data.show_cart.length > 0) {
         // Assuming each item in the cart has a 'products' array
         let totalProducts = response.data.show_cart.reduce(

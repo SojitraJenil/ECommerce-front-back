@@ -8,6 +8,7 @@ import Form from "react-bootstrap/Form";
 import Loader from "../../Container/Loading/Loader";
 import All_Admin_Details from "./All_Admin_Details";
 import Swal from "sweetalert2";
+import { RenderHost } from "../../API/Api";
 
 // import { useNavigate } from "react-router-dom";
 
@@ -74,7 +75,7 @@ function Product_Detail() {
       formData.append("Product_rating", Product_rating);
 
       const uploadResponse = await axios.post(
-        `http://localhost:8000/Product_add`,
+        `${RenderHost}/Product_add`,
         formData,
         {
           headers: {
@@ -101,7 +102,7 @@ function Product_Detail() {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     axios
-      .get(`http://localhost:8000/Product_show?page_no=${pageNumber}`)
+      .get(`${RenderHost}/Product_show?page_no=${pageNumber}`)
       .then(function (response) {
         setData(response.data.product_show);
         console.log(response.data.product_show);
@@ -112,7 +113,7 @@ function Product_Detail() {
   };
 
   const category = () => {
-    axios.get(`http://localhost:8000/categories`).then(function (response) {
+    axios.get(`${RenderHost}/categories`).then(function (response) {
       setCategory(response.data.categories);
       console.log(response.data.categories);
     });
@@ -124,7 +125,7 @@ function Product_Detail() {
     const limit = 25; // adjust according to your pagination requirements
 
     axios
-      .get(`http://localhost:8000/Product_Show`)
+      .get(`${RenderHost}/Product_Show`)
       .then(function (response) {
         console.log("data", response.data.product_show);
         setData(response.data.product_show);
@@ -142,32 +143,29 @@ function Product_Detail() {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-        .delete(`http://localhost:8000/product_delete/${id}`)
-        .then(function (response) {
-          console.log(response);
-          Getdata();
-          // navigation("/");
-        });
+          .delete(`${RenderHost}/product_delete/${id}`)
+          .then(function (response) {
+            console.log(response);
+            Getdata();
+            // navigation("/");
+          });
         Swal.fire({
           title: "Deleted!",
           text: "Your file has been deleted.",
-          icon: "success"
+          icon: "success",
         });
       }
     });
-
   };
   const Product_Search = async (key) => {
     // change val to key for consistency
     console.log(key);
     try {
-      const result = await axios.get(
-        `http://localhost:8000/product_Search/${key}`
-      );
+      const result = await axios.get(`${RenderHost}/product_Search/${key}`);
       if (result.data.Result && result.data.Result.length > 0) {
         setData(result.data.Result);
       } else {
@@ -282,7 +280,7 @@ function Product_Detail() {
                           <td>
                             {item.product_img && (
                               <img
-                                src={`http://localhost:8000/images/${item.product_img[0]}`}
+                                src={`${RenderHost}/images/${item.product_img[0]}`}
                                 style={{ objectFit: "cover" }}
                                 width="100"
                                 height="100"

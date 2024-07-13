@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Table } from "react-bootstrap";
 import All_Admin_Details from "./All_Admin_Details";
 import Swal from "sweetalert2";
+import { RenderHost } from "../../API/Api";
 function Inquiry_Detail() {
   const [Inquiry, setInquiry] = useState();
 
@@ -12,7 +13,7 @@ function Inquiry_Detail() {
   }, []);
 
   const ShowAllInquiry = () => {
-    axios.get(`http://localhost:8000/Inquiry_show`).then(function (response) {
+    axios.get(`${RenderHost}/Inquiry_show`).then(function (response) {
       console.log(response.data.inquiry_show);
       setInquiry(response.data.inquiry_show);
       console.log(response.data.inquiry_show.length);
@@ -31,7 +32,7 @@ function Inquiry_Detail() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:8000/Inquiry_delete/${id}`)
+          .delete(`${RenderHost}/Inquiry_delete/${id}`)
           .then(function (response) {
             console.log(response);
             ShowAllInquiry();
@@ -48,9 +49,7 @@ function Inquiry_Detail() {
   const Inquiry_Search = async (key) => {
     console.log(key);
     try {
-      const result = await axios.get(
-        `http://localhost:8000/Inquiry_Search/${key}`
-      );
+      const result = await axios.get(`${RenderHost}/Inquiry_Search/${key}`);
       if (result.data.Result && result.data.Result.length > 0) {
         setInquiry(result.data.Result);
       } else {

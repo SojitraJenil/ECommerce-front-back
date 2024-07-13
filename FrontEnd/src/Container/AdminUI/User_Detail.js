@@ -4,6 +4,7 @@ import axios from "axios";
 import Table from "react-bootstrap/Table";
 import All_Admin_Details from "./All_Admin_Details";
 import Swal from "sweetalert2";
+import { RenderHost } from "../../API/Api";
 
 function User_Detail() {
   const [data, setData] = useState(null);
@@ -14,7 +15,7 @@ function User_Detail() {
 
   const Getdata = () => {
     axios
-      .get(`http://localhost:8000/show_all_user`, {
+      .get(`${RenderHost}/show_all_user`, {
         headers: {
           Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
         },
@@ -40,7 +41,7 @@ function User_Detail() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(`http://localhost:8000/delete_user/${id}`)
+          .delete(`${RenderHost}/delete_user/${id}`)
           .then((response) => {
             console.log("Resource deleted successfully:", response.data);
             Getdata();

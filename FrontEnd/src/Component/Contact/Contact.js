@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Swal from "sweetalert2";
 import TopNavbar from "../../../src/Component/TopNavbar/TopNavbar";
 import Header from "../Navbar/Header";
+import { RenderHost } from "../../API/Api";
 
 function Contact() {
   const initialState = {
@@ -65,7 +66,7 @@ function Contact() {
       try {
         const { name, email, mobile, subject, message } = formData;
         console.log({ name, email, mobile, subject, message });
-        const response = await axios.post("http://localhost:8000/Inquiry_add", {
+        const response = await axios.post(`${RenderHost}/Inquiry_add`, {
           name,
           email,
           mobile,

@@ -23,6 +23,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useAtom } from "jotai";
 import { AllCartData } from "../../Atom/Atom";
 import Swal from "sweetalert2";
+import { RenderHost } from "../../API/Api";
 
 export default function Payment() {
   const { id } = useParams();
@@ -45,7 +46,7 @@ export default function Payment() {
 
   const fetchData = () => {
     axios
-      .get("http://localhost:8000/getAllCart")
+      .get(`${RenderHost}/getAllCart`)
       .then((res) => {
         SetAllCartData(res.data.show_cart);
         const cartData = res.data.show_cart[0];
@@ -98,7 +99,7 @@ export default function Payment() {
     }
     try {
       const response = await axios.post(
-        "http://localhost:8000/Order_Register",
+        `${RenderHost}/Order_Register`,
         formData
       );
       console.log("Product Order successful:", response.data);
@@ -311,7 +312,7 @@ export default function Payment() {
                         <>
                           <MDBCol md="6" className="ms-3">
                             <MDBCardImage
-                              src={`http://localhost:8000/images/${data.product_img}`}
+                              src={`${RenderHost}/images/${data.product_img}`}
                               className="object-fit-cover border"
                               style={{ width: "100px", height: "100px" }}
                             />

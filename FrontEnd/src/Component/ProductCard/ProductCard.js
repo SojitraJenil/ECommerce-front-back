@@ -10,6 +10,7 @@ import { Link } from "react-router-dom";
 import Loader from "../../Container/Loading/Loader";
 import Pagination from "react-bootstrap/Pagination";
 import { CardImg, CardBody } from "react-bootstrap";
+import { RenderHost } from "../../API/Api";
 
 function Product_card({ SetMainCart, inputValue }) {
   const [data, setdata] = useState(null);
@@ -38,7 +39,7 @@ function Product_card({ SetMainCart, inputValue }) {
 
   const AddItemToCart = (val) => {
     axios
-      .post("http://localhost:8000/addItemToCart", {
+      .post(`${RenderHost}0/addItemToCart`, {
         productId: val._id,
         quantity: 1,
         product_name: val.product_name,
@@ -54,7 +55,7 @@ function Product_card({ SetMainCart, inputValue }) {
     console.log(inputValue);
     if (inputValue) {
       axios
-        .get(`http://localhost:8000/Product_show/ProductName/${inputValue}`)
+        .get(`${RenderHost}/Product_show/ProductName/${inputValue}`)
         .then(function (response) {
           setdata(response.data.products);
         })
@@ -66,7 +67,7 @@ function Product_card({ SetMainCart, inputValue }) {
 
   const handleHighToLow = () => {
     axios
-      .get(`http://localhost:8000/Product_show/Product_Price/high_to_low`)
+      .get(`${RenderHost}/Product_show/Product_Price/high_to_low`)
       .then(function (response) {
         console.log(response.data.products);
         setdata(response.data.products);
@@ -79,7 +80,7 @@ function Product_card({ SetMainCart, inputValue }) {
 
   const handleLowToHigh = () => {
     axios
-      .get(`http://localhost:8000/Product_show/Product_Price/low_to_high`)
+      .get(`${RenderHost}/Product_show/Product_Price/low_to_high`)
       .then(function (response) {
         console.log(response.data.products);
         setdata(response.data.products);
@@ -92,7 +93,7 @@ function Product_card({ SetMainCart, inputValue }) {
 
   const Category = () => {
     axios
-      .get("http://localhost:8000/categories")
+      .get(`${RenderHost}/categories`)
       .then(function (response) {
         setcate(response.data.categories);
       })
@@ -103,7 +104,7 @@ function Product_card({ SetMainCart, inputValue }) {
 
   const Product = () => {
     axios
-      .get(`http://localhost:8000/Product_Show`)
+      .get(`${RenderHost}/Product_Show`)
       .then(function (response) {
         setdata(response.data.product_show);
         setTotalPages(response.data.page);
@@ -117,7 +118,7 @@ function Product_card({ SetMainCart, inputValue }) {
   const Product1 = (item) => {
     if (item) {
       axios
-        .get(`http://localhost:8000/Product_show/category/${item}`)
+        .get(`${RenderHost}/Product_show/category/${item}`)
         .then(function (response) {
           setdata(response.data.One_product_show);
         })
@@ -134,7 +135,7 @@ function Product_card({ SetMainCart, inputValue }) {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
     axios
-      .get(`http://localhost:8000/Product_show?page_no=${pageNumber}`)
+      .get(`${RenderHost}/Product_show?page_no=${pageNumber}`)
       .then(function (response) {
         setdata(response.data.product_show);
         console.log(response.data.product_show);
@@ -257,7 +258,7 @@ function Product_card({ SetMainCart, inputValue }) {
                           className="text-decoration-none"
                         >
                           <CardImg
-                            src={`http://localhost:8000/images/${val.product_img[0]}`}
+                            src={`${RenderHost}/images/${val.product_img[0]}`}
                             alt="Laptop"
                             height={"300px"}
                             className="object-fit-cover"
@@ -274,7 +275,8 @@ function Product_card({ SetMainCart, inputValue }) {
                               <s>
                                 {val.Product_dis_rate == null
                                   ? "999"
-                                  : val.product_price *val.Product_dis_rate / 100}
+                                  : (val.product_price * val.Product_dis_rate) /
+                                    100}
                                 <MdCurrencyRupee className="m-0 p-0" />
                               </s>
                             </p>

@@ -9,6 +9,7 @@ import { HiMinusSm, HiPlusSm } from "react-icons/hi";
 import { FiPlus } from "react-icons/fi";
 import { MdDelete } from "react-icons/md";
 import Swal from "sweetalert2";
+import { RenderHost } from "../../API/Api";
 
 export default function AddToCart() {
   const [cartItems, setCartItems] = useState([]);
@@ -24,7 +25,7 @@ export default function AddToCart() {
 
   const AddItemToCart = (productId) => {
     axios
-      .post("http://localhost:8000/addItemToCart", {
+      .post(`${RenderHost}/addItemToCart`, {
         productId: productId,
         quantity: 1,
       })
@@ -37,7 +38,7 @@ export default function AddToCart() {
   };
   const removeOneItemToCart = (productId) => {
     axios
-      .post("http://localhost:8000/addItemToCart", {
+      .post(`${RenderHost}/addItemToCart`, {
         productId: productId,
         quantity: -1,
       })
@@ -52,7 +53,7 @@ export default function AddToCart() {
 
   const fetchData = () => {
     axios
-      .get("http://localhost:8000/getAllCart")
+      .get(`${RenderHost}/getAllCart`)
       .then((res) => {
         const cartData = res.data.show_cart[0];
         const products = cartData.products;
@@ -87,7 +88,7 @@ export default function AddToCart() {
       if (result.isConfirmed) {
         axios
           .delete(
-            `http://localhost:8000/removeCartProduct/66444b466f3d22168fc6238a/${productId}`
+            `${RenderHost}/removeCartProduct/66444b466f3d22168fc6238a/${productId}`
           )
           .then(function (res) {
             console.log(res);
@@ -138,7 +139,7 @@ export default function AddToCart() {
                             className="text-decoration-none"
                           >
                             <Card.Img
-                              src={`http://localhost:8000/images/${product.product_img}`}
+                              src={`${RenderHost}/images/${product.product_img}`}
                               style={{ width: "150px" }}
                               alt="Product"
                             />
