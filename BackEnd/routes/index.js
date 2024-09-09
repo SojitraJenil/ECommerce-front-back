@@ -43,13 +43,13 @@ const {
 } = require("../controller/cartcontroller");
 // const  authenticateUser  = require('../middleware/authenticate');
 // const { Email_Add } = require('../controller/maincontroller');
-
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/images");
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "public/images")); // Store images in /public/images
   },
   filename: (req, file, cb) => {
-    cb(null, file.originalname);
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname); // Unique filename to avoid conflicts
   },
 });
 
@@ -67,7 +67,6 @@ router.post("/Order_Register", Register_Order_Details);
 router.get("/Order_details", Show_all_Order_details);
 router.delete("/Order_delete/:id", Order_Delete);
 router.get("/Order_Search/:key", Order_Search);
-
 router.post("/Product_add", upload.array("images", 5), Product_add);
 // router.post("/Product_add", upload.single("image"), Product_add);
 router.get("/Product_Show", Product_Show);

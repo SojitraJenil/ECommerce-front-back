@@ -1,5 +1,6 @@
 var Product = require("../Model/productmodel");
 const Category = require("../Model/categorymodel"); // Import the Category model
+
 exports.Product_add = async (req, res) => {
   try {
     if (!req.files || req.files.length === 0) {
@@ -16,22 +17,22 @@ exports.Product_add = async (req, res) => {
       Product_rating,
     } = req.body;
 
-    // Extract image filenames from the uploaded files
-    const images = req.files.map((file) => file.originalname);
-    console.log(images);
-    // Create product object with image filenames array
+    // Extract image filenames with paths to serve via URLs
+    const images = req.files.map((file) => `/images/${file.filename}`);
+
+    // Create product object with image URLs
     const productData = {
       product_name,
       product_price,
       product_description,
       category,
-      product_img: images, // Array of image filenames
+      product_img: images, // Array of image URLs
       Product_stock,
       Product_dis_rate,
       Product_rating,
     };
 
-    // Create product with images
+    // Store product with image URLs in MongoDB
     const product = await Product.create(productData);
     res.status(200).json({
       status: "Product added successfully with images",
@@ -42,6 +43,7 @@ exports.Product_add = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 // var limit=5;
 // var total_record= await user.find().count();
 
