@@ -1,5 +1,6 @@
 var Product = require("../Model/productmodel");
 const Category = require("../Model/categorymodel"); // Import the Category model
+const cloudinary = require("../cloudinaryConfig"); // Import Cloudinary configuration
 
 exports.Product_add = async (req, res) => {
   try {
@@ -17,22 +18,29 @@ exports.Product_add = async (req, res) => {
       Product_rating,
     } = req.body;
 
-    // Extract image filenames with paths to serve via URLs
-    const images = req.files.map((file) => `/images/${file.filename}`);
+    // Upload images to Cloudinary
+    const imageUploads = req.files.map((file) =>
+      cloudinary.uploader.upload(file.path)
+    );
 
-    // Create product object with image URLs
+    const uploadResults = await Promise.all(imageUploads);
+
+    // Extract URLs from upload results
+    const imageUrls = uploadResults.map((result) => result.secure_url);
+
+    // Create product object with Cloudinary image URLs
     const productData = {
       product_name,
       product_price,
       product_description,
       category,
-      product_img: images, // Array of image URLs
+      product_img: imageUrls, // Array of Cloudinary image URLs
       Product_stock,
       Product_dis_rate,
       Product_rating,
     };
 
-    // Store product with image URLs in MongoDB
+    // Save product to MongoDB
     const product = await Product.create(productData);
     res.status(200).json({
       status: "Product added successfully with images",
