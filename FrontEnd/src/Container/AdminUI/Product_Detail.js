@@ -167,6 +167,7 @@ function Product_Detail() {
     try {
       const result = await axios.get(`${RenderHost}/product_Search/${key}`);
       if (result.data.Result && result.data.Result.length > 0) {
+        console.log("result.data.Result", result.data.Result);
         setData(result.data.Result);
       } else {
         Getdata();
@@ -280,7 +281,7 @@ function Product_Detail() {
                           <td>
                             {item.product_img && (
                               <img
-                                src={`${RenderHost}/images/${item.product_img[0]}`}
+                                src={item.product_img}
                                 style={{ objectFit: "cover" }}
                                 width="100"
                                 height="100"

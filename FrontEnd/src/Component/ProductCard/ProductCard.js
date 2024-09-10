@@ -14,6 +14,8 @@ import { RenderHost } from "../../API/Api";
 
 function Product_card({ SetMainCart, inputValue }) {
   const [data, setdata] = useState(null);
+
+  console.log("data :>>1234 ", data);
   const [Cart, setCart] = useState(0);
   const [cate, setcate] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -38,6 +40,7 @@ function Product_card({ SetMainCart, inputValue }) {
   }, [inputValue]);
 
   const AddItemToCart = (val) => {
+    setLoading(true);
     axios
       .post(`${RenderHost}0/addItemToCart`, {
         productId: val._id,
@@ -48,6 +51,7 @@ function Product_card({ SetMainCart, inputValue }) {
       })
       .then((res) => {
         console.log(res);
+        setLoading(false);
       });
   };
 
@@ -258,7 +262,7 @@ function Product_card({ SetMainCart, inputValue }) {
                           className="text-decoration-none"
                         >
                           <CardImg
-                            src={`${RenderHost}/images/${val.product_img[0]}`}
+                            src={`${val.product_img}`}
                             alt="Laptop"
                             height={"300px"}
                             className="object-fit-cover"
