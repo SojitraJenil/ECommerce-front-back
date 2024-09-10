@@ -33,24 +33,22 @@ const Product = () => {
           <div className="">
             {data.product_img &&
               data.product_img.map((imageUrl, index) => (
-                <Col key={index} className="mb-3">
+                <Col key={index} className="mb-3 p-3">
                   <img
-                    src={`${RenderHost}/images/${imageUrl}`}
+                    src={`${imageUrl}`}
                     style={{ height: "80px", width: "80px" }}
                     className="border border-black my-2"
                     alt={`Product Image ${index + 1}`}
-                    onClick={() => setImage(imageUrl)} // Set the clicked image as the main image
+                    onClick={() => setImage(imageUrl)}
                   />
                 </Col>
               ))}
           </div>
           <div className="d-flex">
-            <div className="">
+            <div className="p-3 pt-4">
               <img
-                src={`${RenderHost}/images/${
-                  data.product_img && data.product_img.length > 0
-                    ? image || data.product_img[0] // Check if image state is defined, if not, use the first image
-                    : ""
+                src={`${
+                  data.product_img && data.product_img[0] // Check if image state is defined, if not, use the first image
                 }`}
                 style={{ height: "400px", width: "500px" }}
                 className="object-fit-cover border border-black"

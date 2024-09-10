@@ -281,7 +281,7 @@ function Product_Detail() {
                           <td>
                             {item.product_img && (
                               <img
-                                src={item.product_img}
+                                src={item.product_img[0] || item.product_img}
                                 style={{ objectFit: "cover" }}
                                 width="100"
                                 height="100"

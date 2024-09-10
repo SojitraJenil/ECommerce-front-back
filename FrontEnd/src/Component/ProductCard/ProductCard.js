@@ -262,7 +262,7 @@ function Product_card({ SetMainCart, inputValue }) {
                           className="text-decoration-none"
                         >
                           <CardImg
-                            src={`${val.product_img}`}
+                            src={`${val.product_img[0] || val.product_img}`}
                             alt="Laptop"
                             height={"300px"}
                             className="object-fit-cover"
