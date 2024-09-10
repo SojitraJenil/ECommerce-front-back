@@ -18,15 +18,8 @@ exports.Product_add = async (req, res) => {
       Product_rating,
     } = req.body;
 
-    // Upload images to Cloudinary
-    const imageUploads = req.files.map((file) =>
-      cloudinary.uploader.upload(file.path)
-    );
-
-    const uploadResults = await Promise.all(imageUploads);
-
-    // Extract URLs from upload results
-    const imageUrls = uploadResults.map((result) => result.secure_url);
+    // Extract URLs from uploaded files
+    const imageUrls = req.files.map((file) => file.path); // Multer/Cloudinary provides the file path
 
     // Create product object with Cloudinary image URLs
     const productData = {

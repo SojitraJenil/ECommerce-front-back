@@ -1,6 +1,11 @@
 var express = require("express");
 var router = express.Router();
 const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+const path = require("path");
+const upload = require("../cloudinaryConfig"); // Adjust the path accordingly
 
 var {
   User_Register,
@@ -43,17 +48,6 @@ const {
 } = require("../controller/cartcontroller");
 // const  authenticateUser  = require('../middleware/authenticate');
 // const { Email_Add } = require('../controller/maincontroller');
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "public/images")); // Store images in /public/images
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + "-" + file.originalname); // Unique filename to avoid conflicts
-  },
-});
-
-var upload = multer({ storage: storage });
 
 // router.post('/image',upload.single('image'),Image_upload);
 router.post("/register", User_Register);
@@ -67,17 +61,19 @@ router.post("/Order_Register", Register_Order_Details);
 router.get("/Order_details", Show_all_Order_details);
 router.delete("/Order_delete/:id", Order_Delete);
 router.get("/Order_Search/:key", Order_Search);
-router.post("/Product_add", upload.array("images", 5), Product_add);
+router.post("/product_add", upload.array("images", 5), Product_add);
+
+console.log(upload);
 // router.post("/Product_add", upload.single("image"), Product_add);
 router.get("/Product_Show", Product_Show);
-router.delete("/product_delete/:id", product_delete);
 router.get("/Product_show/ProductId/:id", one_Product_show);
 router.get("/product_Search/:key", product_Search);
 router.get("/Product_show/ProductName/:product_name", oneProductByName);
-router.post("/Product_Update/:id", Product_Update);
 router.get("/Product_show/category/:category", productFindByCat);
 router.get("/Product_show/Product_Price/low_to_high", Low_to_High);
 router.get("/Product_show/Product_Price/high_to_low", High_to_Low);
+router.post("/Product_Update/:id", Product_Update);
+router.delete("/product_delete/:id", product_delete);
 
 // router.post("/cart/add/productId", addToCart);
 router.post("/addItemToCart", addItemToCart);
