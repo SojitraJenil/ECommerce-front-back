@@ -55,7 +55,7 @@ function App() {
           }
         />
         <Route
-          path="/user"
+          path="/admin/user"
           element={
             <>
               <PageTitle title="user" />

@@ -5,12 +5,23 @@ import App from './App';
 import './css/style.css';
 import './css/satoshi.css';
 import 'jsvectormap/dist/css/jsvectormap.css';
+import { SnackbarProvider } from 'notistack';
 import 'flatpickr/dist/flatpickr.min.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Router>
-      <App />
+      <SnackbarProvider
+        maxSnack={3}
+        autoHideDuration={3000}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        {' '}
+        <App />
+      </SnackbarProvider>
     </Router>
   </React.StrictMode>,
 );

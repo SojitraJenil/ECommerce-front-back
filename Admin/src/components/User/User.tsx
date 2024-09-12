@@ -1,11 +1,11 @@
 import React from 'react';
-import TableThree from '../Tables/TableThree';
+import TableUser from '../Tables/TableUser';
 
 function User() {
   return (
     <div>
       {' '}
-      <TableThree />
+      <TableUser />
     </div>
   );
 }
