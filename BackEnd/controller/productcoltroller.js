@@ -119,7 +119,6 @@ exports.productFindByCat = async (req, res) => {
 exports.one_Product_show = async (req, res) => {
   try {
     const productId = req.params.id; // Assuming the parameter is named product_id
-    console.log(productId);
     // Find product by ID and populate the associated category
     const product = await Product.findById(productId).populate("category");
 
