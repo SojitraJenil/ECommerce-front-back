@@ -4,7 +4,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 import './css/style.css';
 import './css/satoshi.css';
-import 'jsvectormap/dist/css/jsvectormap.css';
 import { SnackbarProvider } from 'notistack';
 import 'flatpickr/dist/flatpickr.min.css';
 

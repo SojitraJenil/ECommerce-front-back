@@ -85,7 +85,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         <nav className="mt-5 py-4 px-4 lg:mt-9 lg:px-6">
           {/* <!-- Menu Group --> */}
           <div>
-            <h3 className="mb-4 ml-4 text-sm font-semibold text-bodydark2">
+            <h3 className="mb-4 ml-4 text-sm font-semi  bold text-bodydark2">
               MENU
             </h3>
 
@@ -151,28 +151,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               eCommerce
                             </NavLink>
                           </li>
-                          <li>
-                            <NavLink
-                              to="/admin/user"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
-                            >
-                              User
-                            </NavLink>
-                          </li>
-                          <li>
-                            <NavLink
-                              to="/Product"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
-                            >
-                              Product
-                            </NavLink>
-                          </li>
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
@@ -180,55 +158,53 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                   );
                 }}
               </SidebarLinkGroup>
-              {/* <!-- Menu Item Dashboard --> */}
 
-              {/* <!-- Menu Item Calendar --> */}
               <li>
                 <NavLink
-                  to="/calendar"
+                  to="/admin/user"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('calendar') &&
+                    pathname.includes('/admin/user') &&
                     'bg-graydark dark:bg-meta-4'
                   }`}
                 >
                   <FaUserAlt />
-                  Manage Inquiry
-                </NavLink>
-              </li>
-              {/* <!-- Menu Item Calendar --> */}
-
-              <li>
-                <NavLink
-                  to="/calendar"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('order') && 'bg-graydark dark:bg-meta-4'
-                  }`}
-                >
-                  <FaUserAlt />
-                  Manage order
-                </NavLink>
-              </li>
-
-              <li>
-                <NavLink
-                  to="/calendar"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('cart') && 'bg-graydark dark:bg-meta-4'
-                  }`}
-                >
-                  <FaUserAlt />
-                  Add Product
-                </NavLink>
-              </li>
-              <li>
-                <NavLink
-                  to="/calendar"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                    pathname.includes('cart') && 'bg-graydark dark:bg-meta-4'
-                  }`}
-                >
-                  <FaUserAlt />
                   Manage User
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/admin/Product"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes('/Product') &&
+                    'bg-graydark dark:bg-meta-4'
+                  }`}
+                >
+                  <FaUserAlt />
+                  Manage Product
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/admin/inquiries"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes('/admin/inquiries') &&
+                    'bg-graydark dark:bg-meta-4'
+                  }`}
+                >
+                  <FaUserAlt />
+                  Manage inquiries
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/admin/categories"
+                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                    pathname.includes('/admin/categories') &&
+                    'bg-graydark dark:bg-meta-4'
+                  }`}
+                >
+                  <FaUserAlt />
+                  Manage categories
                 </NavLink>
               </li>
             </ul>

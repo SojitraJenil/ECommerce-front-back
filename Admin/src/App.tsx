@@ -18,6 +18,8 @@ import Buttons from './pages/UiElements/Buttons';
 import DefaultLayout from './layout/DefaultLayout';
 import User from './components/User/User';
 import Product from './components/Product/Product';
+import Inquiries from './components/inquiries/Inquiries';
+import Categories from './components/Categories/Categories';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -64,6 +66,24 @@ function App() {
           }
         />
         <Route
+          path="/admin/inquiries"
+          element={
+            <>
+              <PageTitle title="Inquiries" />
+              <Inquiries />
+            </>
+          }
+        />
+        <Route
+          path="/admin/categories"
+          element={
+            <>
+              <PageTitle title="categories" />
+              <Categories />
+            </>
+          }
+        />
+        <Route
           path="/profile"
           element={
             <>
@@ -100,7 +120,7 @@ function App() {
           }
         />
         <Route
-          path="/Product"
+          path="/admin/Product"
           element={
             <>
               <PageTitle title="Tables" />

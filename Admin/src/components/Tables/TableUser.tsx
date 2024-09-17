@@ -4,6 +4,7 @@ import { deleteUser, getUser } from '../../API/api';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import useSnackbar from '../../hooks/useSnackbar';
+import Loader from '../../common/Loader/index';
 
 interface User {
   _id: string;
@@ -15,6 +16,7 @@ interface User {
 
 const TableUser: React.FC = () => {
   const [userDetails, setUserDetails] = useState<User[]>([]);
+  const [loading, setLoading] = useState(false);
   const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -23,10 +25,13 @@ const TableUser: React.FC = () => {
 
   const fetchUser = async () => {
     try {
+      setLoading(true);
       const response = await getUser();
       setUserDetails(response.data1);
     } catch (error) {
       showSnackbar('Failed to fetch users', 'error');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,7 +66,9 @@ const TableUser: React.FC = () => {
     showSnackbar('This is a success message!', 'info');
   };
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
         <table className="w-full table-auto">

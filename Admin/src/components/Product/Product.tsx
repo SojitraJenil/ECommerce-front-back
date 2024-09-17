@@ -1,11 +1,10 @@
 import React from 'react';
-import TableThree from '../Tables/TableThree';
-import TableTwo from '../Tables/TableTwo';
+import TableProd from '../Tables/TableProd';
 
 function Product() {
   return (
     <div>
-      <TableTwo />
+      <TableProd />
     </div>
   );
 }
