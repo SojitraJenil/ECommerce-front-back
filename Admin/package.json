@@ -12,9 +12,6 @@
     "name": "e-com-admin"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
-    "@mui/material": "^6.1.0",
     "apexcharts": "^3.53.0",
     "axios": "^1.7.7",
     "flatpickr": "^4.6.13",
