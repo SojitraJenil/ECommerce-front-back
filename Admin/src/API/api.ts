@@ -132,13 +132,32 @@ export const addCategories = async (categories: any) => {
 };
 
 export const UpdateCategories = async (id: any, categories: string) => {
+  console.log('categories :>> ', categories);
+  console.log('id :>> ', id);
   try {
-    const response = await axiosInstance.patch(`/CateUpdate/${id}`, {
+    const response = await axiosInstance.post(`/CateUpdate/${id}`, {
       name: categories,
     });
     return response.data;
   } catch (error: unknown) {
     console.error(error);
+    throw error;
+  }
+};
+
+export const getOrder = async () => {
+  try {
+    const response = await axiosInstance.get('/Order_details');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const getOrderDelete = async (id: any) => {
+  try {
+    const response = await axiosInstance.delete(`/Order_delete/${id}`);
+    return response.data;
+  } catch (error) {
     throw error;
   }
 };

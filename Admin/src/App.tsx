@@ -20,6 +20,7 @@ import User from './components/User/User';
 import Product from './components/Product/Product';
 import Inquiries from './components/inquiries/Inquiries';
 import Categories from './components/Categories/Categories';
+import Order from './components/order/Order';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -80,6 +81,15 @@ function App() {
             <>
               <PageTitle title="categories" />
               <Categories />
+            </>
+          }
+        />
+        <Route
+          path="/admin/order"
+          element={
+            <>
+              <PageTitle title="order" />
+              <Order />
             </>
           }
         />

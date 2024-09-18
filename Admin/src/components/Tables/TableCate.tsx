@@ -7,19 +7,21 @@ import {
   getInquiries,
   UpdateCategories,
 } from '../../API/api';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import useSnackbar from '../../hooks/useSnackbar';
 
 function TableCate() {
+  const { showSnackbar } = useSnackbar();
   const [categories, setCategories] = useState([]);
   const [formCategories, setFormCategories] = useState<any>();
+  const [formCategoriesId, setFormCategoriesId] = useState<any>();
+  const [updateCategories, setUpdateCategories] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
-  const { showSnackbar } = useSnackbar();
   useEffect(() => {
-    fetchInquiries();
+    fetchCategories();
   }, []);
 
-  const fetchInquiries = async () => {
+  const fetchCategories = async () => {
     setLoading(true);
     try {
       const res = await getCategories();
@@ -35,28 +37,36 @@ function TableCate() {
   const handleDelete = async (id: string) => {
     try {
       await deleteCategories(id);
-      showSnackbar('Inquiries deleted successfully!', 'success');
-      fetchInquiries();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const handleUpdate = async (id: string) => {
-    try {
-      await UpdateCategories(id, formCategories);
-      showSnackbar('Inquiries deleted successfully!', 'success');
-      fetchInquiries();
+      showSnackbar('Categories deleted successfully!', 'success');
+      fetchCategories();
     } catch (error) {
       console.log(error);
     }
   };
 
+  const handleUpdate = async (item: any) => {
+    setFormCategories(item.name);
+    setFormCategoriesId(item._id);
+  };
+
   const HandleAddCategories = async () => {
-    console.log('formCategories :>> ', formCategories);
     try {
-      const res = await addCategories(formCategories);
-      fetchInquiries();
-      console.log('res', res);
+      await addCategories(formCategories);
+      showSnackbar('Inquiries deleted successfully!', 'success');
+      fetchCategories();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const HandleUpdateCategories = async () => {
+    try {
+      await UpdateCategories(formCategoriesId, formCategories);
+      showSnackbar('Inquiries deleted successfully!', 'success');
+      setUpdateCategories(false);
+      fetchCategories();
+      setFormCategories('');
+      setFormCategoriesId(null);
     } catch (error) {
       console.log(error);
     }
@@ -68,27 +78,32 @@ function TableCate() {
       ) : (
         <div className="max-w-full overflow-x-auto">
           <div>
-            <div className="grid gap-4 mb-4 md:grid-cols-2">
+            <div className="flex gap-4 mb-4 md:grid-cols-2">
               <label
                 htmlFor="name"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                className="mb-2 align-middle self-center text-md font-medium text-gray-900 dark:text-white"
               >
-                First name
+                Categories :
               </label>
               <input
+                value={formCategories}
                 type="text"
                 onChange={(e: any) => {
                   setFormCategories(e.target.value);
                 }}
                 id="name"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="John"
+                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-50 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="enter the text"
               />
               <button
                 className="px-4 py-1 bg-teal-500 rounded-lg text-white"
-                onClick={HandleAddCategories}
+                onClick={
+                  updateCategories
+                    ? HandleUpdateCategories
+                    : HandleAddCategories
+                }
               >
-                Add Categories
+                {updateCategories ? 'Update' : 'Add Categories'}
               </button>
             </div>
           </div>
@@ -147,7 +162,8 @@ function TableCate() {
                       <button
                         className="hover:text-primary bg-red-400 px-3 rounded-md text-white "
                         onClick={() => {
-                          handleUpdate(item._id);
+                          setUpdateCategories(true);
+                          handleUpdate(item);
                         }}
                       >
                         Update
