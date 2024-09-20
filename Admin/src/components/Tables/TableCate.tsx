@@ -10,36 +10,30 @@ import {
 import { useEffect, useState } from 'react';
 import useSnackbar from '../../hooks/useSnackbar';
 import Breadcrumb from '../Breadcrumbs/Breadcrumb';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '@/reducers';
+import { fetchProductCategories } from '../../reducers/productSlice';
 
 function TableCate() {
   const { showSnackbar } = useSnackbar();
-  const [categories, setCategories] = useState([]);
+  const dispatch = useDispatch<any>();
+  const categories = useSelector(
+    (state: RootState) => state.product.categories,
+  );
+  const loading = useSelector((state: RootState) => state.product.loading);
   const [formCategories, setFormCategories] = useState<any>();
   const [formCategoriesId, setFormCategoriesId] = useState<any>();
   const [updateCategories, setUpdateCategories] = useState<boolean>(false);
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    fetchCategories();
-  }, []);
 
-  const fetchCategories = async () => {
-    setLoading(true);
-    try {
-      const res = await getCategories();
-      setCategories(res.categories);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    dispatch(fetchProductCategories());
+  }, []);
 
   const handleDelete = async (id: string) => {
     try {
       await deleteCategories(id);
       showSnackbar('Categories deleted successfully!', 'success');
-      fetchCategories();
+      dispatch(fetchProductCategories());
     } catch (error) {
       console.log(error);
     }
@@ -54,7 +48,7 @@ function TableCate() {
     try {
       await addCategories(formCategories);
       showSnackbar('Inquiries deleted successfully!', 'success');
-      fetchCategories();
+      dispatch(fetchProductCategories());
     } catch (error) {
       console.log(error);
     }
@@ -65,7 +59,7 @@ function TableCate() {
       await UpdateCategories(formCategoriesId, formCategories);
       showSnackbar('Inquiries deleted successfully!', 'success');
       setUpdateCategories(false);
-      fetchCategories();
+      dispatch(fetchProductCategories());
       setFormCategories('');
       setFormCategoriesId(null);
     } catch (error) {
@@ -131,50 +125,53 @@ function TableCate() {
                 </tr>
               </thead>
               <tbody>
-                {categories.map((item: any, index: any) => (
-                  <tr key={index}>
-                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                      <h5 className="font-medium text-black dark:text-white">
-                        {index + 1}
-                      </h5>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                      <h5 className="font-medium text-black dark:text-white">
-                        {item._id}
-                      </h5>
-                    </td>
+                {categories &&
+                  categories.map((item: any, index: any) => (
+                    <tr key={index}>
+                      <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <h5 className="font-medium text-black dark:text-white">
+                          {index + 1}
+                        </h5>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <h5 className="font-medium text-black dark:text-white">
+                          {item._id}
+                        </h5>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">{item.name}</p>
-                    </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.name}
+                        </p>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <div className="flex items-center space-x-3.5">
-                        <button
-                          className="hover:text-primary bg-red-400 px-3 rounded-md text-white "
-                          onClick={() => {
-                            handleDelete(item._id);
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <div className="flex items-center space-x-3.5">
-                        <button
-                          className="hover:text-primary bg-red-400 px-3 rounded-md text-white "
-                          onClick={() => {
-                            setUpdateCategories(true);
-                            handleUpdate(item);
-                          }}
-                        >
-                          Update
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <div className="flex items-center space-x-3.5">
+                          <button
+                            className="hover:text-primary bg-red-400 px-3 rounded-md text-white "
+                            onClick={() => {
+                              handleDelete(item._id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <div className="flex items-center space-x-3.5">
+                          <button
+                            className="hover:text-primary bg-red-400 px-3 rounded-md text-white "
+                            onClick={() => {
+                              setUpdateCategories(true);
+                              handleUpdate(item);
+                            }}
+                          >
+                            Update
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

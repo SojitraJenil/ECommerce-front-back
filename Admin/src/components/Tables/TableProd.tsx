@@ -1,20 +1,26 @@
-import { useEffect, useReducer, useState } from 'react';
-import {
-  addProduct,
-  deleteProduct,
-  getCategory,
-  getProduct,
-  UpdateProduct,
-} from '../../API/api';
+import { useEffect, useState } from 'react';
+import { addProduct, UpdateProduct } from '../../API/api';
 import Loader from '../../common/Loader/index';
 import useSnackbar from '../../hooks/useSnackbar';
 import Breadcrumb from '../Breadcrumbs/Breadcrumb';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../reducers/index';
+import {
+  fetchProduct,
+  fetchProductCategories,
+  IsDeleteProduct,
+} from '../../reducers/productSlice';
 
 const TableProd = () => {
   const { showSnackbar } = useSnackbar();
-  const [product, setProduct] = useState([]);
-  const [category, setCategory] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch<any>();
+  const Product = useSelector((state: RootState) => state.product.product);
+  const categories = useSelector(
+    (state: RootState) => state.product.categories,
+  );
+  const loading = useSelector((state: RootState) => state.product.loading);
+  const error = useSelector((state: RootState) => state.product.error);
+
   const [addProductModel, setAddProductModel] = useState(false);
   const [productForm, setProductForm] = useState({
     product_name: '',
@@ -27,34 +33,11 @@ const TableProd = () => {
     Product_rating: '',
   });
 
-  const fetchProduct = async () => {
-    try {
-      setLoading(true);
-      const res = await getProduct();
-      setProduct(res.product_show);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const fetchCategory = async () => {
-    try {
-      setLoading(true);
-      const res = await getCategory();
-      setCategory(res.categories);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const HandleAddProduct = async () => {
     console.log('object');
     try {
       const res = await addProduct(productForm);
-      fetchProduct();
+      dispatch(fetchProduct());
       console.log('res123456323456', res);
     } catch (error) {
       console.log('error :>> ', error);
@@ -63,9 +46,10 @@ const TableProd = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteProduct(id);
-      showSnackbar('User deleted successfully!', 'success');
-      fetchProduct();
+      dispatch(IsDeleteProduct(id)).then(() => {
+        dispatch(fetchProduct());
+        showSnackbar('User deleted successfully!', 'success');
+      });
     } catch (error) {
       showSnackbar('Failed to delete user', 'error');
     }
@@ -75,7 +59,7 @@ const TableProd = () => {
     try {
       await UpdateProduct(id);
       showSnackbar('User deleted successfully!', 'success');
-      fetchProduct();
+      dispatch(fetchProduct());
     } catch (error) {
       showSnackbar('Failed to delete user', 'error');
     }
@@ -90,10 +74,11 @@ const TableProd = () => {
   };
 
   useEffect(() => {
-    fetchProduct();
-    fetchCategory();
+    dispatch(fetchProduct());
+    dispatch(fetchProductCategories());
   }, []);
 
+  if (error) return;
   return (
     <>
       <Breadcrumb pageName="Product" />
@@ -149,81 +134,82 @@ const TableProd = () => {
                 </tr>
               </thead>
               <tbody>
-                {product.map((item: any, index: any) => (
-                  <tr key={index}>
-                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                      <h5 className="font-medium text-black dark:text-white">
-                        {index + 1}
-                      </h5>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                      <h5 className="font-medium text-black dark:text-white">
-                        {item.product_name}
-                      </h5>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        ${item.product_price}
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.product_description}
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <img
-                        src={item.product_img[0]}
-                        alt={item.product_name}
-                        className="w-20 h-20 object-cover"
-                      />
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item?.category?.name}
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.Product_stock}
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.Product_dis_rate}%
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.Product_rating}
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <div className="flex items-center space-x-3.5">
-                        <button
-                          className="hover:text-primary bg-red-400 px-3 rounded-md text-white "
-                          onClick={() => {
-                            handleDelete(item._id);
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <div className="flex items-center space-x-3.5">
-                        <button
-                          className="hover:text-primary bg-green-400 px-3 rounded-md text-white "
-                          onClick={() => {
-                            handleUpdate(item._id);
-                          }}
-                        >
-                          Edit
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                {Product &&
+                  Product.map((item: any, index: any) => (
+                    <tr key={index}>
+                      <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <h5 className="font-medium text-black dark:text-white">
+                          {index + 1}
+                        </h5>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <h5 className="font-medium text-black dark:text-white">
+                          {item.product_name}
+                        </h5>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          ${item.product_price}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.product_description}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <img
+                          src={item.product_img[0]}
+                          alt={item.product_name}
+                          className="w-20 h-20 object-cover"
+                        />
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item?.category?.name}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.Product_stock}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.Product_dis_rate}%
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.Product_rating}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <div className="flex items-center space-x-3.5">
+                          <button
+                            className="hover:text-primary bg-red-400 px-3 rounded-md text-white "
+                            onClick={() => {
+                              handleDelete(item._id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <div className="flex items-center space-x-3.5">
+                          <button
+                            className="hover:text-primary bg-green-400 px-3 rounded-md text-white "
+                            onClick={() => {
+                              handleUpdate(item._id);
+                            }}
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
@@ -309,8 +295,8 @@ const TableProd = () => {
                             className=" w-[100%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           >
                             <option selected>Choose a category</option>
-                            {category != null &&
-                              category.map((item: any) => {
+                            {categories != null &&
+                              categories.map((item: any) => {
                                 return (
                                   <>
                                     <option value={item._id}>

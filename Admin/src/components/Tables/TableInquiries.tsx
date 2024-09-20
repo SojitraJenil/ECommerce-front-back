@@ -3,33 +3,26 @@ import { deleteInquiries, getInquiries } from '../../API/api';
 import React, { useEffect, useState } from 'react';
 import useSnackbar from '../../hooks/useSnackbar';
 import Breadcrumb from '../Breadcrumbs/Breadcrumb';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../reducers';
+import { fetchInquiry, IsDeleteInquiry } from '../../reducers/inquiriesSlice';
 
 function TableInquiries() {
-  const [Inquiries, setInquiries] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<any>();
   const { showSnackbar } = useSnackbar();
-  useEffect(() => {
-    fetchInquiries();
-  }, []);
+  const Inquiries = useSelector((state: RootState) => state.inquiry.inquiry);
+  const loading = useSelector((state: RootState) => state.inquiry.loading);
 
-  const fetchInquiries = async () => {
-    setLoading(true);
-    try {
-      const res = await getInquiries();
-      setInquiries(res.inquiry_show);
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => {
+    dispatch(fetchInquiry());
+  }, []);
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteInquiries(id);
-      showSnackbar('Inquiries deleted successfully!', 'success');
-      fetchInquiries();
+      await dispatch(IsDeleteInquiry(id)).then(() => {
+        showSnackbar('Inquiries deleted successfully!', 'success');
+        dispatch(fetchInquiry());
+      });
     } catch (error) {
       console.log(error);
     }
@@ -69,52 +62,55 @@ function TableInquiries() {
                 </tr>
               </thead>
               <tbody>
-                {Inquiries.map((item: any, index: any) => (
-                  <tr key={index}>
-                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                      <h5 className="font-medium text-black dark:text-white">
-                        {index + 1}
-                      </h5>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                      <h5 className="font-medium text-black dark:text-white">
-                        {item.name}
-                      </h5>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">{item.email}</p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        +91 {item.mobile}
-                      </p>
-                    </td>
+                {Inquiries &&
+                  Inquiries.map((item: any, index: any) => (
+                    <tr key={index}>
+                      <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <h5 className="font-medium text-black dark:text-white">
+                          {index + 1}
+                        </h5>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <h5 className="font-medium text-black dark:text-white">
+                          {item.name}
+                        </h5>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.email}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          +91 {item.mobile}
+                        </p>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.subject}
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.message}
-                      </p>
-                    </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.subject}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.message}
+                        </p>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <div className="flex items-center space-x-3.5">
-                        <button
-                          className="hover:text-primary bg-red-400 px-3 rounded-md text-white "
-                          onClick={() => {
-                            handleDelete(item._id);
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <div className="flex items-center space-x-3.5">
+                          <button
+                            className="hover:text-primary bg-red-400 px-3 rounded-md text-white "
+                            onClick={() => {
+                              handleDelete(item._id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

@@ -1,72 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { MdDelete, MdEdit } from 'react-icons/md';
-import { deleteUser, getUser } from '../../API/api';
-import { confirmAlert } from 'react-confirm-alert';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../reducers/index';
+import { IsDeleteUser, fetchUsers, setError } from '../../reducers/userSlice';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import useSnackbar from '../../hooks/useSnackbar';
 import Loader from '../../common/Loader/index';
 import Breadcrumb from '../Breadcrumbs/Breadcrumb';
 
-interface User {
-  _id: string;
-  email: string;
-  fname: string;
-  lname: string;
-  password: string;
-}
-
 const TableUser: React.FC = () => {
-  const [userDetails, setUserDetails] = useState<User[]>([]);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch<any>();
+  const users = useSelector((state: RootState) => state.users.users);
+  const loading = useSelector((state: RootState) => state.users.loading);
+  const error = useSelector((state: RootState) => state.users.error);
+
   const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
-    fetchUser();
-  }, []);
-
-  const fetchUser = async () => {
-    try {
-      setLoading(true);
-      const response = await getUser();
-      setUserDetails(response.data1);
-    } catch (error) {
-      showSnackbar('Failed to fetch users', 'error');
-    } finally {
-      setLoading(false);
-    }
-  };
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   const handleDelete = async (id: string) => {
     try {
-      await deleteUser(id);
-      showSnackbar('User deleted successfully!', 'success');
-      fetchUser();
+      dispatch(IsDeleteUser(id)).then(() => {
+        dispatch(fetchUsers());
+        showSnackbar('User deleted successfully!', 'success');
+      });
     } catch (error) {
+      dispatch(setError('Failed to delete user'));
       showSnackbar('Failed to delete user', 'error');
     }
   };
 
-  const confirmDelete = (id: string) => {
-    confirmAlert({
-      title: 'Confirm Deletion',
-      message: 'Are you sure you want to delete this user?',
-      buttons: [
-        {
-          label: 'Yes',
-          onClick: () => handleDelete(id),
-        },
-        {
-          label: 'No',
-          onClick: () => showSnackbar('User deletion cancelled', 'info'),
-        },
-      ],
-    });
+  const handleEdit = (id: string) => {
+    showSnackbar('Edit functionality not implemented yet.', 'info');
   };
 
-  const handleEdit = () => {
-    showSnackbar('This is a success message!', 'info');
-  };
-
+  if (error) return;
   return loading ? (
     <Loader />
   ) : (
@@ -98,7 +68,7 @@ const TableUser: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {userDetails.map((item, index) => (
+              {users.map((item: any, index: any) => (
                 <tr key={item._id}>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <p className="text-black dark:text-white">{index + 1}</p>
@@ -121,13 +91,15 @@ const TableUser: React.FC = () => {
                     <div className="flex items-center space-x-3.5">
                       <button
                         className="hover:text-primary"
-                        onClick={() => confirmDelete(item._id)}
+                        onClick={() => handleDelete(item._id)}
                       >
                         <MdDelete />
                       </button>
                       <button
                         className="hover:text-primary"
-                        onClick={handleEdit}
+                        onClick={() => {
+                          handleEdit(item._id);
+                        }}
                       >
                         <MdEdit />
                       </button>

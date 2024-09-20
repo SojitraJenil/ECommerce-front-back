@@ -3,39 +3,28 @@ import { getOrder, getOrderDelete } from '../../API/api';
 import { useEffect, useState } from 'react';
 import useSnackbar from '../../hooks/useSnackbar';
 import Breadcrumb from '../Breadcrumbs/Breadcrumb';
-
-type Category = {
-  _id: string;
-  name: string;
-};
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../../reducers';
+import { fetchOrder, IsDeleteOrder } from '../../reducers/orderSlice';
 
 function TableOrder() {
+  const dispatch = useDispatch<any>();
   const { showSnackbar } = useSnackbar();
-  const [order, setOrder] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(false);
+  const order = useSelector((state: RootState) => state.order.order);
+  const loading = useSelector((state: RootState) => state.inquiry.loading);
+
+  console.log('order :>> ', order);
 
   useEffect(() => {
-    fetchOrder();
+    dispatch(fetchOrder());
   }, []);
-
-  const fetchOrder = async () => {
-    setLoading(true);
-    try {
-      const res = await getOrder();
-      setOrder(res.show_details);
-      console.log('res. :>> ', res.show_details);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleDelete = async (id: any) => {
     try {
-      await getOrderDelete(id);
-      showSnackbar('Order deleted successfully!', 'success');
-      fetchOrder();
+      await dispatch(IsDeleteOrder(id)).then(() => {
+        showSnackbar('Order deleted successfully!', 'success');
+        dispatch(fetchOrder());
+      });
     } catch (error) {
       console.error(error);
     }
@@ -91,75 +80,84 @@ function TableOrder() {
                 </tr>
               </thead>
               <tbody>
-                {order.map((item: any, index: any) => (
-                  <tr key={index}>
-                    <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                      <h5 className="font-medium text-black dark:text-white">
-                        {index + 1}
-                      </h5>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">{item.fname}</p>
-                    </td>
+                {order &&
+                  order.map((item: any, index: any) => (
+                    <tr key={index}>
+                      <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
+                        <h5 className="font-medium text-black dark:text-white">
+                          {index + 1}
+                        </h5>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.fname}
+                        </p>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">{item.lname}</p>
-                    </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.lname}
+                        </p>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.userId}
-                      </p>
-                    </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.userId}
+                        </p>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">{item.phone}</p>
-                    </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.phone}
+                        </p>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.voucher}
-                      </p>
-                    </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.voucher}
+                        </p>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.address}
-                      </p>
-                    </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.address}
+                        </p>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.company}
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.country}
-                      </p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">
-                        {item.pinCode}
-                      </p>
-                    </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.company}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.country}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.pinCode}
+                        </p>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">{item.email}</p>
-                    </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {item.email}
+                        </p>
+                      </td>
 
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <div className="flex items-center space-x-3.5">
-                        <button
-                          className="hover:text-primary bg-red-400 px-3 rounded-md text-white "
-                          onClick={() => handleDelete(item._id)}
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <div className="flex items-center space-x-3.5">
+                          <button
+                            className="hover:text-primary bg-red-400 px-3 rounded-md text-white "
+                            onClick={() => handleDelete(item._id)}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
