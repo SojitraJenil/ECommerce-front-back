@@ -11,6 +11,7 @@ const Register = () => {
   const [fname, setFname] = useState("");
   const [lname, setLname] = useState("");
   const [email, setEmail] = useState("");
+  const [mobileNo, setMobileNo] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
@@ -19,21 +20,22 @@ const Register = () => {
 
   const getData = async (e) => {
     e.preventDefault();
-    if (!fname || !lname || !email || !password) {
+    if ((!fname || !lname || !email || !password, !mobileNo)) {
       setError("All fields are required....!");
       return;
     }
     try {
-      console.log({ fname, lname, email, password });
+      console.log({ fname, lname, email, password, mobileNo });
       const data = await axios.post(`${RenderHost}/register`, {
         fname: fname,
         lname: lname,
         email: email,
+        mobileno: mobileNo,
         password: password,
       });
       console.log(data.success);
-      console.log("Data Added Successfully");
       localStorage.setItem("RegisterEmail", email);
+      localStorage.setItem("mobileno", mobileNo);
       localStorage.setItem("RegisterPassword", password);
       navigation("/Login");
     } catch (error) {
@@ -77,6 +79,16 @@ const Register = () => {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Enter The Email Address"
+          />
+        </div>
+        <div className="mb-3">
+          <label className="mb-1">Mobile No:</label>
+          <input
+            type="string"
+            className="form-control"
+            value={mobileNo}
+            onChange={(e) => setMobileNo(e.target.value)}
+            placeholder="Enter The Mobile No"
           />
         </div>
         <div className="mb-3">

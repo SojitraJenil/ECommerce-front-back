@@ -1,18 +1,29 @@
 var User_Register = require("../Model/usermodel");
-const jwt = require('jsonwebtoken');
-// const bcrypt = require('bcrypt');
+const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require("uuid");
 
 exports.User_Register = async (req, res) => {
- try {
-   var data = await User_Register.create(req.body);
-   res.status(200).json({
-     status: "success",
-     data,
-   });
- } catch (error) {
-  console.log(error);
- }
+  try {
+    const newUser = {
+      userId: uuidv4(),
+      fname: req.body.fname,
+      lname: req.body.lname,
+      mobileno: req.body.mobileno,
+      email: req.body.email,
+      password: req.body.password,
+      role: req.body.role || "user",
+      isVerified: req.body.isVerified || false,
+    };
 
+    var data = await User_Register.create(newUser);
+    res.status(200).json({
+      status: "success",
+      data,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ status: "error", error });
+  }
 };
 
 exports.show_All_User = async (req, res) => {
@@ -57,7 +68,6 @@ exports.Update_user = async (req, res) => {
   });
 };
 
-
 exports.User_Login = async (req, res) => {
   try {
     // Check if user with provided email exists
@@ -66,11 +76,14 @@ exports.User_Login = async (req, res) => {
     if (user) {
       // If user exists, compare passwords
       if (user.password === req.body.password) {
-        const token = jwt.sign({ id: user.id, username: user.email }, "Jenil", { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id, username: user.email }, "Jenil", {
+          expiresIn: "1h",
+        });
         console.log("Login successful");
         return res.status(200).json({
           status: "User logged in successfully",
-          user,token
+          user,
+          token,
         });
       } else {
         console.log("Password incorrect");
@@ -91,5 +104,3 @@ exports.User_Login = async (req, res) => {
     });
   }
 };
-
-
