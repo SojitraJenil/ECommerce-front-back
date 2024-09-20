@@ -42,7 +42,7 @@ function Product_card({ SetMainCart, inputValue }) {
   const AddItemToCart = (val) => {
     setLoading(true);
     axios
-      .post(`${RenderHost}0/addItemToCart`, {
+      .post(`${RenderHost}/addItemToCart`, {
         productId: val._id,
         quantity: 1,
         product_name: val.product_name,

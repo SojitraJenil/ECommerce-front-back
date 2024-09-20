@@ -132,8 +132,6 @@ export const addCategories = async (categories: any) => {
 };
 
 export const UpdateCategories = async (id: any, categories: string) => {
-  console.log('categories :>> ', categories);
-  console.log('id :>> ', id);
   try {
     const response = await axiosInstance.post(`/CateUpdate/${id}`, {
       name: categories,
