@@ -15,32 +15,28 @@ import { RenderHost } from "../../API/Api";
 function Product_card({ SetMainCart, inputValue }) {
   const [data, setdata] = useState(null);
 
-  console.log("data :>>1234 ", data);
-  const [Cart, setCart] = useState(0);
   const [cate, setcate] = useState(null);
-  const [loading, setLoading] = useState(false);
   const [sortingOption, setSortingOption] = useState(null);
   const [currentPage, setCurrentPage] = useState(1); // Fix the useState call
   const [totalPages, setTotalPages] = useState(1);
 
-  console.log("totalPages", totalPages);
-  console.log("currentPage", currentPage);
   const notify = (val) => {
     toast("Product Added Successfully...!", { icon: "👏" });
-    setCart(Cart + 1);
-    SetMainCart(Cart);
+    // setCart(Cart + 1);
+    // SetMainCart(Cart);
     AddItemToCart(val);
   };
 
   useEffect(() => {
+    if (inputValue.length > 0) {
+      FindProductByProductName(inputValue);
+    } else {
+      Product(); // Fetch all products when inputValue is empty
+    }
     Category();
-    Product();
-    FindProductByProductName(inputValue);
-    Product1();
-  }, [inputValue]);
+  }, [inputValue]); //
 
   const AddItemToCart = (val) => {
-    setLoading(true);
     axios
       .post(`${RenderHost}/addItemToCart`, {
         productId: val._id,
@@ -50,8 +46,7 @@ function Product_card({ SetMainCart, inputValue }) {
         product_img: val.product_img[0],
       })
       .then((res) => {
-        console.log(res);
-        setLoading(false);
+        console.log("object :>> ", res.data);
       });
   };
 
@@ -149,24 +144,17 @@ function Product_card({ SetMainCart, inputValue }) {
       });
   };
 
-  if (loading === true) {
-    return <Loader />;
-  }
-
   return (
     <>
       <div className="py-5">
         <Container>
           <div>
-            <div className="Title py-4">
+            <div className="Title">
               <h4>
-                <center className="fw-bold pt-4">New Arrivals</center>{" "}
+                <center className="fw-bold">New Arrivals</center>{" "}
               </h4>
-              <h6>
-                <center>New Top Trendy Fashion Winter Clothes</center>{" "}
-              </h6>
             </div>
-            <div className="Btn py-3">
+            <div className="Btn py-2">
               <input
                 type="button"
                 value={"All"}
@@ -185,7 +173,6 @@ function Product_card({ SetMainCart, inputValue }) {
                   );
                 })}
             </div>
-            <hr />
             <div className="d-flex">
               <div className="">
                 <h4 className="mt-2 me-3 ">Filter</h4>

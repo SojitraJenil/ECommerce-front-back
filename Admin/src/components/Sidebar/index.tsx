@@ -12,8 +12,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const { pathname } = location;
 
-  console.log('sidebarOpen :>> ', sidebarOpen);
-
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
 
@@ -65,9 +63,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       } lg:translate-x-0`} // Sidebar hidden on sm/md but visible on lg+
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+      <div className="flex items-center justify-between gap-2 px-6 py-5.5 text-center lg:py-6.5">
         <NavLink to="/">
-          <h1 className="text-xl text-white font-bold px-10">Admin E-com</h1>
+          <h1 className="text-md ms-4 text-white font-bold mx-auto align-bottom item--center">
+            The Cartify Shop - Admin{' '}
+          </h1>
         </NavLink>
 
         <button

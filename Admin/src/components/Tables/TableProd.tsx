@@ -26,12 +26,14 @@ const TableProd = () => {
     product_name: '',
     product_price: '',
     product_description: '',
-    category: '669283cca40ba951540c6936',
+    category: '',
     images: '',
     Product_stock: '',
     Product_dis_rate: '',
     Product_rating: '',
   });
+
+  console.log('productForm :>> ', productForm);
 
   const HandleAddProduct = async () => {
     console.log('object');
@@ -65,7 +67,7 @@ const TableProd = () => {
     }
   };
 
-  const HandleChange = (e: React.FormEvent<HTMLInputElement>) => {
+  const HandleChange = (e: React.FormEvent<any>) => {
     const { id, value, type, files } = e.target as any;
     setProductForm((prevForm) => ({
       ...prevForm,
@@ -166,7 +168,7 @@ const TableProd = () => {
                       </td>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                         <p className="text-black dark:text-white">
-                          {item?.category?.name}
+                          {item?.category}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -291,20 +293,19 @@ const TableProd = () => {
                             Category
                           </label>
                           <select
-                            id="countries"
-                            className=" w-[100%] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block  p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            onChange={HandleChange}
+                            id="category"
+                            className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                           >
-                            <option selected>Choose a category</option>
-                            {categories != null &&
-                              categories.map((item: any) => {
-                                return (
-                                  <>
-                                    <option value={item._id}>
-                                      {item.name}
-                                    </option>
-                                  </>
-                                );
-                              })}
+                            <option value="" disabled selected>
+                              Choose a category
+                            </option>
+                            {categories &&
+                              categories.map((item: any) => (
+                                <option key={item._id} value={item._id}>
+                                  {item.name}
+                                </option>
+                              ))}
                           </select>
                         </form>
 

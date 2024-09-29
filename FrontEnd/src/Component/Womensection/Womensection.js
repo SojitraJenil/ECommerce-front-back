@@ -28,7 +28,7 @@ const Womensection = () => {
 
   const WomenSection1 = (item) => {
     axios
-      .get(`${RenderHost}/Product_show/category/womens-dresses`)
+      .get(`${RenderHost}/Product_show/category/women`)
       .then(function (response) {
         setdata1(response.data.One_product_show);
       })
@@ -107,7 +107,7 @@ const Womensection = () => {
                         variant="top"
                         height={"300px"}
                         className="object-fit-cover"
-                        src={`${RenderHost}/images/${val.product_img}`}
+                        src={`${val.product_img}`}
                       />
                     </Link>
                     <Card.Body className="text-center">

@@ -10,8 +10,7 @@ import Form from "react-bootstrap/Form";
 import { useAtom } from "jotai";
 import { totalProduct } from "../../Atom/Atom";
 
-var LogoImage =
-  "https://kamleshyadav.com/wp/shopmartio-wp/wp-content/uploads/2021/04/shopmartiologo-1.svg";
+var LogoImage = "https://www.cartify.org/logo/logo_full.png";
 
 function Header({ onInputChange }) {
   const [inputValue, setInputValue] = useState(null);
@@ -36,14 +35,17 @@ function Header({ onInputChange }) {
       style={{ zIndex: "10" }}
     >
       <Container className="py-2">
-        <Navbar.Brand>
-          <img
-            src={LogoImage}
-            alt="logo"
-            onClick={() => window.location.reload()}
-            style={{ cursor: "pointer" }}
-          />
-        </Navbar.Brand>
+        {/* <Navbar.Brand> */}
+        <img
+          src={LogoImage}
+          alt="logo"
+          onClick={() => window.location.reload()}
+          style={{
+            cursor: "pointer",
+            width: "10%",
+          }}
+        />
+        {/* </Navbar.Brand> */}
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav

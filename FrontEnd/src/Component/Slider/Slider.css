@@ -1,35 +1,182 @@
-.owl-nav{
-    margin: 0 !important;
-    position: absolute;
-    top: 50%;
-    width: 100%;
+.main-banner {
+  border-bottom: 3px dotted #eee;
+  padding-top: 40px;
+  padding-bottom: 30px;
 }
-.owl-nav .owl-prev,
-.owl-nav .owl-next{
-    position: absolute;
-    left: 50px;
-    height: 50px;
-    width: 50px;
-    background: #000 !important;
-    color: white !important;
-    border-radius: 50% !important;
-    transform: translateY(-50%);
-} 
-.owl-nav .owl-next{
-    left: auto;
-    right: 50px;
+
+.main-banner .left-content .thumb img {
+  width: 100%;
+  overflow: hidden;
 }
-.owl-dots{
-    position: absolute;
-    width: 100%;
-    bottom: 10px;
+
+.main-banner .left-content .inner-content {
+  position: absolute;
+  left: 100px;
+  top: 50%;
+  transform: translateY(-50%);
 }
-.owl-dots .owl-dot span{
-    background: black !important;
-    border-radius: 0 !important;
-    width: 45px !important;
-    height: 3px !important;
+
+.main-banner .left-content .inner-content h4 {
+  color: #fff;
+  margin-top: -10px;
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 20px;
 }
-.owl-dots .owl-dot.active span{
-    background: white !important;
+
+.main-banner .left-content .inner-content span {
+  font-size: 16px;
+  color: #fff;
+  font-weight: 400;
+  font-style: italic;
+  display: block;
+  margin-bottom: 30px;
+}
+
+.main-banner .right-content .right-first-image {
+  margin-bottom: 28.5px;
+}
+
+.main-banner .right-content .right-first-image .thumb {
+  position: relative;
+  text-align: center;
+}
+
+.main-banner .right-content .right-first-image .thumb img {
+  width: 100%;
+  overflow: hidden;
+}
+
+.main-banner .right-content .right-first-image .thumb .inner-content {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  text-align: center;
+}
+
+.main-banner .right-content .right-first-image .thumb .inner-content h4 {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.main-banner .right-content .right-first-image .thumb .inner-content span {
+  font-size: 16px;
+  color: #fff;
+  font-style: italic;
+}
+
+.main-banner .right-content .right-first-image .thumb .hover-content {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  left: 15px;
+  bottom: 15px;
+  text-align: center;
+  background-color: rgba(42, 42, 42, 0.97);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s;
+}
+
+.main-banner .right-content .right-first-image .thumb:hover .hover-content {
+  opacity: 1;
+  visibility: visible;
+}
+
+.main-banner .right-content .right-first-image .thumb .hover-content .inner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.main-banner .right-content .right-first-image .thumb .hover-content h4 {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.main-banner .right-content .right-first-image .thumb .hover-content p {
+  color: #fff;
+  padding: 0px 20px;
+  margin-bottom: 20px;
+}
+
+html,
+body {
+  background: #fff;
+  font-family: "Poppins", sans-serif;
+}
+
+::selection {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+::-moz-selection {
+  background: #2a2a2a;
+  color: #fff;
+}
+
+@media (max-width: 991px) {
+  html,
+  body {
+    overflow-x: hidden;
+  }
+  .mobile-top-fix {
+    margin-top: 30px;
+    margin-bottom: 0px;
+  }
+  .mobile-bottom-fix {
+    margin-bottom: 30px;
+  }
+  .mobile-bottom-fix-big {
+    margin-bottom: 60px;
+  }
+}
+
+.main-border-button a {
+  font-size: 13px;
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 12px 25px;
+  display: inline-block;
+  font-weight: 500;
+  transition: all 0.3s;
+}
+
+.main-border-button a:hover {
+  background-color: #fff;
+  color: #2a2a2a;
+}
+
+.main-white-button a {
+  font-size: 13px;
+  color: #2a2a2a;
+  background-color: #fff;
+  padding: 12px 25px;
+  display: inline-block;
+  border-radius: 3px;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.main-white-button a:hover {
+  opacity: 0.9;
+}
+
+.main-text-button a {
+  font-size: 13px;
+  color: #fff;
+  font-weight: 600;
+  transition: all 0.3s;
+}
+
+.main-text-button a:hover {
+  opacity: 0.9;
 }

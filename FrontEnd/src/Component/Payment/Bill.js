@@ -53,10 +53,9 @@ export default function Bill() {
             <div className="d-flex align-items-baseline">
               <div className="col-xl-9">
                 <img
-                  src={
-                    "https://kamleshyadav.com/wp/shopmartio-wp/wp-content/uploads/2021/04/shopmartiologo-1.svg"
-                  }
+                  src={"https://www.cartify.org/logo/logo_full.png"}
                   alt=""
+                  style={{ height: "20%", width: "20%" }}
                 />
                 <p style={{ color: "#7e8d9f", fontSize: "20px" }}>
                   Invoice &gt; &gt; <strong>{InvoiceID}</strong>
@@ -155,7 +154,7 @@ export default function Bill() {
                     <tr key={index} className="text-center">
                       <th>
                         <img
-                          src={`${RenderHost}/images/${item.product_img}`}
+                          src={`${item.product_img}`}
                           alt="Img"
                           className="object-fit-cover border"
                           style={{ width: "50px", height: "50px" }}

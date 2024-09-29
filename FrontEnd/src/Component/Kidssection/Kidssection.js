@@ -22,7 +22,7 @@ const Kidssection = () => {
 
   const Product1 = (item) => {
     axios
-      .get(`${RenderHost}/Product_show/category/kids-watch`)
+      .get(`${RenderHost}/Product_show/category/children`)
       .then(function (response) {
         setdata1(response.data.One_product_show);
       })
@@ -64,7 +64,8 @@ const Kidssection = () => {
                         variant="top"
                         height={"300px"}
                         className="object-fit-cover"
-                        src={`${RenderHost}/images/${val.product_img}`}
+                        src={`
+                          ${val.product_img}`}
                       />
                     </Link>
                     <Card.Body className="text-center">

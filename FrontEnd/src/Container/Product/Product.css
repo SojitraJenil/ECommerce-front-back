@@ -1,0 +1,96 @@
+.product-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.thumbnail-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.thumb-box {
+  border: 1px solid #ddd;
+  padding: 5px;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.thumb-box:hover {
+  transform: scale(1.1);
+}
+
+.thumb-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
+.main-product-img {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+}
+
+.product-details {
+  padding-left: 20px;
+}
+
+.product-title {
+  font-size: 1.75rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.ratings {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stars {
+  font-size: 1.25rem;
+  color: gold;
+}
+
+.review-count {
+  color: #888;
+}
+
+.product-price {
+  color: #d9534f;
+  font-size: 1.75rem;
+}
+
+.color-options {
+  display: flex;
+  gap: 8px;
+}
+
+.color-thumb {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.size-select {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+
+.action-buttons .btn {
+  padding: 10px 20px;
+  font-size: 1rem;
+}
+
+.action-buttons .btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.action-buttons .btn-outline-secondary {
+  border-color: #ddd;
+  color: #333;
+}

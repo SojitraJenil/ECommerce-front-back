@@ -1,98 +1,139 @@
 import React from "react";
-import OwlCarousel from "react-owl-carousel";
-import "owl.carousel/dist/assets/owl.carousel.css";
-import "owl.carousel/dist/assets/owl.theme.default.css";
 import "./Slider.css";
-import "animate.css";
 
-const data = [
-  {
-    Name: "Slider 2",
-    Path: "https://dronevionics.com/wp-content/uploads/2023/01/Experimental_Solutions.png",
-    content1: "Welcome to Our E-commerce Store",
-    content2: "Discover the latest trends in fashion and accessories.",
-  },
-  {
-    Name: "Slider 3",
-    Path: "https://i.blogs.es/614765/okkkkkporrtadacaptura-de-pantalla-2018-09-10-a-las-11.28.01/1366_2000.jpg",
-    content1: "Shop Now and Save Big ",
-    content2: "Explore our exclusive deals and Continue",
-  },
-  {
-    Name: "Slider 4",
-    Path: "https://content.assets.pressassociation.io/2018/01/07143254/adbbd7be-613d-4f13-91e5-1e0ba8dacc34-1366x676.jpg",
-    content1: "Welcome to Our E-commerce Store",
-    content2: "Discover the latest trends in fashion and accessories.",
-  },
-  {
-    Name: "Slider 5",
-    Path: "https://www.gorangergroup.com/wp-content/uploads/2017/02/jobs-1366.jpg",
-    content1: "Shop Now and Save Big ",
-    content2: "Explore our exclusive deals and Continue",
-  },
-];
-
-const options = {
-  responsiveClass: true,
-  loop: true,
-  nav: true,
-  dots: true,
-  autoplay: true,
-  alignItems: "center",
-  autoplayTimeout: 2000,
-  smartSpeed: 2000,
-  animateIn: "animate__fadeIn",
-  animateOut: "animate__fadeOut",
-  responsive: {
-    200: {
-      items: 1,
-      nav: false,
-      dots: false,
-    },
-    400: {
-      items: 1,
-      nav: false,
-      dots: false,
-    },
-    600: {
-      items: 1,
-      nav: false,
-      dots: false,
-    },
-    700: {
-      items: 1,
-      nav: false,
-      dots: false,
-    },
-    1000: {
-      items: 1,
-      nav: false,
-      dots: false,
-    },
-    1300: {
-      items: 1,
-      nav: true,
-      dots: true,
-    },
-  },
-};
 function Slider() {
   return (
     <div>
-      <OwlCarousel className="owl-theme" loop nav {...options}>
-        {data.map((img) => {
-          return (
-            <>
-              <div className="item" style={{ objectFit: "cover" }}>
-                <img
-                  src={img.Path}                  
-                  alt="Carousel"
-                />
+      <div class="main-banner" id="top">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-6">
+              <div class="left-content">
+                <div class="thumb">
+                  <div class="inner-content">
+                    <h4>Welcome to The Cartify Shop</h4>
+                    <span>Indian e-commerce company</span>
+                    <div class="main-border-button">
+                      <a href="#">Purchase Now!</a>
+                    </div>
+                  </div>
+                  <img src={require("./image/left-banner-image.jpg")} alt="" />
+                </div>
               </div>
-            </>
-          );
-        })}
-      </OwlCarousel>
+            </div>
+            <div class="col-lg-6">
+              <div class="right-content">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="right-first-image">
+                      <div class="thumb">
+                        <div class="inner-content">
+                          <h4>Women</h4>
+                          <span>Best Clothes For Women</span>
+                        </div>
+                        <div class="hover-content">
+                          <div class="inner">
+                            <h4>Women</h4>
+                            <p>
+                              Lorem ipsum dolor sit amet, conservisii ctetur
+                              adipiscing elit incid.
+                            </p>
+                            <div class="main-border-button">
+                              <a href="#">Discover More</a>
+                            </div>
+                          </div>
+                        </div>
+                        <img
+                          src={require("./image/baner-right-image-01.jpg")}
+                          alt=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="right-first-image">
+                      <div class="thumb">
+                        <div class="inner-content">
+                          <h4>Men</h4>
+                          <span>Best Clothes For Men</span>
+                        </div>
+                        <div class="hover-content">
+                          <div class="inner">
+                            <h4>Men</h4>
+                            <p>
+                              Lorem ipsum dolor sit amet, conservisii ctetur
+                              adipiscing elit incid.
+                            </p>
+                            <div class="main-border-button">
+                              <a href="#">Discover More</a>
+                            </div>
+                          </div>
+                        </div>
+                        <img
+                          src={require("./image/baner-right-image-02.jpg")}
+                          alt=""
+                        />{" "}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="right-first-image">
+                      <div class="thumb">
+                        <div class="inner-content">
+                          <h4>Kids</h4>
+                          <span>Best Clothes For Kids</span>
+                        </div>
+                        <div class="hover-content">
+                          <div class="inner">
+                            <h4>Kids</h4>
+                            <p>
+                              Lorem ipsum dolor sit amet, conservisii ctetur
+                              adipiscing elit incid.
+                            </p>
+                            <div class="main-border-button">
+                              <a href="#">Discover More</a>
+                            </div>
+                          </div>
+                        </div>
+                        <img
+                          src={require("./image/baner-right-image-03.jpg")}
+                          alt=""
+                        />{" "}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6">
+                    <div class="right-first-image">
+                      <div class="thumb">
+                        <div class="inner-content">
+                          <h4>Accessories</h4>
+                          <span>Best Trend Accessories</span>
+                        </div>
+                        <div class="hover-content">
+                          <div class="inner">
+                            <h4>Accessories</h4>
+                            <p>
+                              Lorem ipsum dolor sit amet, conservisii ctetur
+                              adipiscing elit incid.
+                            </p>
+                            <div class="main-border-button">
+                              <a href="#">Discover More</a>
+                            </div>
+                          </div>
+                        </div>
+                        <img
+                          src={require("./image/baner-right-image-04.jpg")}
+                          alt=""
+                        />{" "}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

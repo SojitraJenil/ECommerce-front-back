@@ -13,6 +13,7 @@ import { RenderHost } from "../../API/Api";
 
 export default function AddToCart() {
   const [cartItems, setCartItems] = useState([]);
+  const [cartId, setCartId] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
   const [totalCartedProduct, setTotalCartedProduct] = useAtom(totalProduct);
   const [CGST, setCGST] = useState(0);
@@ -62,7 +63,7 @@ export default function AddToCart() {
         const total = products.reduce((acc, product) => {
           return acc + parseInt(product.product_price) * product.quantity;
         }, 0);
-
+        setCartId(cartData._id);
         setCartItems(products);
         setTotalPrice(total);
         setCGST(Math.abs((total * 4.5) / 100));
@@ -87,16 +88,13 @@ export default function AddToCart() {
     }).then((result) => {
       if (result.isConfirmed) {
         axios
-          .delete(
-            `${RenderHost}/removeCartProduct/66444b466f3d22168fc6238a/${productId}`
-          )
+          .delete(`${RenderHost}/removeCartProduct/${cartId}/${productId}`)
           .then(function (res) {
             console.log(res);
             fetchData();
           })
           .catch(function (error) {
             console.log(error);
-            alert("Error deleting product");
           });
         Swal.fire({
           title: "Deleted!",
@@ -139,7 +137,7 @@ export default function AddToCart() {
                             className="text-decoration-none"
                           >
                             <Card.Img
-                              src={`${RenderHost}/images/${product.product_img}`}
+                              src={`${product.product_img}`}
                               style={{ width: "150px" }}
                               alt="Product"
                             />

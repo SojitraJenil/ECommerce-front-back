@@ -312,7 +312,7 @@ export default function Payment() {
                         <>
                           <MDBCol md="6" className="ms-3">
                             <MDBCardImage
-                              src={`${RenderHost}/images/${data.product_img}`}
+                              src={`${data.product_img}`}
                               className="object-fit-cover border"
                               style={{ width: "100px", height: "100px" }}
                             />

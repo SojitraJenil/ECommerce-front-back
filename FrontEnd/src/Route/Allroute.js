@@ -16,6 +16,7 @@ import Kidssection from "../Component/Kidssection/Kidssection";
 import Blog from "../Component/Blog";
 import Contact from "../Component/Contact/Contact";
 import Bill from "../Component/Payment/Bill";
+import Explore from "../Component/Explore/Explore";
 
 const Allroute = () => {
   return (
@@ -45,6 +46,7 @@ const Allroute = () => {
         <Route path="/KidsSection" element={<Kidssection />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/AddToCart" element={<AddToCart />} />
+        <Route path="/Explore" element={<Explore />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </div>
