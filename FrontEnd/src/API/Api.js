@@ -1,5 +1,5 @@
 export const RenderHost =
-  "http://localhost:8000" ||
+  "https://ecommerce-3-ul25.onrender.com" ||
   "cloudinary://594643919336788:TtRdeJ_XMcUg_yve6AAMCOfquzo@dvmdeehwt";
 
-// "https://ecommerce-3-ul25.onrender.com"
+//
