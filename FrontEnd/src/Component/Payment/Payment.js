@@ -304,7 +304,6 @@ export default function Payment() {
                     Total Buy Item -: {totalCartedProduct}
                   </MDBTypography>
                 </MDBCardHeader>
-
                 <MDBCardBody className="">
                   <MDBRow style={{ maxHeight: "340px", overflowY: "auto" }}>
                     {cartItems.map((data) => {
@@ -379,6 +378,8 @@ export default function Payment() {
                   </MDBListGroup>
                 </MDBCardFooter>
               </MDBCard>
+              Make sure the Pay Now button is disabled until all required
+              delivery address fields are filled out.{" "}
             </MDBCol>
           </>
         </MDBRow>

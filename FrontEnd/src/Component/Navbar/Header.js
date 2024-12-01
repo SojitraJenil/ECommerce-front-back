@@ -116,9 +116,9 @@ function Header({ onInputChange }) {
             <Link to="/AddToCart">
               <span class=" border-none position-relative mx-2">
                 <ShoppingBasketIcon className="option ms-3 fs-2 " />
-                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {/* <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {totalCartedProduct}
-                </span>
+                </span> */}
               </span>
             </Link>
             <Link to="/account" className="text-text-decoration-none text-dark">

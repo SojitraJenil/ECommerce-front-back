@@ -7,13 +7,14 @@ import { MdCurrencyRupee } from "react-icons/md";
 import toast, { Toaster } from "react-hot-toast";
 import { IoStar } from "react-icons/io5";
 import { Link } from "react-router-dom";
-import Loader from "../../Container/Loading/Loader";
+import LoaderSmall from "../../Container/Loading/LoaderSmall";
 import Pagination from "react-bootstrap/Pagination";
 import { CardImg, CardBody } from "react-bootstrap";
 import { RenderHost } from "../../API/Api";
 
 function Product_card({ SetMainCart, inputValue }) {
   const [data, setdata] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const [cate, setcate] = useState(null);
   const [sortingOption, setSortingOption] = useState(null);
@@ -100,20 +101,20 @@ function Product_card({ SetMainCart, inputValue }) {
         console.error(error);
       });
   };
-
   const Product = () => {
+    setLoading(true); // Set loading to true when the request starts
     axios
       .get(`${RenderHost}/Product_Show`)
       .then(function (response) {
         setdata(response.data.product_show);
         setTotalPages(response.data.page);
-        // setdata(product_price_filter);
-        // console.log(response.data.product_show);
+        setLoading(false);
       })
       .catch(function (error) {
         console.error(error);
       });
   };
+
   const Product1 = (item) => {
     if (item) {
       axios
@@ -222,102 +223,110 @@ function Product_card({ SetMainCart, inputValue }) {
             <hr />
           </div>
           <div className="">
-            <Row>
-              {data != null &&
-                data.map((val) => {
-                  return (
-                    <Col
-                      xxl={3}
-                      xl={3}
-                      lg={4}
-                      md={6}
-                      sm={12}
-                      className="mb-4 mb-lg-0"
-                    >
-                      <Card className="my-2">
-                        <div className="d-flex justify-content-between p-3">
-                          <p className="lead mb-0">Today's Combo Offer</p>
-                          <div
-                            className="bg-info rounded-circle d-flex align-items-center justify-content-center shadow-1-strong"
-                            style={{ width: "35px", height: "35px" }}
-                          >
-                            <p className="text-white mb-0 small">x4</p>
-                          </div>
-                        </div>
-                        <Link
-                          to={`/product/${val._id}`}
-                          className="text-decoration-none"
-                        >
-                          <CardImg
-                            src={`${val.product_img[0] || val.product_img}`}
-                            alt="Laptop"
-                            height={"300px"}
-                            className="object-fit-cover"
-                          />
-                        </Link>
-                        <CardBody>
-                          <div className="d-flex justify-content-between">
-                            <p className="small">
-                              <a href="#!" className="text-muted">
-                                {val.category ? val.category.name : ""}
-                              </a>
-                            </p>
-                            <p className="small text-danger">
-                              <s>
-                                {val.Product_dis_rate == null
-                                  ? "999"
-                                  : (val.product_price * val.Product_dis_rate) /
-                                    100}
-                                <MdCurrencyRupee className="m-0 p-0" />
-                              </s>
-                            </p>
-                          </div>
-
-                          <div className="d-flex justify-content-between mb-3">
-                            <h5 className="mb-0">{val.product_name}</h5>
-                            <h5 className="text-dark mb-0">
-                              {val.product_price}
-                              <MdCurrencyRupee className="m-0 p-0" />
-                            </h5>
-                          </div>
-
-                          <div className="d-flex justify-content-between mb-2">
-                            <p className="text-muted mb-0">
-                              Available:{" "}
-                              <span className="fw-bold">
-                                {val.Product_stock != null
-                                  ? val.Product_stock
-                                  : "999"}
-                              </span>
-                            </p>
-                            <div className="ms-auto text-warning">
-                              {[...Array(5)].map((_, index) => (
-                                <IoStar
-                                  key={index}
-                                  className={`text-warning fs-5 ${
-                                    index < val.Product_rating ? "filled" : ""
-                                  }`}
-                                />
-                              ))}
+            {loading ? (
+              <LoaderSmall />
+            ) : (
+              <Row>
+                {data != null &&
+                  data.map((val) => {
+                    return (
+                      <Col
+                        xxl={3}
+                        xl={3}
+                        lg={4}
+                        md={6}
+                        sm={12}
+                        className="mb-4 mb-lg-0"
+                      >
+                        <Card className="my-2">
+                          <div className="d-flex justify-content-between p-3">
+                            <p className="lead mb-0">Today's Combo Offer</p>
+                            <div
+                              className="bg-info rounded-circle d-flex align-items-center justify-content-center shadow-1-strong"
+                              style={{ width: "35px", height: "35px" }}
+                            >
+                              <p className="text-white mb-0 small">x4</p>
                             </div>
                           </div>
-                          <div className="">
-                            <Toaster position="top-left" reverseOrder={false} />
-                            <button
-                              className="btn btn-outline-danger  col-12  "
-                              onClick={() => {
-                                notify(val);
-                              }}
-                            >
-                              Add To Cart
-                            </button>
-                          </div>
-                        </CardBody>
-                      </Card>
-                    </Col>
-                  );
-                })}
-            </Row>
+                          <Link
+                            to={`/product/${val._id}`}
+                            className="text-decoration-none"
+                          >
+                            <CardImg
+                              src={`${val.product_img[0] || val.product_img}`}
+                              alt="Laptop"
+                              height={"300px"}
+                              className="object-fit-cover"
+                            />
+                          </Link>
+                          <CardBody>
+                            <div className="d-flex justify-content-between">
+                              <p className="small">
+                                <a href="#!" className="text-muted">
+                                  {val.category ? val.category.name : ""}
+                                </a>
+                              </p>
+                              <p className="small text-danger">
+                                <s>
+                                  {val.Product_dis_rate == null
+                                    ? "999"
+                                    : (val.product_price *
+                                        val.Product_dis_rate) /
+                                      100}
+                                  <MdCurrencyRupee className="m-0 p-0" />
+                                </s>
+                              </p>
+                            </div>
+
+                            <div className="d-flex justify-content-between mb-3">
+                              <h5 className="mb-0">{val.product_name}</h5>
+                              <h5 className="text-dark mb-0">
+                                {val.product_price}
+                                <MdCurrencyRupee className="m-0 p-0" />
+                              </h5>
+                            </div>
+
+                            <div className="d-flex justify-content-between mb-2">
+                              <p className="text-muted mb-0">
+                                Available:{" "}
+                                <span className="fw-bold">
+                                  {val.Product_stock != null
+                                    ? val.Product_stock
+                                    : "999"}
+                                </span>
+                              </p>
+                              <div className="ms-auto flex d-flex text-warning">
+                                {[...Array(4)].map((_, index) => (
+                                  <IoStar
+                                    key={index}
+                                    className={`text-warning fs-5 ${
+                                      index < val.Product_rating ? "filled" : ""
+                                    }`}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            <div className="">
+                              <Toaster
+                                position="top-left"
+                                reverseOrder={false}
+                              />
+                              <button
+                                className="btn btn-outline-danger  col-12  "
+                                onClick={() => {
+                                  notify(val);
+                                }}
+                              >
+                                Add To Cart
+                              </button>
+                            </div>
+                          </CardBody>
+                        </Card>
+                      </Col>
+                    );
+                  })}
+              </Row>
+            )}
           </div>
         </Container>
       </div>

@@ -53,7 +53,14 @@ const {
 router.post("/register", User_Register);
 router.post("/login", User_Login);
 router.get("/show_all_user", show_All_User);
-router.get("/", show_All_User);
+router.get("/", (req, res) => {
+  const data = "Database is connected...";
+  res.status(200).json({
+    status: "connected",
+    data,
+  });
+});
+
 // router.get('/Logout',Logout);
 router.post("/delete_user", Delete_User);
 

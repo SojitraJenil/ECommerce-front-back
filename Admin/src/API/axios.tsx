@@ -6,8 +6,8 @@ interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
 }
 
 export const axiosInstance = axios.create({
-  baseURL: 'https://ecommerce-3-ul25.onrender.com',
-  // baseURL: 'http://localhost:8000',
+  // baseURL: 'https://ecommerce-3-ul25.onrender.com',
+  baseURL: 'http://localhost:8000',
 });
 
 axiosInstance.interceptors.request.use(

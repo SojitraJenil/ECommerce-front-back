@@ -32,7 +32,6 @@ function TableCate() {
   const handleDelete = async (id: string) => {
     try {
       await deleteCategories(id);
-      showSnackbar('Categories deleted successfully!', 'success');
       dispatch(fetchProductCategories());
     } catch (error) {
       console.log(error);
