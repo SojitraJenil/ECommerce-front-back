@@ -44,6 +44,15 @@ export default function Payment() {
     fetchData();
   }, []);
 
+  const HandlePayment = () => {
+    Swal.fire({
+      title: "payment is received..!",
+      text: "Now Your Bill is,Here!",
+      icon: "success",
+    });
+    // nav("/Payment/Bill");
+  }
+
   const fetchData = () => {
     axios
       .get(`${RenderHost}/getAllCart`)
@@ -361,14 +370,9 @@ export default function Payment() {
                     <MDBListGroupItem className="d-flex justify-content-between align-items-center px-0 fw-bold text-uppercase">
                       <button
                         disabled={IsPayNow === false}
-                        onClick={() => {
-                          Swal.fire({
-                            title: "payment is received..!",
-                            text: "Now Your Bill is,Here!",
-                            icon: "success",
-                          });
-                          nav("/Payment/Bill");
-                        }}
+                        onClick={
+                          HandlePayment
+                        }
                         className="btn btn-primary button-order mx-auto px-5"
                       >
                         Pay Now

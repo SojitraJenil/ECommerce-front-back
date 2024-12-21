@@ -271,8 +271,8 @@ function Product_card({ SetMainCart, inputValue }) {
                                   {val.Product_dis_rate == null
                                     ? "999"
                                     : (val.product_price *
-                                        val.Product_dis_rate) /
-                                      100}
+                                      val.Product_dis_rate) /
+                                    100}
                                   <MdCurrencyRupee className="m-0 p-0" />
                                 </s>
                               </p>
@@ -299,9 +299,8 @@ function Product_card({ SetMainCart, inputValue }) {
                                 {[...Array(4)].map((_, index) => (
                                   <IoStar
                                     key={index}
-                                    className={`text-warning fs-5 ${
-                                      index < val.Product_rating ? "filled" : ""
-                                    }`}
+                                    className={`text-warning fs-5 ${index < val.Product_rating ? "filled" : ""
+                                      }`}
                                   />
                                 ))}
                               </div>

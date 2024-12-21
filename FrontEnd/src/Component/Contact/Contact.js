@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import TopNavbar from "../../../src/Component/TopNavbar/TopNavbar";
 import Header from "../Navbar/Header";
 import { RenderHost } from "../../API/Api";
+import { useLocation } from "react-router-dom";
 
 function Contact() {
   const initialState = {
@@ -16,8 +17,7 @@ function Contact() {
   };
 
   const [formData, setFormData] = useState(initialState);
-  const [Loader, setLoader] = useState(false);
-
+  const location = useLocation(); // Get current route
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -89,6 +89,12 @@ function Contact() {
 
   return (
     <>
+      {location.pathname === "/contact" && (
+        <>
+          <TopNavbar />
+          <Header />
+        </>
+      )}
       <div className="container-xxl py-5">
         <div className="container">
           <div className="text-center wow fadeInUp" data-wow-delay="0.1s">

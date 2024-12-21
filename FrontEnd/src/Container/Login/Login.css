@@ -1,3 +1,30 @@
-form{
-height: 10px;
+/* Background */
+.login-bg {
+  background: linear-gradient(to right, #ff9a9e, #fad0c4);
+}
+
+/* Form Container */
+.login-form {
+  background-color: #ffffff;
+  max-width: 400px;
+}
+
+/* Icon Styling */
+.eye-icon {
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: #555;
+}
+
+.eye-icon:hover {
+  color: #000;
+}
+
+/* Social Buttons */
+.btn-outline-danger,
+.btn-outline-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 0;
 }

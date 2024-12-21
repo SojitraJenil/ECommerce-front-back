@@ -7,19 +7,35 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
-import { useAtom } from "jotai";
-import { totalProduct } from "../../Atom/Atom";
+import axios from "axios";
+import { RenderHost } from "../../API/Api";
 
 var LogoImage = "https://www.cartify.org/logo/logo_full.png";
 
 function Header({ onInputChange }) {
   const [inputValue, setInputValue] = useState(null);
-  const [totalCartedProduct] = useAtom(totalProduct);
-  // const [Totalcart, setTotalcart] = useState(totalCartedProduct);
-
+  const [TotalCart, setTotalCart] = useState("");
   // useEffect(() => {
   //   setTotalcart(Totalcart);
   // }, [Totalcart]);
+
+  useEffect(() => {
+    const fetchData = () => {
+      axios
+        .get(`${RenderHost}/getAllCart`)
+        .then((res) => {
+          const cartData = res.data.show_cart[0];
+          const products = cartData.products;
+          const totalProducts = products.length;
+          setTotalCart(totalProducts); // Update total cart count
+        })
+        .catch((err) => {
+          console.error(err); // Log errors
+        });
+    };
+
+    fetchData();
+  }, []);
 
   const handleInputChange = (event) => {
     event.preventDefault();
@@ -109,15 +125,11 @@ function Header({ onInputChange }) {
                 </div>
               </div>
             </div>
-            {/* <span>
-              <SearchIcon className=" option fs-2" />
-            </span> */}
-
             <Link to="/AddToCart">
               <span class=" border-none position-relative mx-2">
                 <ShoppingBasketIcon className="option ms-3 fs-2 " />
                 {/* <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                  {totalCartedProduct}
+                  {TotalCart}
                 </span> */}
               </span>
             </Link>

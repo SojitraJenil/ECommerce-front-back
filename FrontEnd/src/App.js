@@ -1,6 +1,6 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Allroute from "./Route/Allroute";
+import AllRoute from "./Route/Allroute";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useEffect, useState } from "react";
 import Loader from "./Container/Loading/Loader";
@@ -20,7 +20,7 @@ function App() {
   return (
     <>
       {/* <Maintenance />*/}
-      <Allroute />
+      <AllRoute />
     </>
   );
 }
