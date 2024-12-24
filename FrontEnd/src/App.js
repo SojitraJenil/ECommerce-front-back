@@ -4,9 +4,13 @@ import AllRoute from "./Route/Allroute";
 import "react-toastify/dist/ReactToastify.css";
 import React, { useEffect, useState } from "react";
 import Loader from "./Container/Loading/Loader";
+import Login from "./Container/Login/Login";
 
 function App() {
   const [loader, setLoader] = useState(true);
+
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     setTimeout(() => {
@@ -20,7 +24,9 @@ function App() {
   return (
     <>
       {/* <Maintenance />*/}
-      <AllRoute />
+      {
+        (userId && token) ? <AllRoute /> : <Login />
+      }
     </>
   );
 }

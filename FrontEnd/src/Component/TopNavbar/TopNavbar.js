@@ -32,7 +32,7 @@ function TopNavbar() {
               <span> Welcome back {name ? "UserName" : data}</span>
             </div>
             <div
-              class="col-md-auto col-md-center col-12 ms-md-auto me-lg-auto me-md-auto me-xl-0 text-center ms-auto"
+              className="col-md-auto col-md-center col-12 ms-md-auto me-lg-auto me-md-auto me-xl-0 text-center ms-auto"
               style={{ zIndex: "12" }}
             >
               <span className="btn border-end border-start border-0">

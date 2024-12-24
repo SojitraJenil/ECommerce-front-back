@@ -4,11 +4,11 @@ import "./Explore.css";
 function Explore() {
   return (
     <div>
-      <section class="section" id="explore">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="left-content">
+      <section className="section" id="explore">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-6">
+              <div className="left-content">
                 <h2>Explore Our Products</h2>
                 <span>
                   You are allowed to use this HexaShop HTML CSS template. You
@@ -27,16 +27,16 @@ function Explore() {
                   a little via PayPal. Please also tell your friends about our
                   great website. Thank you.
                 </p>
-                <div class="main-border-button">
+                <div className="main-border-button">
                   <a href="/">Discover More</a>
                 </div>
               </div>
             </div>
-            <div class="col-lg-6">
-              <div class="right-content">
-                <div class="row">
-                  <div class="col-lg-6">
-                    <div class="first-image">
+            <div className="col-lg-6">
+              <div className="right-content">
+                <div className="row">
+                  <div className="col-lg-6">
+                    <div className="first-image">
                       <img
                         height={"256px"}
                         src={require("./Image/explore-image-01.jpg")}
@@ -44,8 +44,8 @@ function Explore() {
                       />
                     </div>
                   </div>
-                  <div class="col-lg-6">
-                    <div class="second-image">
+                  <div className="col-lg-6">
+                    <div className="second-image">
                       <img
                         height={"256px"}
                         src={require("./Image/explore-image-02.jpg")}

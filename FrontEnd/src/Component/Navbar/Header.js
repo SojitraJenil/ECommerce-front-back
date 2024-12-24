@@ -112,11 +112,11 @@ function Header({ onInputChange }) {
               e.preventDefault();
             }}
           >
-            <div class="row">
-              <div class="col-12">
-                <div class="input-group">
+            <div className="row">
+              <div className="col-12">
+                <div className="input-group">
                   <input
-                    class="form-control border-none outline-none"
+                    className="form-control border-none outline-none"
                     placeholder="Search Product..."
                     type="text"
                     value={inputValue}
@@ -126,7 +126,7 @@ function Header({ onInputChange }) {
               </div>
             </div>
             <Link to="/AddToCart">
-              <span class=" border-none position-relative mx-2">
+              <span className=" border-none position-relative mx-2">
                 <ShoppingBasketIcon className="option ms-3 fs-2 " />
                 {/* <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                   {TotalCart}
