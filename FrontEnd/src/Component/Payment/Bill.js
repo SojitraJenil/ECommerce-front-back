@@ -7,6 +7,7 @@ import { RenderHost } from "../../API/Api";
 export default function Bill() {
   const [PrintBill, setPrintBill] = useState(null);
   const [OrderDetails, SetOrderDetails] = useState([]);
+  const userId = localStorage.getItem("userId");
   const [InvoiceID, SetInvoiceID] = useState([]);
   const [CreateDate, SetCreateDate] = useState([]);
   const [TotalPrice, setTotalPrice] = useState([]);
@@ -19,26 +20,27 @@ export default function Bill() {
     ShowAllOrderDetails();
   }, []);
 
-  const fetch = () => {
-    axios.get(`${RenderHost}/getAllCart`).then((res) => {
-      const cartData = res.data.show_cart[0];
-      const products = cartData.products;
-      setPrintBill(products);
-      SetInvoiceID(cartData._id);
-      SetCreateDate(cartData.createdAt);
-      const total = products.reduce((acc, product) => {
-        return acc + parseInt(product.product_price) * product.quantity;
-      }, 0);
-      setTotalPrice(total);
-      setCGST(Math.abs((total * 4.5) / 100));
-      setSGST(Math.abs((total * 4.5) / 100));
-      setpayable(Math.ceil(total - CGST - SGST));
-    });
-  };
+  const fetch = async () => {
+    const response = await axios.get(`${RenderHost}/getCart/${userId}`);
+    const cartData = response.data.cart;
+    const products = cartData.products;
+    setPrintBill(products);
+    SetInvoiceID(cartData._id);
+    SetCreateDate(cartData.createdAt);
+    const total = products.reduce(
+      (acc, product) => acc + product.productId.product_price * product.quantity,
+      0
+    );
+    setTotalPrice(total);
+    setCGST(Math.abs((total * 4.5) / 100));
+    setSGST(Math.abs((total * 4.5) / 100));
+    setpayable(Math.ceil(total - CGST - SGST));
+
+  }
 
   const ShowAllOrderDetails = () => {
     axios.get(`${RenderHost}/Order_details`).then(function (response) {
-      console.log(response.data.show_details);
+      console.log("A", response.data.show_details);
       SetOrderDetails(response.data.show_details);
     });
   };
@@ -84,7 +86,6 @@ export default function Bill() {
               {OrderDetails && OrderDetails.length > 0 && (
                 <>
                   <ul className="list-unstyled">
-                    {/* Assuming there's only one order details item */}
                     <li className="text-muted">
                       To:{" "}
                       <span style={{ color: "#5d9fc5" }}>
@@ -154,17 +155,17 @@ export default function Bill() {
                     <tr key={index} className="text-center">
                       <th>
                         <img
-                          src={`${item.product_img}`}
+                          src={`${item.productId.product_img}`}
                           alt="Img"
                           className="object-fit-cover border"
                           style={{ width: "50px", height: "50px" }}
                         />
                       </th>
-                      <td>{item.product_name}</td>
-                      <td>{item.product_price}</td>
+                      <td>{item.productId.product_name}</td>
+                      <td>{item.productId.product_price}</td>
                       <td>{item.quantity}</td>
                       <td>
-                        {parseInt(item.product_price) * item.quantity}
+                        {parseInt(item.quantity) * item.productId.product_price}
                       </td>{" "}
                     </tr>
                   ))}

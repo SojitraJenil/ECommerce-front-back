@@ -8,7 +8,7 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import { RenderHost } from "../../API/Api";
 
 const Login = () => {
-  const [email, setEmail] = useState("tejasdhandhukiya@gmail.com");
+  const [email, setEmail] = useState("jenilsojitra1@gmail.com");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -27,10 +27,7 @@ const Login = () => {
         password,
       });
       if (response.data.status === "User logged in successfully") {
-        console.log("Success");
-        console.log(response.data.user.fname);
-        console.log(response.data.token);
-
+        localStorage.setItem("userId", response.data.user.userId);
         localStorage.setItem("userEmail", email);
         localStorage.setItem("userPassword", password);
         localStorage.setItem("name", JSON.stringify(response.data.user.fname));
@@ -53,9 +50,7 @@ const Login = () => {
       console.error("Error during login:", error);
     }
   };
-
   const token = localStorage.getItem("token");
-
   axios
     .get(`${RenderHost}/login`, {
       headers: {

@@ -14,6 +14,8 @@ const TableUser: React.FC = () => {
   const loading = useSelector((state: RootState) => state.users.loading);
   const error = useSelector((state: RootState) => state.users.error);
 
+  console.log('users :>> ', users);
+
   const { showSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -51,6 +53,9 @@ const TableUser: React.FC = () => {
                   No.
                 </th>
                 <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
+                  UserID
+                </th>
+                <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
                   Email
                 </th>
                 <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
@@ -68,10 +73,13 @@ const TableUser: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((item: any, index: any) => (
+              {users && users.map((item: any, index: any) => (
                 <tr key={item._id}>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <p className="text-black dark:text-white">{index + 1}</p>
+                  </td>
+                  <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                    <p className="text-black dark:text-white">{item.userId}</p>
                   </td>
                   <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                     <p className="text-black dark:text-white">{item.email}</p>

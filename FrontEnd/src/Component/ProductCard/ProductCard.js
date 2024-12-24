@@ -32,23 +32,34 @@ function Product_card({ SetMainCart, inputValue }) {
     if (inputValue.length > 0) {
       FindProductByProductName(inputValue);
     } else {
-      Product(); // Fetch all products when inputValue is empty
+      Product();
     }
     Category();
   }, [inputValue]); //
 
-  const AddItemToCart = (val) => {
-    axios
-      .post(`${RenderHost}/addItemToCart`, {
-        productId: val._id,
-        quantity: 1,
-        product_name: val.product_name,
-        product_price: val.product_price,
-        product_img: val.product_img[0],
-      })
-      .then((res) => {
-        console.log("object :>> ", res.data);
-      });
+  const userId = localStorage.getItem("userId");
+  const token = localStorage.getItem("token");
+  const AddItemToCart = async (val) => {
+    try {
+      const response = await axios.post(
+        `${RenderHost}/addItemToCart`,
+        {
+          userId,
+          productId: val._id,
+          quantity: 1,
+          product_name: val.product_name,
+          product_price: val.product_price,
+          product_img: val.product_img[0],
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    } catch (error) {
+      console.error("Error adding item to cart:", error);
+    }
   };
 
   const FindProductByProductName = (inputValue) => {
@@ -69,7 +80,6 @@ function Product_card({ SetMainCart, inputValue }) {
     axios
       .get(`${RenderHost}/Product_show/Product_Price/high_to_low`)
       .then(function (response) {
-        console.log(response.data.products);
         setdata(response.data.products);
         setSortingOption("high_to_low");
       })
@@ -82,7 +92,6 @@ function Product_card({ SetMainCart, inputValue }) {
     axios
       .get(`${RenderHost}/Product_show/Product_Price/low_to_high`)
       .then(function (response) {
-        console.log(response.data.products);
         setdata(response.data.products);
         setSortingOption("low_to_high");
       })
@@ -138,7 +147,6 @@ function Product_card({ SetMainCart, inputValue }) {
       .get(`${RenderHost}/Product_show?page_no=${pageNumber}`)
       .then(function (response) {
         setdata(response.data.product_show);
-        console.log(response.data.product_show);
       })
       .catch(function (error) {
         console.error(error);

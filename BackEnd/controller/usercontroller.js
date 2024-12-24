@@ -74,7 +74,6 @@ exports.User_Login = async (req, res) => {
     const user = await User_Register.findOne({ email: req.body.email });
 
     if (user) {
-      // If user exists, compare passwords
       if (user.password === req.body.password) {
         const token = jwt.sign({ id: user.id, username: user.email }, "Jenil", {
           expiresIn: "1h",
