@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-var userSchema = mongoose.Schema({
+var productDetailsSchema = mongoose.Schema({
   product_name: { type: String },
   product_price: { type: String },
   product_description: { type: String },
@@ -15,4 +15,4 @@ var userSchema = mongoose.Schema({
   Product_rating: { type: String },
 });
 
-module.exports = mongoose.model("Product_details", userSchema);
+module.exports = mongoose.model("Product_details", productDetailsSchema);

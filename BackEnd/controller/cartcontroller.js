@@ -122,11 +122,16 @@ exports.getCart = async (req, res) => {
     if (!userId) {
       return res.status(400).json({ status: "error", message: "User ID is required" });
     }
-    const cart = await Cart.findOne({ userId: userId }).populate("products.productId");
+    const cart = await Cart.findOne({ userId })
+      .populate({
+        path: "products.productId",
+        select: "product_name product_price product_description category product_img",
+      });
 
     if (!cart) {
       return res.status(404).json({ status: "error", message: "Cart not found" });
     }
+
     res.status(200).json({ status: "success", cart });
   } catch (error) {
     console.error("Error fetching cart by userId:", error);

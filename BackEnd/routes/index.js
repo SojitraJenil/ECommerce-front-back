@@ -37,6 +37,8 @@ const {
   Show_all_Order_details,
   Order_Delete,
   Order_Search,
+  Get_User_Orders,
+  Place_Order,
 } = require("../controller/orderplacecontroller");
 const {
   addItemToCart,
@@ -89,6 +91,9 @@ router.delete("/Inquiry_delete/:id", Inquiry_delete);
 router.get("/Inquiry_Search/:key", Inquiry_Search);
 
 // Order routes
+
+router.post("/place-order", Place_Order);
+router.get("/user-orders/:userId", Get_User_Orders);
 router.post("/Order_Register", Register_Order_Details);
 router.get("/Order_details", Show_all_Order_details);
 router.delete("/Order_delete/:id", Order_Delete);

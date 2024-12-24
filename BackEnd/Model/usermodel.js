@@ -10,7 +10,7 @@ var userSchema = mongoose.Schema({
   role: { type: String, enum: ["user", "admin"], default: "user" },
   createdAt: { type: Date, default: Date.now },
   isVerified: { type: Boolean, default: false },
-  orderHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order" }],
+  orderHistory: [{ type: mongoose.Schema.Types.ObjectId, ref: "Order_Details" }],
   cart: [
     {
       productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },

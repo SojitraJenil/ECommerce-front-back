@@ -4,6 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import { RenderHost } from "../../API/Api";
 import { QRCodeCanvas } from "qrcode.react";
+import Bill from "./Bill";
 import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 import "./payment.css"; // Custom styles
 
@@ -13,14 +14,14 @@ export default function Payment() {
   const email = localStorage.getItem("userEmail");
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    userId: userId,
-    country: "United States",
-    voucher: "Dummy",
+    userId: "",
+    country: "",
+    voucher: "",
     fname: "",
     lname: "",
-    company: "Dummy",
+    company: "",
     address: "",
-    email: email,
+    email: "",
     pinCode: "",
     phone: "",
   });
@@ -64,8 +65,8 @@ export default function Payment() {
 
   const handleSubmitAddress = (e) => {
     e.preventDefault();
-    if (!formData.fname || !formData.lname || !formData.address || !formData.phone || !formData.pinCode) {
-      setError("Please fill in all required fields.");
+    if (!formData.fname || !formData.lname || !formData.address) {
+      setError("All fields are required.");
       return;
     }
     setError("");
@@ -73,15 +74,82 @@ export default function Payment() {
       title: "Address Submitted",
       icon: "success",
     });
-    setStep(2); // Proceed to payment step
+    setStep(2);
   };
 
-  const handlePaymentSuccess = () => {
-    setStep(3); // Show success message
+  const handlePlaceOrder = async () => {
+    try {
+      const orderData = {
+        userId: userId,
+        country: "India",
+        cartItems: cartItems.map((item) => ({
+          productId: item.productId._id,
+          quantity: item.quantity,
+        })),
+        voucher: "FE7F6DF",
+        fname: formData.fname,
+        lname: formData.lname,
+        company: "Expo",
+        address: formData.address,
+        pinCode: formData.pinCode,
+        email: formData.email,
+        phone: formData.phone,
+        totalPrice: payable,
+      }
+
+      const response = await axios.post(`${RenderHost}/place-order`, orderData);
+      if (response.data.success) {
+        Swal.fire({
+          title: "Order Placed Successfully!",
+          icon: "success",
+        });
+        setStep(3);
+      }
+    } catch (err) {
+      console.error("Error placing order:", err);
+      Swal.fire({
+        title: "Error",
+        text: "Something went wrong while placing the order.",
+        icon: "error",
+      });
+    }
+    handlePayment();
+  };
+
+
+  const handlePayment = () => {
+    Swal.fire({
+      title: "Processing Payment",
+      text: "Your payment is being processed...",
+      icon: "info",
+      allowOutsideClick: false,
+      showConfirmButton: false,
+    });
+
     setTimeout(() => {
-      nav("/Payment/Bill"); // Navigate to bill screen after 3 seconds
+      Swal.fire({
+        title: "Payment Successful!",
+        text: "Your payment has been successfully processed.",
+        icon: "success",
+      });
+      nav("/Payment/Bill");
+      setStep(3); // Show success message
     }, 3000);
   };
+
+
+  const fetchUserOrders = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
+      const response = await axios.get(`${RenderHost}/place-order/${userId}`);
+      console.log('User orders:', response.data);
+    } catch (error) {
+      console.error('Error fetching orders:', error.response?.data || error.message);
+    }
+  };
+  useEffect(() => {
+    fetchUserOrders();
+  }, [])
 
   return (
     <div className="container py-5">
@@ -190,18 +258,20 @@ export default function Payment() {
             </p>
             <QRCodeCanvas value={`Total: $${payable}`} size={256} className="my-4" />
             <p>Scan the QR code to make payment</p>
-            <button className="btn btn-success w-100" onClick={handlePaymentSuccess}>
-              Press After complete Payment
+            <button className="btn btn-primary w-100" onClick={handlePlaceOrder}>
+              Place Order
             </button>
           </div>
         )}
 
-
         {step === 3 && (
           <div className="text-center">
-            <div className="alert alert-success">
-              <strong>Payment Successful! Redirecting to bill...</strong>
-            </div>
+            <h4>Payment Successful!</h4>
+            <p>Your order has been successfully placed. Thank you for shopping with us!</p>
+            <button className="btn btn-primary" onClick={() => nav("/OrderHistory")}>
+              View Order History
+            </button>
+            <Bill />
           </div>
         )}
       </div>

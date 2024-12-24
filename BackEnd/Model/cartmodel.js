@@ -11,7 +11,7 @@ const cartSchema = new mongoose.Schema(
       {
         productId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: "Product_details",
+          ref: "Product_details", // Must match the exported model name
         },
         quantity: { type: Number, required: true },
       },

@@ -6,47 +6,51 @@ import { RenderHost } from "../../API/Api";
 
 export default function Bill() {
   const [PrintBill, setPrintBill] = useState(null);
-  const [OrderDetails, SetOrderDetails] = useState([]);
+  const [OrderDetails, SetOrderDetails] = useState({});
   const userId = localStorage.getItem("userId");
-  const [InvoiceID, SetInvoiceID] = useState([]);
-  const [CreateDate, SetCreateDate] = useState([]);
-  const [TotalPrice, setTotalPrice] = useState([]);
-  const [CGST, setCGST] = useState([]);
-  const [SGST, setSGST] = useState([]);
-  const [payable, setpayable] = useState([]);
+  const [InvoiceID, SetInvoiceID] = useState(null);
+  const [CreateDate, SetCreateDate] = useState(null);
+  const [TotalPrice, setTotalPrice] = useState(0);
+  const [CGST, setCGST] = useState(0);
+  const [SGST, setSGST] = useState(0);
+  const [payable, setPayable] = useState(0);
 
   useEffect(() => {
-    fetch();
     ShowAllOrderDetails();
   }, []);
 
-  const fetch = async () => {
-    const response = await axios.get(`${RenderHost}/getCart/${userId}`);
-    const cartData = response.data.cart;
-    const products = cartData.products;
-    setPrintBill(products);
-    SetInvoiceID(cartData._id);
-    SetCreateDate(cartData.createdAt);
-    const total = products.reduce(
-      (acc, product) => acc + product.productId.product_price * product.quantity,
-      0
-    );
-    setTotalPrice(total);
-    setCGST(Math.abs((total * 4.5) / 100));
-    setSGST(Math.abs((total * 4.5) / 100));
-    setpayable(Math.ceil(total - CGST - SGST));
+  const ShowAllOrderDetails = async () => {
+    try {
+      const response = await axios.get(`${RenderHost}/user-orders/${userId}`);
+      const order = response.data.orders[0]; // Assuming only one order
+      const cartItems = order.cartItems;
 
-  }
+      // Setting order and customer details
+      SetInvoiceID(userId);
+      SetCreateDate(userId); // Assuming _id is being used as the creation date. You might want to adjust this.
+      SetOrderDetails(order); // Update state with the full order details
 
-  const ShowAllOrderDetails = () => {
-    axios.get(`${RenderHost}/Order_details`).then(function (response) {
-      console.log("A", response.data.show_details);
-      SetOrderDetails(response.data.show_details);
-    });
+      // Calculate the total price, CGST, SGST, and payable amount
+      const total = cartItems.reduce(
+        (acc, item) => acc + item.productPrice * item.quantity,
+        0
+      );
+      setTotalPrice(total);
+      setCGST(Math.abs((total * 4.5) / 100));
+      setSGST(Math.abs((total * 4.5) / 100));
+      setPayable(Math.ceil(total - CGST - SGST));
+
+      // Set the product details for printing
+      setPrintBill(cartItems);
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+    }
   };
+
   const onButtonClick = () => {
     window.print();
   };
+
   return (
     <div className="container">
       <div className="card">
@@ -83,53 +87,33 @@ export default function Bill() {
           </div>
           <div className="row">
             <div className="col-xl-8">
-              {OrderDetails && OrderDetails.length > 0 && (
-                <>
-                  <ul className="list-unstyled">
-                    <li className="text-muted">
-                      To:{" "}
-                      <span style={{ color: "#5d9fc5" }}>
-                        {OrderDetails[0].fname} {OrderDetails[0].lname}
-                      </span>
-                    </li>
-                    <li className="text-muted">{OrderDetails[0].address}</li>
-                    <li className="text-muted">{OrderDetails[0].country}</li>
-                    <li className="text-muted">
-                      <i className="fas fa-phone-alt"></i>{" "}
-                      {OrderDetails[0].phone}
-                    </li>
-                    <li className="text-muted">
-                      <i className="fas fa-envelope"></i>{" "}
-                      {OrderDetails[0].email}
-                    </li>
-                  </ul>
-                </>
+              {OrderDetails && OrderDetails.fname && (
+                <ul className="list-unstyled">
+                  <li className="text-muted">
+                    To: <span style={{ color: "#5d9fc5" }}>{OrderDetails.fname} {OrderDetails.lname}</span>
+                  </li>
+                  <li className="text-muted">{OrderDetails.address}</li>
+                  <li className="text-muted">{OrderDetails.country}</li>
+                  <li className="text-muted"><i className="fas fa-phone-alt"></i> {OrderDetails.phone}</li>
+                  <li className="text-muted"><i className="fas fa-envelope"></i> {OrderDetails.email}</li>
+                  <li className="text-muted"><span className="fw-bold">Company:</span> {OrderDetails.company}</li>
+                  <li className="text-muted"><span className="fw-bold">Pin Code:</span> {OrderDetails.pinCode}</li>
+                </ul>
               )}
             </div>
             <div className="col-xl-4">
               <p className="text-muted">Invoice</p>
               <ul className="list-unstyled">
                 <li className="text-muted">
-                  <i
-                    className="fas fa-circle me-1"
-                    style={{ color: "#84B0CA" }}
-                  ></i>
-                  <span className="fw-bold">ID:</span>
-                  {InvoiceID}
+                  <i className="fas fa-circle me-1" style={{ color: "#84B0CA" }}></i>
+                  <span className="fw-bold">ID:</span> {InvoiceID}
                 </li>
                 <li className="text-muted">
-                  <i
-                    className="fas fa-circle me-1"
-                    style={{ color: "#84B0CA" }}
-                  ></i>
-                  <span className="fw-bold">Creation Date: </span>
-                  {CreateDate}
+                  <i className="fas fa-circle me-1" style={{ color: "#84B0CA" }}></i>
+                  <span className="fw-bold">Creation Date: </span> {CreateDate}
                 </li>
                 <li className="text-muted">
-                  <i
-                    className="fas fa-circle me-1"
-                    style={{ color: "#84B0CA" }}
-                  ></i>
+                  <i className="fas fa-circle me-1" style={{ color: "#84B0CA" }}></i>
                   <span className="fw-bold">Status:</span>
                   <span className="badge bg-success text-white fw-bold ms-1">
                     success
@@ -155,18 +139,18 @@ export default function Bill() {
                     <tr key={index} className="text-center">
                       <th>
                         <img
-                          src={`${item.productId.product_img}`}
+                          src={item.productImg}
                           alt="Img"
                           className="object-fit-cover border"
                           style={{ width: "50px", height: "50px" }}
                         />
                       </th>
-                      <td>{item.productId.product_name}</td>
-                      <td>{item.productId.product_price}</td>
+                      <td>{item.productName}</td>
+                      <td>{item.productPrice}</td>
                       <td>{item.quantity}</td>
                       <td>
-                        {parseInt(item.quantity) * item.productId.product_price}
-                      </td>{" "}
+                        {parseInt(item.quantity) * item.productPrice}
+                      </td>
                     </tr>
                   ))}
               </tbody>
@@ -174,9 +158,7 @@ export default function Bill() {
           </div>
           <div className="row">
             <div className="col-xl-8">
-              <p className="ms-3">
-                Add additional notes and payment information
-              </p>
+              <p className="ms-3">Add additional notes and payment information</p>
             </div>
             <div className="col-xl-3 fw-bold">
               <ul className="list-unstyled">
@@ -195,7 +177,7 @@ export default function Bill() {
                 </li>
                 <hr />
                 <li className="text-muted ms-3 mt-2">
-                  <span className="me-4">Total</span>
+                  <span className="me-4">Payable</span>
                   <span className="fs-5">
                     {payable} <LiaRupeeSignSolid className="fs-4 m-0 p-0" />
                   </span>
@@ -209,9 +191,7 @@ export default function Bill() {
               <p>Thank you for your purchase</p>
             </div>
             <div className="col-xl-2">
-              <a href="#" className="text-dark text-decoration-none">
-                Need Help...?
-              </a>
+              <a href="#" className="text-dark text-decoration-none">Need Help...?</a>
             </div>
           </div>
         </div>
