@@ -17,21 +17,21 @@ import {
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { RenderHost } from "../../API/Api";
+import moment from "moment"; // Import moment
 import Header from "../../Component/Navbar/Header";
 import TopNavbar from "../../Component/TopNavbar/TopNavbar";
 
 export default function ProfilePage() {
   const Navigation = useNavigate();
   const [name, setName] = useState();
-  const [email, setEmail] = useState();
   const [pass, setPass] = useState();
   const [orders, setOrders] = useState([]);
   const userId = localStorage.getItem("userId");
+  const email = localStorage.getItem("userEmail");
 
   useEffect(() => {
     fetchOrderHistory();
     setName(JSON.parse(localStorage.getItem("name")));
-    setEmail(localStorage.getItem("userEmail"));
     setPass(localStorage.getItem("userPassword"));
   }, []);
 
@@ -135,41 +135,62 @@ export default function ProfilePage() {
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
+
             </MDBCard>
 
             {/* Order History Table */}
-            <MDBCard className="mb-4">
-              <MDBCardBody>
-                <h5 className="text-center">Order History</h5>
-                <MDBTable>
-                  <MDBTableHead>
-                    <tr>
-                      <th scope="col">Order ID</th>
-                      <th scope="col">Address</th>
-                      <th scope="col">Email</th>
-                      <th scope="col">Phone</th>
-                    </tr>
-                  </MDBTableHead>
-                  <MDBTableBody>
-                    {orders.length > 0 ? (
-                      orders.map((order) => (
-                        <tr key={order._id}>
-                          <td>{order._id}</td>
-                          <td>{order.address}</td>
-                          <td>{order.email}</td>
-                          <td>{order.phone}</td>
-                        </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan="4" className="text-center">No orders found</td>
-                      </tr>
-                    )}
-                  </MDBTableBody>
-                </MDBTable>
-              </MDBCardBody>
-            </MDBCard>
+
+
           </MDBCol>
+          <MDBCard className="mb-4">
+            <MDBCardBody>
+              <h5 className="text-center">Order History</h5>
+              <MDBTable>
+                <MDBTableHead>
+
+                </MDBTableHead>
+                <MDBTableBody>
+                  {orders.length > 0 ? (
+                    orders.map((order) => (
+                      <tr key={order._id}>
+
+                        <td>
+                          <MDBTable bordered>
+                            <MDBTableHead>
+                              <tr>
+                                <th>Product Name</th>
+                                <th>Date</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                              </tr>
+                            </MDBTableHead>
+                            <MDBTableBody>
+                              {order.cartItems.map((item) => (
+                                <tr key={item._id}>
+                                  <td>{item.productName}</td>
+                                  <td>{moment(order.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</td>
+                                  <td>{item.productPrice}</td>
+                                  <td>{item.quantity}</td>
+                                  <td>{item.productDescription}</td>
+                                  <td>Pending...</td>
+                                </tr>
+                              ))}
+                            </MDBTableBody>
+                          </MDBTable>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="text-center">No orders found</td>
+                    </tr>
+                  )}
+                </MDBTableBody>
+              </MDBTable>
+            </MDBCardBody>
+          </MDBCard>
         </MDBRow>
       </MDBContainer>
     </section>

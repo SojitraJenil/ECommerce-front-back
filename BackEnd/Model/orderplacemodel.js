@@ -22,6 +22,10 @@ var userSchema = mongoose.Schema({
   pinCode: { type: String },
   email: { type: String },
   phone: { type: String },
-});
+  modifiedOn: {
+    type: Date,
+    default: Date.now,
+  }
+}, { timestamps: true }); // Enable timestamps
 
 module.exports = mongoose.model("Order_Details", userSchema);

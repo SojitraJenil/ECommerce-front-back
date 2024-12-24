@@ -142,14 +142,19 @@ export default function AddToCart() {
         {
           loader ? <Loader /> : (
             <Row>
+              { }
               <Col
                 lg={8}
                 className="border-end border"
                 style={{ overflowY: 'scroll', maxHeight: '550px' }}
-              >                <h3 className="text-center mb-4">Total Cart : {totalCartedProduct}</h3>
-                {cartItems.map((item) => (
-                  <CartItem key={item._id} item={item} />
-                ))}
+              >
+                <h3 className="text-center mb-4">Total Cart {totalCartedProduct ? `: ${totalCartedProduct}` : ""}</h3>
+                {
+                  totalCartedProduct > 0 ? cartItems.map((item) => (
+                    <CartItem key={item._id} item={item} />
+                  )) : <p className="text-center">Product Not Found, Add Product <a href="/" >@ClickHere</a> </p>
+                }
+
               </Col>
               <Col lg={4} className="border">
                 <h3 className="text-center mb-4">Order Summary</h3>
@@ -167,9 +172,12 @@ export default function AddToCart() {
                           Continue Shopping
                         </Button>
                       </Link> */}
-                      <Link to="/Payment">
-                        <Button variant="primary" size="lg" >Pay Now</Button>
-                      </Link>
+                      {
+                        totalCartedProduct != 0 && (<Link to="/Payment">
+                          <Button variant="primary" size="lg" >Pay Now</Button>
+                        </Link>)
+                      }
+
                     </div>
                   </Card.Body>
                 </Card>

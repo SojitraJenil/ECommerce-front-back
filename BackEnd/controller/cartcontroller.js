@@ -11,16 +11,20 @@ exports.addItemToCart = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
+    // Find the cart for the user
     let cart = await Cart.findOne({ userId });
 
     if (cart) {
+      // Find the existing product in the cart
       const existingProduct = cart.products.find(
         (item) => item.productId.toString() === productId
       );
 
       if (existingProduct) {
+        // Update the quantity of the existing product
         existingProduct.quantity += quantity;
       } else {
+        // Add the new product to the cart
         cart.products.push({
           productId: product._id,
           productName: product.productName,
@@ -35,8 +39,10 @@ exports.addItemToCart = async (req, res) => {
         });
       }
 
+      // Save the updated cart
       await cart.save();
     } else {
+      // If no cart exists for the user, create a new one
       cart = new Cart({
         userId,
         products: [
@@ -55,9 +61,11 @@ exports.addItemToCart = async (req, res) => {
         ],
       });
 
+      // Save the new cart
       await cart.save();
     }
 
+    // Return the updated cart to the user
     res.status(200).json({
       message: "Product added to cart",
       cart,
@@ -67,6 +75,7 @@ exports.addItemToCart = async (req, res) => {
     res.status(500).json({ message: "An error occurred", error });
   }
 };
+
 
 exports.getUserCart = async (req, res) => {
   const userId = req.user?.userId; // User ID from middleware

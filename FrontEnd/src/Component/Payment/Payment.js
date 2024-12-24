@@ -96,7 +96,7 @@ export default function Payment() {
         phone: formData.phone,
         totalPrice: payable,
       }
-
+      handlePayment();
       const response = await axios.post(`${RenderHost}/place-order`, orderData);
       if (response.data.success) {
         Swal.fire({
@@ -113,7 +113,6 @@ export default function Payment() {
         icon: "error",
       });
     }
-    handlePayment();
   };
 
 
