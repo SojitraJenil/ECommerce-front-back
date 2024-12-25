@@ -78,7 +78,6 @@ export const UpdateProduct = async (id: any) => {
     throw error;
   }
 };
-//TableInquiries
 
 export const getInquiries = async () => {
   try {
@@ -151,6 +150,18 @@ export const getOrder = async () => {
     throw error;
   }
 };
+export const getAllCart = async () => {
+  try {
+    const response = await axiosInstance.get('/getAllCart');
+    console.log('response.data.show_cart :>> ', response.data);
+    return response.data.show_cart;
+  } catch (error) {
+    console.error('Error fetching cart data:', error);
+    throw error;
+  }
+};
+
+
 export const getOrderDelete = async (id: any) => {
   try {
     const response = await axiosInstance.delete(`/Order_delete/${id}`);

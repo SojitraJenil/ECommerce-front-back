@@ -21,6 +21,7 @@ import Product from './components/Product/Product';
 import Inquiries from './components/inquiries/Inquiries';
 import Categories from './components/Categories/Categories';
 import Order from './components/order/Order';
+import Cart from './components/Cart/Cart';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -135,6 +136,15 @@ function App() {
             <>
               <PageTitle title="Tables" />
               <Product />
+            </>
+          }
+        />
+        <Route
+          path="/admin/cart"
+          element={
+            <>
+              <PageTitle title="Tables" />
+              <Cart />
             </>
           }
         />
