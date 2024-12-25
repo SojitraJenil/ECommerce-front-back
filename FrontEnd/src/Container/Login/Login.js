@@ -1,130 +1,127 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import { Container } from "react-bootstrap";
-import { FaEyeSlash } from "react-icons/fa";
-import GoogleIcon from "@mui/icons-material/Google";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import { RenderHost } from "../../API/Api";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { FaEye, FaEyeSlash, FaGoogle, FaFacebook } from 'react-icons/fa';
+import { RenderHost } from '../../API/Api';
 
 const Login = () => {
-  const [email, setEmail] = useState("jenilsojitra1@gmail.com");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    setEmail(localStorage.getItem("RegisterEmail"));
-    setPassword(localStorage.getItem("RegisterPassword"));
+    setEmail(localStorage.getItem('RegisterEmail') || '');
+    setPassword(localStorage.getItem('RegisterPassword') || '');
   }, []);
-
-  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setError('');
+
     try {
       const response = await axios.post(`${RenderHost}/login`, {
         email,
         password,
       });
-      if (response.data.status === "User logged in successfully") {
-        localStorage.setItem("userId", response.data.user.userId);
-        localStorage.setItem("userEmail", email);
-        localStorage.setItem("userPassword", password);
-        localStorage.setItem("name", JSON.stringify(response.data.user.fname));
-        localStorage.setItem("token", response.data.token);
 
-        navigate("/");
-      } else if (response.data.status === "Incorrect password") {
-        alert("Incorrect password");
-        console.log("Unsuccessful login");
-        navigate("/login");
-      } else if (
-        response.data.status ===
-        "User not found. Please check your email and password"
-      ) {
-        alert("User not found. Please check your email and password");
-        console.log("Unsuccessful login");
-        navigate("/login");
+      if (response.data.status === 'User logged in successfully') {
+        localStorage.setItem('userId', response.data.user.userId);
+        localStorage.setItem('userEmail', email);
+        localStorage.setItem('name', JSON.stringify(response.data.user.fname));
+        localStorage.setItem('token', response.data.token);
+        // Redirect to home page or dashboard
+        window.location.href = '/';
+      } else {
+        setError(response.data.status);
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error('Error during login:', error);
+      setError('An error occurred during login. Please try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
-  const token = localStorage.getItem("token");
-  axios
-    .get(`${RenderHost}/login`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-    .then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      // Handle error
-      console.log(error);
-    });
 
   return (
-    <div className="bg-red-400">
-      <Container>
-        <form
-          style={{ maxWidth: "400px" }}
-          className="w-auto mx-auto border p-3 mt-5 rounded-2"
-          onSubmit={handleLogin}
-        >
-          <h3>Login Page</h3>
-          <div className="mb-3">
-            <label className="mb-1">Email -:</label>
-            <input
-              type="email"
-              className="form-control"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              placeholder="Enter The Email Address....."
-            />
+    <div className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light">
+      <div className="row w-75">
+        <div className="col-md-6 offset-md-3">
+          <div className="card shadow">
+            <div className="card-body">
+              <h3 className="text-center mb-4">Login</h3>
+              {error && <div className="alert alert-danger">{error}</div>}
+              <form onSubmit={handleLogin}>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">Email</label>
+                  <input
+                    type="email"
+                    className="form-control"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    required
+                  />
+                </div>
+                <div className="mb-3 position-relative">
+                  <label htmlFor="password" className="form-label">Password</label>
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    className="form-control"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter your password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-link position-absolute end-0 top-50 translate-middle-y"
+                    onClick={() => setShowPassword(!showPassword)}
+                    style={{ marginTop: '12px' }}
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                <div className="mb-3 d-flex justify-content-between">
+                  <Link to="/forgot-password" className="text-decoration-none">
+                    Forgot Password?
+                  </Link>
+                </div>
+                <div className="d-grid">
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Logging in..." : "Sign In"}
+                  </button>
+                </div>
+              </form>
+              <div className="text-center my-4">
+                <p className="text-muted">or login with</p>
+                <div className="d-flex justify-content-center gap-2">
+                  <button className="btn btn-outline-danger">
+                    <FaGoogle className="me-2" /> Google
+                  </button>
+                  <button className="btn btn-outline-primary">
+                    <FaFacebook className="me-2" /> Facebook
+                  </button>
+                </div>
+              </div>
+              <p className="text-center mt-3">
+                Not registered?{" "}
+                <Link to="/register" className="text-decoration-none">
+                  Register here
+                </Link>
+              </p>
+            </div>
           </div>
-          <div className="mb-3">
-            <label className="mb-1">Password -:</label>
-            <input
-              type={showPassword ? "text" : "password"}
-              className="form-control mb-2"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              placeholder="Enter The Password....."
-            />
-            <span>click to {showPassword ? "Hide" : "Show"} Password -: </span>
-            <FaEyeSlash
-              onClick={() => setShowPassword(!showPassword)}
-              className="fs-4"
-            />
-          </div>
-          <Link to="/register" className="text-dark ">
-            <p className="forgot-password text-right">
-              Not registered...?<span>please First Register</span>
-            </p>
-          </Link>
-          <div className="d-grid">
-            <button type="submit" className="btn btn-primary">
-              Sign Up
-            </button>
-          </div>
-          <div className="d-grid my-3">
-            <button type="" className="btn bg-bg-transparent border">
-              <GoogleIcon className="me-2" />
-              Continue With Google
-            </button>
-          </div>
-          <div className="d-grid my-2">
-            <button type="" className="btn bg-bg-transparent border">
-              <FacebookIcon className="me-2" />
-              Continue With FaceBook
-            </button>
-          </div>
-        </form>
-      </Container>
+        </div>
+      </div>
     </div>
   );
 };
