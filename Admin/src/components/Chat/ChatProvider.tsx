@@ -2,8 +2,9 @@ import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import io, { Socket } from "socket.io-client";
 
-// Replace with your backend server URL
-const SOCKET_SERVER_URL = "http://localhost:8000";
+const SOCKET_SERVER_URL =
+  process.env.REACT_APP_SOCKET_SERVER_URL || 'http://localhost:8000';
+
 
 interface Message {
   sender: "user" | "admin";
