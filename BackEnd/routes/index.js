@@ -13,6 +13,7 @@ const {
   User_Login,
   Update_user,
   Search_user,
+  Find_Single_user_by_id,
 } = require("../controller/usercontroller");
 const {
   Product_add,
@@ -47,6 +48,7 @@ const {
   getCart,
 } = require("../controller/cartcontroller");
 const categoryController = require("../controller/categorycontroller");
+const chatController = require("../controller/chatcontroller");
 const { authenticateUser } = require("../middleware/authenticate");
 
 // Root route
@@ -62,6 +64,7 @@ router.post("/register", User_Register);
 router.post("/login", User_Login);
 router.get("/show_all_user", show_All_User);
 router.get("/Search/:id", Search_user);
+router.get("/findUser/:id", Find_Single_user_by_id);
 router.post("/Update_user/:id", Update_user);
 router.delete("/delete_user/:id", Delete_User);
 
@@ -104,5 +107,11 @@ router.get("/categories", categoryController.getAllCategories);
 router.post("/addCategory", categoryController.addCategory);
 router.delete("/CateDelete/:id", categoryController.DeleteCategory);
 router.post("/CateUpdate/:id", categoryController.Update_Category);
+
+// Route to get or create a chat for a specific user
+router.get('/getChat/:userId', chatController.getChat);
+router.get('/getAllChat', chatController.getAllChat);
+router.post('/:userId/messages', chatController.addMessage);
+router.patch('/:userId/status', chatController.updateChatStatus);
 
 module.exports = router;

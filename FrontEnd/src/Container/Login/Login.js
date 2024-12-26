@@ -87,9 +87,7 @@ const Login = () => {
                   </button>
                 </div>
                 <div className="mb-3 d-flex justify-content-between">
-                  <Link to="/forgot-password" className="text-decoration-none">
-                    Forgot Password?
-                  </Link>
+                  Forgot Password?
                 </div>
                 <div className="d-grid">
                   <button

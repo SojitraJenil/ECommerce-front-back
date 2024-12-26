@@ -35,7 +35,12 @@ function TopNavbar() {
               className="col-md-auto col-md-center col-12 ms-md-auto me-lg-auto me-md-auto me-xl-0 text-center ms-auto"
               style={{ zIndex: "12" }}
             >
-              <span className="btn border-end border-start border-0">
+              <Link to="/help-desk">
+                <span className="btn border-end border-start border-0">
+                  HelpDesk -chat
+                </span>
+              </Link>
+              {/* <span className="btn border-end border-start border-0">
                 <NavDropdown title="Language" id="basic-nav-dropdown">
                   <NavDropdown.Item href="#action/3.1">
                     English
@@ -51,10 +56,7 @@ function TopNavbar() {
                   <NavDropdown.Item href="#action/3.1">USD,$</NavDropdown.Item>
                   <NavDropdown.Item href="#action/3.3">EUR,!</NavDropdown.Item>
                 </NavDropdown>
-              </span>
-              <span className="btn border-end border-start border-0">
-                History
-              </span>
+              </span> */}
               <Link to="/account">
                 <span className="btn border-end border-start border-0">
                   My account

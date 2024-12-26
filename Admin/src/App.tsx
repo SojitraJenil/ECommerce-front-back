@@ -22,6 +22,7 @@ import Inquiries from './components/inquiries/Inquiries';
 import Categories from './components/Categories/Categories';
 import Order from './components/order/Order';
 import Cart from './components/Cart/Cart';
+import ChatProvider from './components/Chat/ChatProvider';
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -154,6 +155,15 @@ function App() {
             <>
               <PageTitle title="Settings" />
               <Settings />
+            </>
+          }
+        />
+        <Route
+          path="/admin/chat"
+          element={
+            <>
+              <PageTitle title="chat" />
+              <ChatProvider />
             </>
           }
         />

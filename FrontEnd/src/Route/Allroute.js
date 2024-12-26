@@ -17,6 +17,7 @@ import Blog from "../Component/Blog";
 import Contact from "../Component/Contact/Contact";
 import Bill from "../Component/Payment/Bill";
 import Explore from "../Component/Explore/Explore";
+import HelpDesk from "../Component/HelpDesk/HelpDesk";
 
 const Allroute = () => {
   return (
@@ -38,6 +39,7 @@ const Allroute = () => {
         <Route path="/account" element={<Account />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/help-desk" element={<HelpDesk />} />
         <Route path="/Product/:id" element={<Product />} />
         <Route path="/About" element={<Home />} />
         <Route path="/Contact" element={<Contact />} />

@@ -34,6 +34,30 @@ exports.show_All_User = async (req, res) => {
   });
 };
 
+exports.Find_Single_user_by_id = async (req, res) => {
+  try {
+    const userId = req.params.id; // This should be the UUID (not the MongoDB _id)
+    const data1 = await User_Register.findOne({ userId }); // Query by userId (UUID)
+
+    if (!data1) {
+      return res.status(404).json({
+        status: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "User found",
+      data: data1,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "Error",
+      message: error.message,
+    });
+  }
+};
+
+
 exports.Search_user = async (req, res) => {
   let Result = await User_Register.find({
     $or: [

@@ -23,30 +23,37 @@ import TopNavbar from "../../Component/TopNavbar/TopNavbar";
 
 export default function ProfilePage() {
   const Navigation = useNavigate();
-  const [name, setName] = useState();
-  const [pass, setPass] = useState();
+  const [userDetails, setUserDetails] = useState(null);
   const [orders, setOrders] = useState([]);
   const userId = localStorage.getItem("userId");
-  const email = localStorage.getItem("userEmail");
 
   useEffect(() => {
+    fetchUserDetails();
     fetchOrderHistory();
-    setName(JSON.parse(localStorage.getItem("name")));
-    setPass(localStorage.getItem("userPassword"));
   }, []);
+
+  const fetchUserDetails = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8000/findUser/${userId}`);
+      if (response.data.status === "User found") {
+        setUserDetails(response.data.data); // Set user details from the response
+      }
+    } catch (error) {
+      console.log('Error fetching user details:', error);
+    }
+  };
 
   const fetchOrderHistory = async () => {
     try {
       const response = await axios.get(`${RenderHost}/user-orders/${userId}`);
-      console.log('response :>> ', response);
       setOrders(response.data.orders); // Assuming the response contains the orders
     } catch (error) {
-      console.log('error :>> ', error);
+      console.log('Error fetching order history:', error);
     }
-  }
+  };
 
   const LogoutHandler = () => {
-    alert(`${name} You have logged out`);
+    alert(`${userDetails.fname} You have logged out`);
     localStorage.clear("name");
     Navigation("/login");
   };
@@ -81,8 +88,9 @@ export default function ProfilePage() {
                   style={{ width: "150px" }}
                   fluid
                 />
-                <p className="text-muted mb-1">{name} Patel</p>
-                <p className="text-muted mb-4">{email}</p>
+                {/* Use dynamic data for name */}
+                <p className="text-muted mb-1">{userDetails ? `${userDetails.fname} ${userDetails.lname}` : 'Loading...'}</p>
+                <p className="text-muted mb-4">{userDetails ? userDetails.email : 'Loading...'}</p>
                 <div className="d-flex justify-content-center mb-2"></div>
               </MDBCardBody>
             </MDBCard>
@@ -95,7 +103,7 @@ export default function ProfilePage() {
                     <MDBCardText>UserID</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">{userId}</MDBCardText>
+                    <MDBCardText className="text-muted">{userDetails ? userDetails.userId : 'Loading...'}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -104,7 +112,7 @@ export default function ProfilePage() {
                     <MDBCardText>Full Name</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">{name}</MDBCardText>
+                    <MDBCardText className="text-muted">{userDetails ? `${userDetails.fname} ${userDetails.lname}` : 'Loading...'}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -113,7 +121,7 @@ export default function ProfilePage() {
                     <MDBCardText>Email</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">{email}</MDBCardText>
+                    <MDBCardText className="text-muted">{userDetails ? userDetails.email : 'Loading...'}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -122,7 +130,7 @@ export default function ProfilePage() {
                     <MDBCardText>Password</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">{pass}</MDBCardText>
+                    <MDBCardText className="text-muted">{userDetails ? userDetails.password : 'Loading...'}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
                 <hr />
@@ -131,66 +139,59 @@ export default function ProfilePage() {
                     <MDBCardText>Mobile</MDBCardText>
                   </MDBCol>
                   <MDBCol sm="9">
-                    <MDBCardText className="text-muted">85967 48154</MDBCardText>
+                    <MDBCardText className="text-muted">{userDetails ? userDetails.mobileno : 'Loading...'}</MDBCardText>
                   </MDBCol>
                 </MDBRow>
               </MDBCardBody>
-
             </MDBCard>
 
             {/* Order History Table */}
-
-
-          </MDBCol>
-          <MDBCard className="mb-4">
-            <MDBCardBody>
-              <h5 className="text-center">Order History</h5>
-              <MDBTable>
-                <MDBTableHead>
-
-                </MDBTableHead>
-                <MDBTableBody>
-                  {orders.length > 0 ? (
-                    orders.map((order) => (
-                      <tr key={order._id}>
-
-                        <td>
-                          <MDBTable bordered>
-                            <MDBTableHead>
-                              <tr>
-                                <th>Product Name</th>
-                                <th>Date</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Description</th>
-                                <th>Status</th>
-                              </tr>
-                            </MDBTableHead>
-                            <MDBTableBody>
-                              {order.cartItems.map((item) => (
-                                <tr key={item._id}>
-                                  <td>{item.productName}</td>
-                                  <td>{moment(order.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</td>
-                                  <td>{item.productPrice}</td>
-                                  <td>{item.quantity}</td>
-                                  <td>{item.productDescription}</td>
-                                  <td>Pending...</td>
+            <MDBCard className="mb-4">
+              <MDBCardBody>
+                <h5 className="text-center">Order History</h5>
+                <MDBTable>
+                  <MDBTableBody>
+                    {orders.length > 0 ? (
+                      orders.map((order) => (
+                        <tr key={order._id}>
+                          <td>
+                            <MDBTable bordered>
+                              <MDBTableHead>
+                                <tr>
+                                  <th>Product Name</th>
+                                  <th>Date</th>
+                                  <th>Price</th>
+                                  <th>Quantity</th>
+                                  <th>Description</th>
+                                  <th>Status</th>
                                 </tr>
-                              ))}
-                            </MDBTableBody>
-                          </MDBTable>
-                        </td>
+                              </MDBTableHead>
+                              <MDBTableBody>
+                                {order.cartItems.map((item) => (
+                                  <tr key={item._id}>
+                                    <td>{item.productName}</td>
+                                    <td>{moment(order.createdAt).format('MMMM Do YYYY, h:mm:ss a')}</td>
+                                    <td>{item.productPrice}</td>
+                                    <td>{item.quantity}</td>
+                                    <td>{item.productDescription}</td>
+                                    <td>Pending...</td>
+                                  </tr>
+                                ))}
+                              </MDBTableBody>
+                            </MDBTable>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="6" className="text-center">No orders found</td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="5" className="text-center">No orders found</td>
-                    </tr>
-                  )}
-                </MDBTableBody>
-              </MDBTable>
-            </MDBCardBody>
-          </MDBCard>
+                    )}
+                  </MDBTableBody>
+                </MDBTable>
+              </MDBCardBody>
+            </MDBCard>
+          </MDBCol>
         </MDBRow>
       </MDBContainer>
     </section>
