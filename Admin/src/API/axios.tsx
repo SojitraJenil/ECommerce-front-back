@@ -6,7 +6,7 @@ interface AdaptAxiosRequestConfig extends AxiosRequestConfig {
 }
 
 export const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_SOCKET_SERVER_URL
+  baseURL: 'https://ecommerce-3-ul25.onrender.com',
   // baseURL: 'http://localhost:8000',
 });
 
