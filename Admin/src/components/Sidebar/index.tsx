@@ -220,7 +220,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     }`}
                 >
                   <FaUserAlt />
-                  Live Cart
+                  Cart
                 </NavLink>
               </li>
               <li>
