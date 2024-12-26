@@ -34,7 +34,7 @@ export default function ProfilePage() {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await axios.get(`http://localhost:8000/findUser/${userId}`);
+      const response = await axios.get(`${RenderHost}/findUser/${userId}`);
       if (response.data.status === "User found") {
         setUserDetails(response.data.data); // Set user details from the response
       }
