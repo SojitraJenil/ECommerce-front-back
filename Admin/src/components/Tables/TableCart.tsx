@@ -1,93 +1,84 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Breadcrumb from '../Breadcrumbs/Breadcrumb';
-import Loader from '../../common/Loader/index';
-import useSnackbar from '../../hooks/useSnackbar';
-import { RootState } from '../../reducers';
-import { fetchCart } from '../../reducers/cartSlice';
+"use client";
 
-function TableCart() {
-    const dispatch = useDispatch<any>();
-    const { showSnackbar } = useSnackbar();
-    const cart = useSelector((state: RootState) => state.cart);
-    const loading = useSelector((state: RootState) => state.cart.loading);
+import React, {
+    useCallback,
+    useMemo,
+    useRef,
+    useState,
+    StrictMode,
+} from "react";
+import { createRoot } from "react-dom/client";
+import { AgGridReact } from "ag-grid-react";
+import {
+    ClientSideRowModelModule,
+    ModuleRegistry,
+    NumberEditorModule,
+    NumberFilterModule,
+    PaginationModule,
+    RowSelectionModule,
+    TextEditorModule,
+    TextFilterModule,
+    ValidationModule,
+    createGrid,
+} from "ag-grid-community";
+ModuleRegistry.registerModules([
+    NumberEditorModule,
+    TextEditorModule,
+    TextFilterModule,
+    NumberFilterModule,
+    RowSelectionModule,
+    PaginationModule,
+    ClientSideRowModelModule,
+    ValidationModule,
+]);
 
-    useEffect(() => {
-        dispatch(fetchCart());
+const TableCart = () => {
+    const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
+    const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
+    const [rowData, setRowData] = useState();
+    const [columnDefs, setColumnDefs] = useState([
+        {
+            field: "athlete",
+            minWidth: 170,
+        },
+        { field: "age" },
+        { field: "country" },
+        { field: "year" },
+        { field: "date" },
+        { field: "sport" },
+        { field: "gold" },
+        { field: "silver" },
+        { field: "bronze" },
+        { field: "total" },
+    ]);
+    const defaultColDef = useMemo(() => {
+        return {
+            editable: true,
+            filter: true,
+            flex: 1,
+            minWidth: 100,
+        };
+    }, []);
+    const rowSelection: any = useMemo(() => {
+        return {
+            mode: "multiRow",
+            groupSelects: "descendants",
+        };
     }, []);
 
-    console.log('cart :>> ', cart);
-
-    const renderCartItems = () => {
-        if (!cart.items || cart.items.length === 0) {
-            return <div>No items in the cart.</div>;
-        }
-
-        return cart.items.map((cartItem: any) => (
-            <tr key={cartItem._id} className="border-b border-gray-200">
-                <td className="p-2">{cartItem._id}</td>
-                <td className="p-2">{cartItem.active ? 'Yes' : 'No'}</td>
-                <td className="p-2">{cartItem.updatedAt ? new Date(cartItem.updatedAt).toLocaleString() : 'N/A'}</td>
-                <td className="p-2">
-                    {cartItem.products && cartItem.products.length > 0 ? (
-                        <table className="w-full">
-                            <thead>
-                                <tr>
-                                    <th className="p-2">Product Name</th>
-                                    <th className="p-2">Quantity</th>
-                                    <th className="p-2">Price</th>
-                                    <th className="p-2">Image</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {cartItem.products.map((product: any) => (
-                                    <tr key={product._id}>
-                                        <td className="p-2">{product.product_name || 'N/A'}</td>
-                                        <td className="p-2">{product.quantity}</td>
-                                        <td className="p-2">{product.product_price || 'N/A'}</td>
-                                        <td className="p-2">
-                                            {product.product_img && (
-                                                <img
-                                                    src={product.product_img}
-                                                    alt={product.product_name || 'Product Image'}
-                                                    className="w-16 h-16 object-cover"
-                                                />
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    ) : (
-                        <p>No products in this cart.</p>
-                    )}
-                </td>
-            </tr>
-        ));
-    };
-
     return (
-        <>
-            <Breadcrumb pageName="Cart" />
-            <div className="p-4">
-                {loading ? <Loader /> : (
-                    <table className="min-w-full table-auto">
-                        <thead>
-                            <tr>
-                                <th className="p-2">Cart ID</th>
-                                <th className="p-2">Active</th>
-                                <th className="p-2">Modified On</th>
-                                <th className="p-2">Products</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {renderCartItems()}
-                        </tbody>
-                    </table>
-                )}
+        <div style={containerStyle}>
+            <div style={gridStyle}>
+                <AgGridReact
+                    rowData={rowData}
+                    columnDefs={columnDefs}
+                    defaultColDef={defaultColDef}
+                    rowSelection={rowSelection}
+                    pagination={true}
+                />
             </div>
-        </>
+        </div>
     );
-}
+};
 
 export default TableCart;

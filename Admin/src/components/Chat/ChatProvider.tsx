@@ -3,8 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 import io, { Socket } from "socket.io-client";
 
 // Replace with your backend server URL
-const SOCKET_SERVER_URL = "https://ecommerce-3-ul25.onrender.com";
-// const SOCKET_SERVER_URL = "http://localhost:8000";
+// const SOCKET_SERVER_URL = "https://ecommerce-3-ul25.onrender.com";
+const SOCKET_SERVER_URL = "http://localhost:8000";
 
 interface Message {
   sender: "user" | "admin";
@@ -106,7 +106,7 @@ const ChatProvider: React.FC = () => {
           Active Chats
         </h3>
         <ul>
-          {activeChats.map((chat) => (
+          {activeChats.map((chat: any) => (
             <li
               key={chat.userId}
               onClick={() => handleSelectChat(chat)}
@@ -117,6 +117,9 @@ const ChatProvider: React.FC = () => {
             >
               <p className="text-xs text-white w-20 rounded-md text-center bg-green-600">Status: {chat.chatStatus}</p>
               <p className="text-sm font-medium">User ID: {chat.userId}</p>
+              <p className="text-sm font-medium">{chat.user.fname} {chat.user.lname}</p>
+              <p className="text-sm font-medium">{chat.user.mobileno}</p>
+              <p className="text-sm font-medium">{chat.user.email}</p>
             </li>
           ))}
         </ul>
