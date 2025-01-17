@@ -40,7 +40,6 @@ export const fetchProductCategories = createAsyncThunk(
   'Category/getCategory',
   async () => {
     const response = await getCategory();
-    console.log('response :>> ', response);
     return response.categories;
   },
 );
@@ -61,8 +60,6 @@ const productSlice = createSlice({
       state.product = action.payload;
     },
     setProductCategories: (state, action: PayloadAction<any[]>) => {
-      console.log('action.payload :>> ', action.payload);
-      console.log('state.categories :>> ', state.categories);
       state.categories = action.payload;
     },
     setError: (state, action: PayloadAction<string>) => {

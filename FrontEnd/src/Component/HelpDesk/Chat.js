@@ -16,8 +16,8 @@ import {
     IoHappyOutline
 } from "react-icons/io5";
 
-const SOCKET_SERVER_URL = "https://ecommerce-3-ul25.onrender.com";
-// const SOCKET_SERVER_URL = 'http://localhost:8000' || "https://ecommerce-3-ul25.onrender.com";
+const SOCKET_SERVER_URL = 'http://localhost:8000';
+// const SOCKET_SERVER_URL =  || "https://ecommerce-3-ul25.onrender.com";
 const TYPING_TIMER_LENGTH = 3000;
 
 const Chat = () => {
@@ -193,174 +193,182 @@ const Chat = () => {
     };
 
     return (
-       <Container fluid className="vh-100" style={{ backgroundColor: '#f8f9fa', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-    <Row className="w-100 justify-content-center">
-        <Col xs={12} sm={10} md={8} lg={6}>
-            <Card className="shadow-sm">
-                <Card.Header className="bg-primary text-white">
-                    <div className="d-flex justify-content-between align-items-center">
-                        <div className="d-flex align-items-center">
-                            <div className="position-relative me-2">
-                                <IoChatboxEllipses size={24} />
-                                <Badge
-                                    bg={connectionStatus === 'connected' ? 'success' : 'danger'}
-                                    className="position-absolute"
-                                    style={{ bottom: -2, right: -2, width: '10px', height: '10px', borderRadius: '50%' }}
-                                />
+        <Container fluid className="" style={{ backgroundColor: '#f8f9fa' }}>
+            <Row className="justify-content-center">
+                <Col>
+                    <Card className="shadow-sm">
+                        <Card.Header className="bg-primary text-white">
+                            <div className="d-flex justify-content-between align-items-center">
+                                <div className="d-flex align-items-center">
+                                    <div className="position-relative me-2">
+                                        <IoChatboxEllipses size={24} />
+                                        <Badge
+                                            bg={connectionStatus === 'connected' ? 'success' : 'danger'}
+                                            className="position-absolute"
+                                            style={{ bottom: -2, right: -2, padding: '4px', borderRadius: '50%' }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <h5 className="mb-0">
+                                            Customer Support
+                                            {connectionStatus !== 'connected' &&
+                                                <small className="ms-2">({connectionStatus})</small>
+                                            }
+                                        </h5>
+                                        <small>{userDetails.email}</small>
+                                    </div>
+                                </div>
+                                <div className="d-flex gap-3">
+                                    <IoCall size={20} className="cursor-pointer" />
+                                    <IoVideocam size={20} className="cursor-pointer" />
+                                    <IoEllipsisVertical size={20} className="cursor-pointer" />
+                                </div>
                             </div>
-                            <div>
-                                <h5 className="mb-0">
-                                    Customer Support
-                                    {connectionStatus !== 'connected' && <small className="ms-2">({connectionStatus})</small>}
-                                </h5>
-                                <small>{userDetails.email || 'user@example.com'}</small>
-                            </div>
-                        </div>
-                        <div className="d-flex gap-3">
-                            <IoCall size={20} className="cursor-pointer" />
-                            <IoVideocam size={20} className="cursor-pointer" />
-                            <IoEllipsisVertical size={20} className="cursor-pointer" />
-                        </div>
-                    </div>
-                </Card.Header>
+                        </Card.Header>
 
-                {error && (
-                    <Alert variant="danger" dismissible onClose={() => setError('')}>
-                        {error}
-                    </Alert>
-                )}
+                        {error && <Alert variant="danger" dismissible onClose={() => setError('')}>{error}</Alert>}
 
-                {/* Chat Messages */}
-                <div
-                    ref={chatBoxRef}
-                    className="p-3"
-                    style={{
-                        height: '400px',
-                        overflowY: 'auto',
-                        backgroundColor: '#f8f9fa',
-                        borderTop: '1px solid #ddd',
-                        borderBottom: '1px solid #ddd',
-                    }}
-                >
-                    {loading ? (
-                        <div className="text-center p-3">
-                            <div className="spinner-border text-primary" role="status">
-                                <span className="visually-hidden">Loading...</span>
-                            </div>
-                        </div>
-                    ) : (
-                        <>
-                            {messages.length ? (
-                                messages.map((message, index) => (
-                                    <div
-                                        key={index}
-                                        className={`d-flex mb-3 ${message.sender === 'user' ? 'justify-content-end' : 'justify-content-start'}`}
-                                    >
+                        {/* Chat Messages */}
+                        <div
+                            ref={chatBoxRef}
+                            className="p-3"
+                            style={{
+                                height: '400px',
+                                overflowY: 'auto',
+                                backgroundColor: '#f8f9fa'
+                            }}
+                        >
+                            {loading ? (
+                                <div className="text-center p-3">
+                                    <div className="spinner-border text-primary" role="status">
+                                        <span className="visually-hidden">Loading...</span>
+                                    </div>
+                                </div>
+                            ) : (
+                                <>
+                                    {messages.map((message, index) => (
                                         <div
-                                            className={`p-3 rounded-3 ${
-                                                message.sender === 'user' ? 'bg-primary text-white' : 'bg-white border'
-                                            }`}
-                                            style={{
-                                                maxWidth: '70%',
-                                                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                                            }}
+                                            key={index}
+                                            className={`d-flex mb-3 ${message.sender === 'user' ? 'justify-content-end' : 'justify-content-start'}`}
                                         >
-                                            <p className="mb-1">{message.message}</p>
-                                            {message.attachments?.map((url, i) => (
-                                                <div key={i} className="mb-2">
-                                                    <a href={url} target="_blank" rel="noopener noreferrer" className="text-primary">
-                                                        View Attachment
-                                                    </a>
+                                            <div
+                                                className={`p-3 rounded-3 ${message.sender === 'user'
+                                                    ? 'bg-primary text-white'
+                                                    : 'bg-white border'
+                                                    }`}
+                                                style={{
+                                                    maxWidth: '70%',
+                                                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                                }}
+                                            >
+                                                <p className="mb-1">{message.message}</p>
+                                                {message.attachments?.map((url, i) => (
+                                                    <div key={i} className="mb-2">
+                                                        <a href={url} target="_blank" rel="noopener noreferrer"
+                                                            className={message.sender === 'user' ? 'text-white' : 'text-primary'}>
+                                                            Attachment {i + 1}
+                                                        </a>
+                                                    </div>
+                                                ))}
+                                                <div className="d-flex justify-content-end align-items-center gap-1">
+                                                    <small className="opacity-75">
+                                                        {moment(message.timestamp).format('h:mm A')}
+                                                    </small>
+                                                    {message.sender === 'user' && (
+                                                        <IoCheckmarkDoneSharp size={16} className="opacity-75" />
+                                                    )}
                                                 </div>
-                                            ))}
-                                            <div className="d-flex justify-content-end align-items-center gap-1">
-                                                <small className="opacity-75">
-                                                    {moment(message.timestamp).format('h:mm A')}
-                                                </small>
-                                                {message.sender === 'user' && (
-                                                    <IoCheckmarkDoneSharp size={16} className="opacity-75" />
-                                                )}
                                             </div>
                                         </div>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="text-center text-muted">No messages yet</div>
+                                    ))}
+                                    {isAgentTyping && (
+                                        <div className="d-flex align-items-center gap-2 text-muted ms-2">
+                                            <IoTimeOutline size={16} className="animate" />
+                                            <small>Agent is typing...</small>
+                                        </div>
+                                    )}
+                                </>
                             )}
-                            {isAgentTyping && (
-                                <div className="d-flex align-items-center gap-2 text-muted">
-                                    <IoTimeOutline size={16} />
-                                    <small>Agent is typing...</small>
-                                </div>
-                            )}
-                        </>
-                    )}
-                    <div ref={chatEndRef} />
-                </div>
-
-                {/* Message Input */}
-                <Card.Footer className="bg-white">
-                    <Form onSubmit={sendMessage}>
-                        <div className="d-flex align-items-center gap-2">
-                            <div className="d-flex gap-2">
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    onChange={handleFileSelect}
-                                    style={{ display: 'none' }}
-                                />
-                                <Button
-                                    variant="light"
-                                    className="border d-flex align-items-center"
-                                    title="Attach file"
-                                    onClick={() => fileInputRef.current?.click()}
-                                >
-                                    <IoAttach size={20} />
-                                </Button>
-                            </div>
-                            <Form.Control
-                                type="text"
-                                value={newMessage}
-                                onChange={handleInputChange}
-                                ref={inputRef}
-                                placeholder="Type your message..."
-                                className="me-2"
-                                disabled={!socket?.connected}
-                            />
-                            <Button
-                                type="submit"
-                                variant="primary"
-                                disabled={(!newMessage.trim() && !fileUpload) || !socket?.connected}
-                                className="d-flex align-items-center"
-                            >
-                                <IoSend size={20} />
-                            </Button>
+                            <div ref={chatEndRef} />
                         </div>
-                        {fileUpload && (
-                            <div className="mt-2 d-flex align-items-center">
-                                <small className="text-muted">
-                                    Selected file: {fileUpload.name}
-                                </small>
-                                <Button
-                                    variant="link"
-                                    className="text-danger p-0 ms-2"
-                                    onClick={() => {
-                                        setFileUpload(null);
-                                        if (fileInputRef.current) {
-                                            fileInputRef.current.value = '';
-                                        }
-                                    }}
-                                >
-                                    Remove
-                                </Button>
-                            </div>
-                        )}
-                    </Form>
-                </Card.Footer>
-            </Card>
-        </Col>
-    </Row>
-</Container>
+
+                        {/* Message Input */}
+                        <Card.Footer className="bg-white">
+                            <Form onSubmit={sendMessage}>
+                                <div className="d-flex gap-2">
+                                    <div className="d-flex gap-2">
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            onChange={handleFileSelect}
+                                            style={{ display: 'none' }}
+                                        />
+                                        <Button
+                                            variant="light"
+                                            className="border d-flex align-items-center"
+                                            title="Attach file"
+                                            onClick={() => fileInputRef.current?.click()}
+                                        >
+                                            <IoAttach size={20} />
+                                        </Button>
+                                        <Button
+                                            variant="light"
+                                            className="border d-flex align-items-center"
+                                            title="Add image"
+                                        >
+                                            <IoImageOutline size={20} />
+                                        </Button>
+                                        <Button
+                                            variant="light"
+                                            className="border d-flex align-items-center"
+                                            title="Add emoji"
+                                        >
+                                            <IoHappyOutline size={20} />
+                                        </Button>
+                                    </div>
+                                    <Form.Control
+                                        type="text"
+                                        value={newMessage}
+                                        onChange={handleInputChange}
+                                        ref={inputRef}
+                                        placeholder="Type your message..."
+                                        className="me-2"
+                                        disabled={!socket?.connected}
+                                    />
+                                    <Button
+                                        type="submit"
+                                        variant="primary"
+                                        disabled={(!newMessage.trim() && !fileUpload) || !socket?.connected}
+                                        className="d-flex align-items-center"
+                                    >
+                                        <IoSend size={20} />
+                                    </Button>
+                                </div>
+                                {fileUpload && (
+                                    <div className="mt-2 d-flex align-items-center">
+                                        <small className="text-muted">
+                                            Selected file: {fileUpload.name}
+                                        </small>
+                                        <Button
+                                            variant="link"
+                                            className="text-danger p-0 ms-2"
+                                            onClick={() => {
+                                                setFileUpload(null);
+                                                if (fileInputRef.current) {
+                                                    fileInputRef.current.value = '';
+                                                }
+                                            }}
+                                        >
+                                            Remove
+                                        </Button>
+                                    </div>
+                                )}
+                            </Form>
+                        </Card.Footer>
+                    </Card>
+                </Col>
+            </Row>
+        </Container>
     );
 };
 

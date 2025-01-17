@@ -49,6 +49,17 @@ function App() {
           <DefaultLayout>
             <Routes>
               <Route
+                path="/dashboard"
+                element={
+                  <>
+                    <PageTitle title="e-com Admin | Dashboard" />
+                    <ProtectedRoute>
+                      <ECommerce />
+                    </ProtectedRoute>
+                  </>
+                }
+              />
+              <Route
                 index
                 element={
                   <>

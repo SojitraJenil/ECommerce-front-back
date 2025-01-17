@@ -5,6 +5,9 @@ import UserOne from '../../images/user/user-01.png';
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const HandleLogout = () => {
+    localStorage.removeItem("token");
+  }
 
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
@@ -13,6 +16,7 @@ const DropdownUser = () => {
         className="flex items-center gap-4"
         to="#"
       >
+        <button onClick={HandleLogout}>Logout</button>
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
             Jenil Sojitra

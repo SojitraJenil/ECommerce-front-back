@@ -36,7 +36,6 @@ const initialState: CartState = {
 
 export const fetchCart = createAsyncThunk('cart/fetchOrder/fulfilled', async () => {
     const response = await getAllCart();
-    console.log('response.show_cart :>> ', response);
     return response;
 });
 
@@ -46,13 +45,9 @@ const cartReducer = createSlice({
     initialState,
     reducers: {
         setCart: (state, action: PayloadAction<CartItem[]>) => {
-            console.log('stateA :>> ', state);
-            console.log('actionA :>> ', action);
             state.items = action.payload;
         },
         setError: (state, action: PayloadAction<string>) => {
-            console.log('stateB :>> ', state);
-            console.log('actionB :>> ', action);
             state.error = action.payload;
         },
     },
@@ -62,8 +57,6 @@ const cartReducer = createSlice({
                 state.loading = true;
             })
             .addCase(fetchCart.fulfilled, (state, action) => {
-                console.log('stateC :>> ', state);
-                console.log('actionC :>> ', action);
                 state.items = action.payload;
                 state.loading = false;
             })

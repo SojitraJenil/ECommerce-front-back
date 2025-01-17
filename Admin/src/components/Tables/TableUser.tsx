@@ -14,8 +14,6 @@ const TableUser: React.FC = () => {
   const loading = useSelector((state: RootState) => state.users.loading);
   const error = useSelector((state: RootState) => state.users.error);
 
-  console.log('users :>> ', users);
-
   const { showSnackbar } = useSnackbar();
 
   useEffect(() => {

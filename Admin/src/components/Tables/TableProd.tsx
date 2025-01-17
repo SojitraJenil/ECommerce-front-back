@@ -33,14 +33,11 @@ const TableProd = () => {
     Product_rating: '',
   });
 
-  console.log('productForm :>> ', productForm);
-
   const HandleAddProduct = async () => {
     console.log('object');
     try {
       const res = await addProduct(productForm);
       dispatch(fetchProduct());
-      console.log('res123456323456', res);
     } catch (error) {
       console.log('error :>> ', error);
     }

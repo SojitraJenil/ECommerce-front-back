@@ -8,7 +8,6 @@ export const getUser = async () => {
         Authorization: `Bearer ${'jenil'}`,
       },
     });
-    console.log('response.data', response.data);
     return response.data;
   } catch (error: unknown) {
     console.error(error);
@@ -47,7 +46,6 @@ export const getCategory = async () => {
 
 export const addProduct = async (addProduct: any) => {
   try {
-    console.log('addProduct :>> ', addProduct);
     const response = await axiosInstance.post('/Product_add', addProduct, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -153,7 +151,6 @@ export const getOrder = async () => {
 export const getAllCart = async () => {
   try {
     const response = await axiosInstance.get('/getAllCart');
-    console.log('response.data.show_cart :>> ', response.data);
     return response.data.show_cart;
   } catch (error) {
     console.error('Error fetching cart data:', error);
