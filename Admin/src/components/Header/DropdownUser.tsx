@@ -6,6 +6,7 @@ import UserOne from '../../images/user/user-01.png';
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const HandleLogout = () => {
+    console.log('Logout');
     localStorage.removeItem("token");
   }
 
