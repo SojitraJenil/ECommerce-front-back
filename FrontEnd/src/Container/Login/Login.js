@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaEye, FaEyeSlash, FaGoogle, FaFacebook } from 'react-icons/fa';
 import { RenderHost } from '../../API/Api';
@@ -10,6 +10,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
+  var Navigation = useNavigate();
 
   useEffect(() => {
     setEmail(localStorage.getItem('RegisterEmail') || '');
@@ -44,6 +45,10 @@ const Login = () => {
       setIsSubmitting(false);
     }
   };
+
+  const HandleClick = () => {
+    Navigation('/register')
+  }
 
   return (
     <div className="container-fluid min-vh-100 d-flex justify-content-center align-items-center bg-light">
@@ -112,15 +117,17 @@ const Login = () => {
               </div>
               <p className="text-center mt-3">
                 Not registered?{" "}
-                <Link to="/register" className="text-decoration-none">
+                <button onClick={HandleClick}>
+                  {/* <Link to="/register" className="text-decoration-none"> */}
                   Register here
-                </Link>
+                  {/* </Link> */}
+                </button>
               </p>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

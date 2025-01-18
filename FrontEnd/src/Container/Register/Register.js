@@ -50,7 +50,7 @@ const Register = () => {
         className="w-auto mx-auto border p-3 mt-5 rounded-2"
         onSubmit={getData}
       >
-        <h3>Sign Up</h3>
+        <h3>Register</h3>
         <div className="mb-3">
           <label className="mb-1">First Name:</label>
           <input
