@@ -86,9 +86,9 @@ function App() {
                 element={
                   <>
                     <PageTitle title="user" />
-                    <ProtectedRoute>
-                      <User />
-                    </ProtectedRoute>
+                    {/* <ProtectedRoute> */}
+                    <User />
+                    {/* </ProtectedRoute> */}
                   </>
                 }
               />
@@ -119,9 +119,9 @@ function App() {
                 element={
                   <>
                     <PageTitle title="order" />
-                    <ProtectedRoute>
-                      <Order />
-                    </ProtectedRoute>
+                    {/* <ProtectedRoute> */}
+                    <Order />
+                    {/* </ProtectedRoute> */}
                   </>
                 }
               />
