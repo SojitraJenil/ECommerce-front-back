@@ -1,82 +1,65 @@
 "use client";
 
-import React, {
-    useCallback,
-    useMemo,
-    useRef,
-    useState,
-    StrictMode,
-} from "react";
-import { createRoot } from "react-dom/client";
-import { AgGridReact } from "ag-grid-react";
-import {
-    ClientSideRowModelModule,
-    ModuleRegistry,
-    NumberEditorModule,
-    NumberFilterModule,
-    PaginationModule,
-    RowSelectionModule,
-    TextEditorModule,
-    TextFilterModule,
-    ValidationModule,
-    createGrid,
-} from "ag-grid-community";
-ModuleRegistry.registerModules([
-    NumberEditorModule,
-    TextEditorModule,
-    TextFilterModule,
-    NumberFilterModule,
-    RowSelectionModule,
-    PaginationModule,
-    ClientSideRowModelModule,
-    ValidationModule,
-]);
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart } from "../../reducers/cartSlice";
+import { RootState } from "../../reducers";
 
 const TableCart = () => {
-    const containerStyle = useMemo(() => ({ width: "100%", height: "100%" }), []);
-    const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
-    const [rowData, setRowData] = useState();
-    const [columnDefs, setColumnDefs] = useState([
-        {
-            field: "athlete",
-            minWidth: 170,
-        },
-        { field: "age" },
-        { field: "country" },
-        { field: "year" },
-        { field: "date" },
-        { field: "sport" },
-        { field: "gold" },
-        { field: "silver" },
-        { field: "bronze" },
-        { field: "total" },
-    ]);
-    const defaultColDef = useMemo(() => {
-        return {
-            editable: true,
-            filter: true,
-            flex: 1,
-            minWidth: 100,
-        };
-    }, []);
-    const rowSelection: any = useMemo(() => {
-        return {
-            mode: "multiRow",
-            groupSelects: "descendants",
-        };
-    }, []);
+    const dispatch = useDispatch<any>();
+    const cart = useSelector((state: RootState) => state.cart.items);
+    const [rowData, setRowData] = useState<any[]>([]);
+
+    useEffect(() => {
+        dispatch(fetchCart());
+    }, [dispatch]);
+
+    useEffect(() => {
+        setRowData(cart);
+    }, [cart]);
 
     return (
-        <div style={containerStyle}>
-            <div style={gridStyle}>
-                <AgGridReact
-                    rowData={rowData}
-                    columnDefs={columnDefs}
-                    defaultColDef={defaultColDef}
-                    rowSelection={rowSelection}
-                    pagination={true}
-                />
-            </div>
+        <div className="w-full p-5">
+            <table className="w-full table-auto border-collapse">
+                <thead>
+                    <tr>
+                        <th className="border px-4 py-2 text-left bg-gray-100">Product Name</th>
+                        <th className="border px-4 py-2 text-left bg-gray-100">Quantity</th>
+                        <th className="border px-4 py-2 text-left bg-gray-100">Price</th>
+                        <th className="border px-4 py-2 text-left bg-gray-100">Image</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {rowData.length > 0 ? (
+                        rowData.map((cartItem: any) => (
+                            cartItem.products.map((product: any) => (
+                                <tr key={product._id} className="bg-white">
+                                    <td className="border px-4 py-2">{product.product_name || "N/A"}</td>
+                                    <td className="border px-4 py-2">{product.quantity}</td>
+                                    <td className="border px-4 py-2">{product.product_price || "N/A"}</td>
+                                    <td className="border px-4 py-2">
+                                        {product.product_img ? (
+                                            <img
+                                                src={product.product_img}
+                                                alt={product.product_name}
+                                                className="w-12 h-12 object-cover"
+                                            />
+                                        ) : (
+                                            "N/A"
+                                        )}
+                                    </td>
+                                </tr>
+                            ))
+                        ))
+                    ) : (
+                        <tr>
+                            <td className="border px-4 py-2" colSpan={4}>
+                                No items in the cart.
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
         </div>
     );
 };
