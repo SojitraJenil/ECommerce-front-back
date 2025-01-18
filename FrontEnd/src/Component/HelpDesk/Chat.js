@@ -16,8 +16,8 @@ import {
     IoHappyOutline
 } from "react-icons/io5";
 
-const SOCKET_SERVER_URL = 'http://localhost:8000';
-// const SOCKET_SERVER_URL =  || "https://ecommerce-3-ul25.onrender.com";
+// const SOCKET_SERVER_URL = 'http://localhost:8000';
+const SOCKET_SERVER_URL = "https://ecommerce-3-ul25.onrender.com";
 const TYPING_TIMER_LENGTH = 3000;
 
 const Chat = () => {
