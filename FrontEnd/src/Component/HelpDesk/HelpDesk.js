@@ -17,7 +17,7 @@ function HelpDesk() {
             <Header />
             <Container className="py-5 flex-grow-1">
                 <Row className="justify-content-center">
-                    <Col lg={8} className="d-none d-lg-block">
+                    <Col lg={8} className="">
                         <Card className="shadow-sm">
                             <Card.Body>
                                 <h3 className="mb-4">Need More Help?</h3>
