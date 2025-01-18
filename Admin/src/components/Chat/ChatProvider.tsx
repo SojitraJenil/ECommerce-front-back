@@ -3,8 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 import io, { Socket } from "socket.io-client";
 
 // Replace with your backend server URL
-// const SOCKET_SERVER_URL = "https://ecommerce-3-ul25.onrender.com";
-const SOCKET_SERVER_URL = "http://localhost:8000";
+ const SOCKET_SERVER_URL = "https://ecommerce-3-ul25.onrender.com";
+//const SOCKET_SERVER_URL = "http://localhost:8000";
 
 interface Message {
   sender: "user" | "admin";
