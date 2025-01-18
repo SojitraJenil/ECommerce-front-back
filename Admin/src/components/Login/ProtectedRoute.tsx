@@ -5,7 +5,6 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
     const token = localStorage.getItem('token'); // Check if the token exists
 
     if (!token) {
-        // Redirect to login if token doesn't exist
         return <Navigate to="/login" />;
     }
 
